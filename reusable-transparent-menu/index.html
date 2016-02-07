@@ -1,0 +1,180 @@
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Reusable Transparent Menu</title>
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:400,700">
+    <link rel="stylesheet" type="text/css" href="../assets/css/custom.css?v=d0f7dfad50">
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="canonical" href="index.html">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Vincent Ngo">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reusable Transparent Menu">
+    <meta property="og:description" content="Goal Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me...">
+    <meta property="og:url" content="http://localhost:2368/reusable-transparent-menu/">
+    <meta property="article:published_time" content="2014-03-09T03:12:00.000Z">
+    <meta property="article:modified_time" content="2016-02-07T03:18:56.355Z">
+    <meta property="article:tag" content="iOS">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Reusable Transparent Menu">
+    <meta name="twitter:description" content="Goal Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me...">
+    <meta name="twitter:url" content="http://localhost:2368/reusable-transparent-menu/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Vincent Ngo",
+    "author": {
+        "@type": "Person",
+        "name": "Vincent Ngo",
+        "url": "http://localhost:2368/author/vincent",
+        "sameAs": null,
+        "description": null
+    },
+    "headline": "Reusable Transparent Menu",
+    "url": "http://localhost:2368/reusable-transparent-menu/",
+    "datePublished": "2014-03-09T03:12:00.000Z",
+    "dateModified": "2016-02-07T03:18:56.355Z",
+    "keywords": "iOS",
+    "description": "Goal Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.7">
+    <link rel="alternate" type="application/rss+xml" title="Vincent Ngo" href="../rss/index.html">
+    <script type="text/javascript">
+function toggleMe(a){
+var e=document.getElementById(a);
+if(!e)return true;
+if(e.style.display=="none"){
+e.style.display="block"
+}
+else{
+e.style.display="none"
+}
+return true;
+}
+</script>
+</head>
+<body class="post-template tag-ios">
+
+<div class="container">
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand"><a href="../">Vincent Ngo</a></h3>
+                        <ul class="nav masthead-nav">
+	<li class="nav-Resume " role="presentation"><a href="../Resume">Resume</a></li>
+</ul>
+
+                    </div>
+                </div>
+                
+    <div class="inner cover post post-head">
+        <h1 class="cover-heading post-title">Reusable Transparent Menu</h1>
+    </div>
+
+    <div class="inner cover post post-body">
+        <div class="image-div" align="middle">  
+<img src="../content/images/2016/02/gif_231x480_9bd662.gif" alt="alt">
+</div>
+
+<h2 id="goal">Goal</h2>
+
+<p>Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me a lot. So I decided to spend the majority of my day rebuilding it from the ground up.</p>
+
+<p>The way I built the menu for HackNC was initially, I wanted a transparent view that disabled any interaction with the previous view. So I decided to use a UIActionSheet, which would cover the entire window, and then I would place the buttons and image View icons one by one, side by side, and manually calculating the offset between each of them. A disadvantage of this was you only could click the buttons. When the user clicked an icon nothing would happen. Another negative thing about using a UIActionSheet to do this was the animation to transition in and out. I placed a black transparent view on the UIActionSheet itself. I had to handle the animation for the black transparent view to fade in and out, as well as show, and dismiss the UIActionSheet. Basically performing 2 rather than 1 animation task. This is totally unnecessary!</p>
+
+<p>To build the transparent menu from the ground up, I decided that it wasn’t the right approach make use of the UIActionSheet in this case. While it did make sense to do so, I needed to create my own custom Controller that performed the same actions as a UIActionSheet. I also realized that you could place a black transparent view over the navigation controller by obtaining reference to the UIWindow and adding it as a sub view to UIWindow.</p>
+
+<h2 id="2mainclassescreated">2 Main Classes created</h2>
+
+<p>VVNTransparentView class’s job is to create, show, and dismiss the black transparent view. It also has a beautiful exit icon to dismiss the view.</p>
+
+<p>View Controller class's job, instantiates the VVNTransparentView that calls the corresponding methods to show, and dismiss the transparent view. The View Controller also lays a UITableView on top of the transparent view. We no longer have to hard code all these buttons and images onto a view. Since we are using a UITableView, we can create a custom UITableViewCell, and just implement the UITableView datasource and delegate methods. This is more dynamic compared to my previous approach. There is even custom animation to transition cells in and out which is gorgeous!</p>
+
+<p>Lastly, I had a tough time figuring out how to have a global right navigation bar button item whenever you transition to another view controller. I want the menu icon to stay there on any view controller. Thanks to a post by: stackOverFlow I was able to reuse as much code as possible. Out of the three approaches listed, I went with the inheritance route, to subclass my custom view controller. This made the most sense to me.</p>
+
+<h2 id="finally">Finally</h2>
+
+<p>This was overall a fun Saturday. I learned about UIViewAnimation, having a better understanding of navigation controllers, UIWindow, and created my very first block completion handlers. What I hope to improve with this is fading in and out cells from the top and bottom instead of getting cut off.</p>
+
+<p><strong><a href="https://github.com/vincentngo/VVNTransparentMenu">Link to Source</a></strong></p>
+    </div>
+
+    <div class="inner cover container post post-foot">
+        <div class="post-foot-right">
+            <a href="http://twitter.com/share?text=Reusable%20Transparent%20Menu&amp;url=http://localhost:2368/reusable-transparent-menu/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/reusable-transparent-menu/" onclick="window.open(this.href, 'facebook-share', 'width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+            </a>
+            <a href="https://plus.google.com/share?url=http://localhost:2368/reusable-transparent-menu/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                <i class="fa fa-google-plus-square"></i>
+            </a>
+        </div>
+    </div>
+    <hr style="margin-bottom:5px">
+    <div class="inner cover container post post-foot footer-info text-muted">
+            <div class="post-foot-left">
+                <a href="../author/vincent/">Vincent Ngo</a>
+            </div>
+        <div class="post-foot-right">
+            <time datetime="2014-03-08">08 Mar 2014</time>
+        </div>
+        <div>
+            <!--<code class="tag"><a href="/tag/ios/">iOS</a></code>-->
+            TAGGED IN <a href="../tag/ios/">iOS</a>
+        </div>
+    </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <footer class="site-footer">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="../rss/index.rss"><span class="glyphicon glyphicon-plane"></span> Subscribe</a>
+
+                        <div class="text-muted">
+                            <section class="copyright">All content copyright <a href="../">Vincent Ngo</a> ©
+                                2015 • All rights reserved.
+                            </section>
+                            <section class="poweredby">Proudly published with <a href="http://ghost.org">Ghost</a>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../assets/js/jquery.bootstrap-autohidingnavbar.min.js?v=d0f7dfad50"></script>
+<script type="text/javascript" src="../assets/js/index.js?v=d0f7dfad50"></script>
+
+
+</body>

@@ -1,0 +1,206 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Vincent Ngo</title><description>Sharing my thoughts, research, and experience with programming and golfing!</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sun, 07 Feb 2016 22:16:43 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>iOS 8 by Tutorials</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/i8T-PDF-phones-640.png" alt="alt"&gt;&lt;/p&gt;
+
+&lt;p&gt;iOS 8 has finally been released today! I was fortunate enough to get a chance to write a book tutorial with other great authors/developers to expose all the exciting new features iOS 8 has to offer.&lt;/p&gt;
+
+&lt;p&gt;iOS 8 by tutorials gives you step by step instructions in using the&lt;/p&gt;</description><link>http://localhost:2368/ios-8-by-tutorials/</link><guid isPermaLink="false">628bd65d-416a-4dd5-87ce-e320f069a01b</guid><category>iOS</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Thu, 18 Sep 2014 02:10:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/i8T-PDF-phones-640.png" alt="alt"&gt;&lt;/p&gt;
+
+&lt;p&gt;iOS 8 has finally been released today! I was fortunate enough to get a chance to write a book tutorial with other great authors/developers to expose all the exciting new features iOS 8 has to offer.&lt;/p&gt;
+
+&lt;p&gt;iOS 8 by tutorials gives you step by step instructions in using the cool and hip new features that iOS 8 brings to the table.&lt;/p&gt;
+
+&lt;p&gt;After a couple months of work, iOS 8 by Tutorials is finally out! I am so thankful for the opportunity to work with the team at Raywenderlich to write this book! Everyone on the team is so smart and helpful and I have learned a lot! I wrote two chapters related to live rendering in Interface builder and it was awesome! If you do decide to grab a copy, I hope you all will love reading and learning about iOS 8!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.raywenderlich.com/store/ios-8-by-tutorials"&gt;http://www.raywenderlich.com/store/ios-8-by-tutorials&lt;/a&gt; &lt;br&gt;
+&lt;a href="http://www.raywenderlich.com/store-beta/swift-tutorials-bundle"&gt;http://www.raywenderlich.com/store-beta/swift-tutorials-bundle&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title>Reusable Transparent Menu</title><description>&lt;div class="image-div" align="middle"&gt;  
+&lt;img src="http://localhost:2368/content/images/2016/02/gif_231x480_9bd662.gif" alt="alt"&gt;
+&lt;/div&gt;
+
+&lt;h2 id="goal"&gt;Goal&lt;/h2&gt;
+
+&lt;p&gt;Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me a lot. So I decided to spend the majority of&lt;/p&gt;</description><link>http://localhost:2368/reusable-transparent-menu/</link><guid isPermaLink="false">26625c0a-9549-475a-b6dc-d438f768df9f</guid><category>iOS</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Sun, 09 Mar 2014 03:12:00 GMT</pubDate><content:encoded>&lt;div class="image-div" align="middle"&gt;  
+&lt;img src="http://localhost:2368/content/images/2016/02/gif_231x480_9bd662.gif" alt="alt"&gt;
+&lt;/div&gt;
+
+&lt;h2 id="goal"&gt;Goal&lt;/h2&gt;
+
+&lt;p&gt;Today on Saturday, I decided to create a reusable menu. You might notice that this menu is similar to our hack for HackNC. The difference is that the menu for HackNC was pretty much hardcoded. This was bothering me a lot. So I decided to spend the majority of my day rebuilding it from the ground up.&lt;/p&gt;
+
+&lt;p&gt;The way I built the menu for HackNC was initially, I wanted a transparent view that disabled any interaction with the previous view. So I decided to use a UIActionSheet, which would cover the entire window, and then I would place the buttons and image View icons one by one, side by side, and manually calculating the offset between each of them. A disadvantage of this was you only could click the buttons. When the user clicked an icon nothing would happen. Another negative thing about using a UIActionSheet to do this was the animation to transition in and out. I placed a black transparent view on the UIActionSheet itself. I had to handle the animation for the black transparent view to fade in and out, as well as show, and dismiss the UIActionSheet. Basically performing 2 rather than 1 animation task. This is totally unnecessary!&lt;/p&gt;
+
+&lt;p&gt;To build the transparent menu from the ground up, I decided that it wasn’t the right approach make use of the UIActionSheet in this case. While it did make sense to do so, I needed to create my own custom Controller that performed the same actions as a UIActionSheet. I also realized that you could place a black transparent view over the navigation controller by obtaining reference to the UIWindow and adding it as a sub view to UIWindow.&lt;/p&gt;
+
+&lt;h2 id="2mainclassescreated"&gt;2 Main Classes created&lt;/h2&gt;
+
+&lt;p&gt;VVNTransparentView class’s job is to create, show, and dismiss the black transparent view. It also has a beautiful exit icon to dismiss the view.&lt;/p&gt;
+
+&lt;p&gt;View Controller class's job, instantiates the VVNTransparentView that calls the corresponding methods to show, and dismiss the transparent view. The View Controller also lays a UITableView on top of the transparent view. We no longer have to hard code all these buttons and images onto a view. Since we are using a UITableView, we can create a custom UITableViewCell, and just implement the UITableView datasource and delegate methods. This is more dynamic compared to my previous approach. There is even custom animation to transition cells in and out which is gorgeous!&lt;/p&gt;
+
+&lt;p&gt;Lastly, I had a tough time figuring out how to have a global right navigation bar button item whenever you transition to another view controller. I want the menu icon to stay there on any view controller. Thanks to a post by: stackOverFlow I was able to reuse as much code as possible. Out of the three approaches listed, I went with the inheritance route, to subclass my custom view controller. This made the most sense to me.&lt;/p&gt;
+
+&lt;h2 id="finally"&gt;Finally&lt;/h2&gt;
+
+&lt;p&gt;This was overall a fun Saturday. I learned about UIViewAnimation, having a better understanding of navigation controllers, UIWindow, and created my very first block completion handlers. What I hope to improve with this is fading in and out cells from the top and bottom instead of getting cut off.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href="https://github.com/vincentngo/VVNTransparentMenu"&gt;Link to Source&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title>HackNC</title><description>&lt;h2 id="hackathonattheuniversityofnorthcarolinaatchapelhill"&gt;Hackathon at The University of North Carolina at Chapel Hill&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/687474703a2f2f6661726d382e737461746963666c69636b722e636f6d2f373431392f31323838343130363436355f636133303838313339645f6f2e706e67.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;HackNC a hackathon with over 200+ passionate hackers trying to have fun, chill, and build something cool. This is the 3rd hackathon I have been to, and so far I have never regret a single experience. Just starting a project&lt;/p&gt;</description><link>http://localhost:2368/hacknc/</link><guid isPermaLink="false">357c2bd0-a8b4-4698-8758-fd0da560b611</guid><category>iOS</category><category>hackathon</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Tue, 04 Mar 2014 03:19:00 GMT</pubDate><content:encoded>&lt;h2 id="hackathonattheuniversityofnorthcarolinaatchapelhill"&gt;Hackathon at The University of North Carolina at Chapel Hill&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/687474703a2f2f6661726d382e737461746963666c69636b722e636f6d2f373431392f31323838343130363436355f636133303838313339645f6f2e706e67.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;HackNC a hackathon with over 200+ passionate hackers trying to have fun, chill, and build something cool. This is the 3rd hackathon I have been to, and so far I have never regret a single experience. Just starting a project from scratch and trying to get a high fidelity prototype working was tedious. But starting things at a hackathon, you get one of the most productive experiences of your life. HackNC is a little different from MHacks and PennApps, it was only for 24 hours. So this meant we had less time to work on our hack. It was just perfect going to HackNC because us Hokies (Virginia Tech) only live 3 hours away.&lt;/p&gt;
+
+&lt;p&gt;During the hackathon we built a hackathon application. We call it Hack.* . Essentially we are trying to create an open source mobile application that can be used by any high school, and any university trying to host their own hackathon. This will provide a seemingly easy and useful way to keep hackathon events in order, and meant less work, and more productivity. The way we came up with our name was really funny. We thought of Hackbook, HackAgenda, HackEasy, Hagenda, and many other weird names. Finally I was like, there needs to be a way to refer to every other school using our application and hence .* was born. This would refer to HackVT, HackNC, HackRU, and etc. I was doing mostly front-end work, where as my partner was doing the back-end. He was setting up the notifications with AWS SNS (Simple Notification Services), which was by the way insanely cool!&lt;/p&gt;
+
+&lt;p&gt;Some hackathons that we have been to has handed out paper brochures, and rely on tweeting events. With this open source mobile application you will be able to know with ease that anyone who has this application downloaded on his or her phone will get this push notification. Never again run around hallways, rooms screaming, "Food is here come grab it!” Also notification is useful for emergencies too! We are going to finish this open source project, and I hope that we provide a way to easily change assets so that, school could cater and customize it to their own needs. Below is a link to our Github repo. Keep in mind that we only had 24 hours to work on this, and some of the code is not cleaned up yet!&lt;/p&gt;</content:encoded></item><item><title>Raywenderlich Tutorial Team!</title><description>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/RW_logo_complete-01-1.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;I am really excited about being apart of a great community Raywenderlich.com!&lt;/p&gt;
+
+&lt;p&gt;It is a web site that provides high quality programming tutorials for iOS, Android, Mac and many other technologies. I have written a tutorial about NSScanner for Mac OS X development. The tutorial is about creating automated&lt;/p&gt;</description><link>http://localhost:2368/raywenderlich-tutorial-team/</link><guid isPermaLink="false">961ed277-35b6-4018-93a2-7b698c6a0cf1</guid><category>iOS</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Fri, 28 Feb 2014 03:22:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/RW_logo_complete-01-1.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;I am really excited about being apart of a great community Raywenderlich.com!&lt;/p&gt;
+
+&lt;p&gt;It is a web site that provides high quality programming tutorials for iOS, Android, Mac and many other technologies. I have written a tutorial about NSScanner for Mac OS X development. The tutorial is about creating automated parsers with NSScanner. It was a great learning experience as I have never done Mac OS X development before, but it is very similar to iOS development. By writing this tutorial I not only help others understand and make use of NSScanner, but also taught myself and it certaintly gave me a better understanding about NSScanner and parsing strings.&lt;/p&gt;
+
+&lt;p&gt;I look forward to writing more tutorials on Raywenderlich.com. Keep a look out for some more in the near future!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href="http://www.raywenderlich.com/61624/nsscanner-tutorial-parsing-data-os-x"&gt;NSScanner Tutorial: Parsing Data in Mac OS X&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;</content:encoded></item><item><title>Downloading images using NSURLSession</title><description>&lt;div class="image-div" align="middle"&gt;  
+&lt;img src="http://localhost:2368/content/images/2016/02/VTFeedsIphone-2.png" alt=""&gt;
+&lt;/div&gt;  
+
+&lt;p&gt;I have used grand central dispatch before, but never NSURLConnections. I have had problems with loading images on to a simple table view for one of my old tutorial projects. Today I decided to dust VTFeeds (application) off the shelf and try to fix the problem. With iOS 7 coming&lt;/p&gt;</description><link>http://localhost:2368/subscribe-downloading-images-using-nsurlsession/</link><guid isPermaLink="false">21e76e1e-2067-4b15-bf58-4eecb7362cb8</guid><category>iOS</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Fri, 21 Feb 2014 03:32:00 GMT</pubDate><content:encoded>&lt;div class="image-div" align="middle"&gt;  
+&lt;img src="http://localhost:2368/content/images/2016/02/VTFeedsIphone-2.png" alt=""&gt;
+&lt;/div&gt;  
+
+&lt;p&gt;I have used grand central dispatch before, but never NSURLConnections. I have had problems with loading images on to a simple table view for one of my old tutorial projects. Today I decided to dust VTFeeds (application) off the shelf and try to fix the problem. With iOS 7 coming out with a new network's framework. Apple has replaced NSURLConnections with NSURLSessions. This was the perfect opportunity to explore how they work. According to Apple's documentation:&lt;/p&gt;
+
+&lt;p&gt;The NSURLSession class and related classes provide an API for downloading content via HTTP. This API provides a rich set of delegate methods for supporting authentication and gives your app the ability to perform background downloads when your app is not running or, in iOS, while your app is suspended.&lt;/p&gt;
+
+&lt;p&gt;So with NSURLSessions it's actually perfect, we don't really need to worry about creating our own background threads to perform background downloading. Now NSURLSession does all this for you!&lt;/p&gt;
+
+&lt;p&gt;It's actually really simple to do. We first create an NSURLConfiguration. For the time being since we don't need to really specify any configs we will leave it as default. Secondly we create a NSURLSession and set up the delegate for this class. Third we use the session we created to create a task. In this case we create an NSURLSessionDownloadTask. When the download task is complete, it saves the data into a temporary file path, in which you must retrieve.&lt;/p&gt;
+
+&lt;p&gt;Since all user interface operations are done on the main thread, we set the image we downloaded in a UIImageView within the main thread. I also currently place the downloaded images in an NSMutableDictionary which acts as a cache for the images. Maybe i'll explore NSURLCache some other time. :)&lt;/p&gt;
+
+&lt;h3 id="solution"&gt;Solution&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;
+NSURL *URL = [NSURL URLWithString:currentArticle.imageURL];
+//First create an NSURLConfiguration
+[NSURLSessionConfiguration defaultSessionConfiguration];
+//Creates a session thatt conforms to the current class as a delegate.
+NSURLSession *session =
+[NSURLSession sessionWithConfiguration:sessionConfiguration
+                              delegate:self
+                         delegateQueue:nil];
+
+//Session creates the Download Task.
+         NSURLSessionDownloadTask *getImageTask =
+[session downloadTaskWithURL:URL
+           completionHandler:^(NSURL *location,
+                               NSURLResponse *response,
+                               NSError *error) {
+
+               UIImage *imageDownloaded =
+               [UIImage imageWithData:
+                [NSData dataWithContentsOfURL:location]];
+
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   [self.ImagesCacheDictionary setObject:imageDownloaded forKey:key];
+                   [cell.articleImage setImage:[self.ImagesCacheDictionary objectForKey:cell.theKey.description]];
+               });
+           }];
+[getImageTask resume];
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the link to the source code: &lt;strong&gt;&lt;a href="https://github.com/vincentngo/VTFeeds"&gt;VTFeeds&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Related &lt;br&gt;
+&lt;a href="http://nshipster.com/afnetworking-2/"&gt;Check out AFNetworking an alternative to NSURLSessions&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/index.html"&gt;NSURLSession Class Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.mikeash.com/pyblog/friday-qa-2009-08-28-intro-to-grand-central-dispatch-part-i-basics-and-dispatch-queues.html"&gt;Intro to Grand Central Dispatch by Mike Ash&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title>My internship with Gannett</title><description>&lt;h1 id="abouthowigothere"&gt;About How I got here&lt;/h1&gt;
+
+&lt;p&gt;Virginia Tech(VT) has an amazing Computer Science program. One of the best things about VT is how they handle their career fairs. Every semester is a huge career fair with over 50+ companies eagerly looking to recruit our wonderful students. I was really interested&lt;/p&gt;</description><link>http://localhost:2368/my-internship-with-gannett/</link><guid isPermaLink="false">f864edf1-5d60-4f4e-abc7-ad6f31330354</guid><category>iOS</category><dc:creator>Vincent Ngo</dc:creator><pubDate>Tue, 06 Aug 2013 02:27:00 GMT</pubDate><content:encoded>&lt;h1 id="abouthowigothere"&gt;About How I got here&lt;/h1&gt;
+
+&lt;p&gt;Virginia Tech(VT) has an amazing Computer Science program. One of the best things about VT is how they handle their career fairs. Every semester is a huge career fair with over 50+ companies eagerly looking to recruit our wonderful students. I was really interested in mobile development particularly in iOS. So i began to look through every single company one by one to see which company had a mobile developer intern position available.&lt;/p&gt;
+
+&lt;p&gt;I was really fortunate to come across Gannett's booth during the CSRC Career fair (&lt;a href="https://csrc.cs.vt.edu/companies"&gt;https://csrc.cs.vt.edu/companies&lt;/a&gt;) If you are a student at Virginia Tech be sure to check out their booth! They are working on some amazing mobile applications for the web, windows, iOS, and android platforms. The products shown during the fair was what caught my attention. They were amazingly great, and I knew that this was where I wanted to spend my summer as I would get a lot of new iOS and real world programming experience that school could not teach.&lt;/p&gt;
+
+&lt;p&gt;So enough about me, what does Gannett do?&lt;/p&gt;
+
+&lt;p&gt;Not many students have heard about Gannett. When my friends asked, "Where are you interning for the summer?" I would say "Gannett", but none of them have ever heard about it before. I would then go about saying "You know USA Today?, well Gannett owns that".&lt;/p&gt;
+
+&lt;p&gt;Gannett is a media, marketing solutions company that works in the area of broadcasting, digital media, mobile, and publishing. Gannett aquires a lot of online websites and media content. The media content they offer are entertainment, travel, career, finance, sports, autos, and housing. With a diverse amount of data they create mobile applications for native Windows, iOS, Android devices, as well as mobile web applications.&lt;/p&gt;
+
+&lt;p&gt;Gannett is highly experience with mobile applications technology, and have won a couple awards for their iPhone and iPad applications&lt;/p&gt;
+
+&lt;p&gt;For more information you can check out this Wikipedia Page and their website: &lt;br&gt;
+&lt;a href="http://en.wikipedia.org/wiki/Gannett_Digital"&gt;http://en.wikipedia.org/wiki/Gannett_Digital&lt;/a&gt; &lt;br&gt;
+&lt;a href="http://www.gannett.com/"&gt;http://www.gannett.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id="myteam"&gt;My Team&lt;/h1&gt;
+
+&lt;p&gt;I was on the iOS mobile team at Gannett. My team is totally funny, and has a diverse culture and skill sets. I felt really connected to my team members mainly because of three reasons. The first reason is, we all have a drive for passion to keep learning, and helping one another. They were always open to helping me improve in writing code, and had a great understanding of design patterns, and common practices to go about solving a problem. Occasionally we would go about talking about technology, iOS concepts, iOS 7, and do some pair programming to find bugs. With pair programming, it really helped me grow to see how they approached a problem. With talking about technology, it helped me expand my horizon, exploring new ways of doing things, and keep an open mind.&lt;/p&gt;
+
+&lt;p&gt;The second reason I was able to connect was because Gannett is hiring a lot of mobile developers. I was able to connect well with new team members joining the team because I was in the same boat, not knowing anyone! Since there was a differentiation of age groups in the team, which ranged from just out of college, to working in the field for a long time. I was able to gain valuable advice, tips to how I should pursue my Computer Science career path. Different perspectives, experience, and wisdom is always a great thing to have.&lt;/p&gt;
+
+&lt;p&gt;Lastly, my manager was a fellow Hokie! I didn't know that till my first day. We would sometimes talk about Virginia Tech whats still there and whats new. Since my boss was a fellow Hokie, I felt a fatherly figure training me, giving me advice, and helping me improve as an overall person, and coder. He was really awesome to work with, highly sharp, and intelligent. It was an honor being apart of a wonderful team.&lt;/p&gt;
+
+&lt;p&gt;I would like to thank my team members for making me laugh, for sharing and teaching me valuable skills and knowledge, and helping me improve as an overall programmer. I will remember the fun times, and will truly miss you guys.&lt;/p&gt;
+
+&lt;h1 id="gannettsworkenvironment"&gt;Gannett's Work Environment&lt;/h1&gt;
+
+&lt;p&gt;Gannett Digital's work environment is truly open. We would occassionally throw some friendly fits with the Android team sitting next to us, but everyone is really cool. Everyone is exposed to everyone. You weren't enclosed to a cubicle by yourself. You could just go to any team station and ask them stuff (when they are not busy), and they would be glad to schedule an appointment to help you. With such a palatial environment communication is great, and everyone knows each other.&lt;/p&gt;
+
+&lt;p&gt;My floor had a break area where you could play ping pong, fooz ball, or pool. Sometimes if you just need to take a break from what you are doing, this is where everyone hangs out. There is also a kitchen next to the break area, ocassionally with free fruits, donuts, and fast food like Popeyes, yummy.&lt;/p&gt;
+
+&lt;p&gt;Not forgetting. Gannett's architecture is just truly remarkable. You have to actually go to the site and see the building for yourself. I walk up the granite staircase every morning going up to where I work. The glass walls is a prestige. I'm always really excited to work at Gannett.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/Gannett-USA-Today-Headquarters5_Carousel.jpg" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Image from&lt;/strong&gt;: Clark Construction&lt;/p&gt;
+
+&lt;h1 id="whatidid"&gt;What I did&lt;/h1&gt;
+
+&lt;p&gt;This is my first internship and I didn't really know what to expect. One of my great mentors on my team would tell me that they didn't really expect much from an intern, just go out there and have fun and learn as much as possible. This internship is catered to help you learn.&lt;/p&gt;
+
+&lt;p&gt;During my internship I did four things. The first thing I did was just to ease me into the program. I created a debugging tool that captures iOS device console logs. This is useful for testers and developers to check logs on when and where the application crashes. After sucessfully pulling the console logs, I added a feature where you could send the logs by Email. My first assignment overall taught me about design decisions, where classes should go, and decisions on when it is appropriate to have controllable parameters.&lt;/p&gt;
+
+&lt;p&gt;The second thing I implemented was a Starwars Theme module. If you watched Starwars before you remember at the start of the movie there was this long introductory credits that would scroll from bottom to top having a slanted 3D perspective. I created something similar to this, but except you could place any text you wanted, probably now possible with text attachments with the new Text Kit stuff on iOS 7. This project gave me a glimpse at how powerful Quartz Core truly is. There is so much more to learn with Quartz framework. Some great UI designs is due to this concept.&lt;/p&gt;
+
+&lt;p&gt;I was fortunate during my internship because iOS 7 came at the perfect time. I was given the task of exploring different new exciting features brought to the new iOS 7. I played around with text kit, and created an article architecture that first obtains the data, and then implemented a way to structure the article from top to bottom. I also experimented a bit more with UICollectionViews, because the interface allows page scrolling. What I realized about developing iOS application is that, sometimes you have to support lower level iOS versions. Some people may still be using the old iOS 4 or iOS 5, and if they download your application it breaks because your application doesn't support older versions. This is truly a tedious and complicated task. The good news is most people are now up to iOS 5 and above. Hopefully iOS 6 and above soon.&lt;/p&gt;
+
+&lt;p&gt;Besides text kit, I look at the new background fetch technology, watched a ton of WWDC videos to help me understand UIDynamics, new xCode 5 capabilities (love the new TESTING FRAMEWORK! YES TO TESTING!), and guidelines to transform your iOS 6 UI to iOS 7 UI.&lt;/p&gt;
+
+&lt;h1 id="internbuddyprogram"&gt;Intern Buddy Program&lt;/h1&gt;
+
+&lt;p&gt;The Intern Buddy program was awesome. Basically every intern in Gannett Digital gets a buddy based on their interest. A buddy works in the same department but could range from a skilled web developer, graphic designer, or product manager. Basically from different work occupation. As I was interested in graphics designer, and so I was paired with one. During this program, we would schedule a meet up once or twice every week just to talk about stuff. This program was aimmed at helping an intern feel more comfortable with the work environment, and if you had any questions or didn't really know what to do, your buddy was the go to person for help.&lt;/p&gt;
+
+&lt;p&gt;Every week my buddy and I would meet up talk about design in general, how it has evolved, and tips and tricks he would use to go about doing his daily job. It was like shadowing a graphics designer, which was totally awesome! We started a design project on anything random. This was just to give me some experience on what a graphics designer would go about doing themselves. Below are some designs I created myself, with advice and knowledge imparted to me by my buddy. &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/02/Flatdesign.png" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;List of great design websites that we occasionally share with each other. Research, and design evolution is key.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.mobile-patterns.com/"&gt;http://www.mobile-patterns.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://speckyboy.com/"&gt;http://speckyboy.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mobileawesomeness.com/"&gt;http://www.mobileawesomeness.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://patterntap.com/"&gt;http://patterntap.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.webdesignerdepot.com/"&gt;http://www.webdesignerdepot.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://plentyofcolour.com/category/palette-of-the-week/"&gt;http://plentyofcolour.com/category/palette-of-the-week/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ios7redesigns.tumblr.com/"&gt;http://ios7redesigns.tumblr.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://cloudcastlegroup.com/blog/basiliq"&gt;http://cloudcastlegroup.com/blog/basiliq&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id="thingstotakeaway"&gt;Things to Take away&lt;/h1&gt;
+
+&lt;p&gt;Of course there may be struggles, and fustrations when you don't understand how to do something. Steve Jobs sums it pretty nicely "You have to be willing to fail, crash and burn." Everyday I come into work having a goal in mind, to learn, and have fun.&lt;/p&gt;
+
+&lt;p&gt;I will bring back all this knowledge of programming for my senior year at Virginia Tech. I am really excited to apply the same coding concepts, and approaches to my course assignments. Looking forward to using design patterns, modulizations, and reusuability of code. Its time to evolve!&lt;/p&gt;
+
+&lt;p&gt;With this internship, I am still solid and stand adamant to my decision that a career in the software industry is where I want to be. I would recommend any student to intern with Gannett. I know for sure that Gannett and their HR department is always finding ways to help improve their intern program. Gannett Interns are here to learn, and you will get a ton of that with Gannett Digital.&lt;/p&gt;</content:encoded></item></channel></rss>
