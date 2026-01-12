@@ -1,0 +1,49 @@
+---
+title: Bắt Đầu Với Next.js 16
+description: Hướng dẫn toàn diện để xây dựng ứng dụng web hiện đại với Next.js
+date: 2026-01-10
+tags: [nextjs, react, typescript, hướng-dẫn]
+slug: bat-dau-voi-nextjs
+---
+
+# Bắt Đầu Với Next.js 16
+
+Next.js đã trở thành một trong những framework React phổ biến nhất để xây dựng các ứng dụng web sẵn sàng cho production. Trong hướng dẫn này, chúng ta sẽ khám phá các tính năng chính của Next.js 16.
+
+## Tại Sao Chọn Next.js?
+
+Next.js mang lại một số lợi thế:
+
+1. **Server-Side Rendering (SSR)**: Cải thiện hiệu suất và SEO
+2. **Static Site Generation (SSG)**: Pre-render các trang tại thời điểm build
+3. **App Router**: Routing hiện đại với React Server Components
+4. **Tối Ưu Hóa Tích Hợp**: Tối ưu hóa hình ảnh, font chữ, và nhiều hơn nữa
+
+## Thiết Lập Dự Án Đầu Tiên
+
+Để tạo một dự án Next.js mới, chạy:
+
+```bash
+bun create next-app@latest my-app
+cd my-app
+bun run dev
+```
+
+## Cơ Bản Về App Router
+
+App Router sử dụng routing dựa trên hệ thống file. Đây là một ví dụ đơn giản:
+
+```typescript
+// app/page.tsx
+export default function Home() {
+  return (
+    <main>
+      <h1>Chào mừng đến Next.js!</h1>
+    </main>
+  );
+}
+```
+
+## Kết Luận
+
+Next.js 16 mang đến những tính năng mạnh mẽ giúp việc xây dựng ứng dụng web hiện đại dễ dàng hơn bao giờ hết. Hãy bắt đầu thử nghiệm ngay hôm nay!

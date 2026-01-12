@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Welcome",
+    "description": "Personal Portfolio & Knowledge Platform",
+    "greeting": "Hi, I'm Vincent Ngo",
+    "bio": "Software engineer passionate about building elegant solutions to complex problems. I write about web development, technology, and continuous learning.",
+    "location": "Hanoi, Vietnam",
+    "recentWriting": "Recent Writing",
+    "allPosts": "View all posts",
+    "tags": "Tags & Topics",
+    "readMore": "Read more"
+  },
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "about": "About"
+  }
+}

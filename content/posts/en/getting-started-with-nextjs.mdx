@@ -1,0 +1,69 @@
+---
+title: Getting Started with Next.js 16
+description: A comprehensive guide to building modern web applications with Next.js
+date: 2026-01-10
+tags: [nextjs, react, typescript, tutorial]
+slug: getting-started-with-nextjs
+---
+
+# Getting Started with Next.js 16
+
+Next.js has become one of the most popular React frameworks for building production-ready web applications. In this guide, we'll explore the key features of Next.js 16.
+
+## Why Next.js?
+
+Next.js offers several advantages:
+
+1. **Server-Side Rendering (SSR)**: Improved performance and SEO
+2. **Static Site Generation (SSG)**: Pre-render pages at build time
+3. **App Router**: Modern routing with React Server Components
+4. **Built-in Optimization**: Image optimization, font optimization, and more
+
+## Setting Up Your First Project
+
+To create a new Next.js project, run:
+
+```bash
+bun create next-app@latest my-app
+cd my-app
+bun run dev
+```
+
+## App Router Basics
+
+The App Router uses a file-system based routing. Here's a simple example:
+
+```typescript
+// app/page.tsx
+export default function Home() {
+  return (
+    <main>
+      <h1>Welcome to Next.js!</h1>
+    </main>
+  );
+}
+```
+
+## Server Components vs Client Components
+
+By default, components in the App Router are Server Components. Use the `"use client"` directive when you need client-side interactivity:
+
+```typescript
+"use client";
+
+import { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+```
+
+## Conclusion
+
+Next.js 16 brings powerful features that make building modern web applications easier than ever. Start experimenting with it today!

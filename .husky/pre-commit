@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# Try to find bunx in common locations
+if command -v bunx >/dev/null 2>&1; then
+  bunx lint-staged
+elif [ -f "$HOME/.bun/bin/bunx" ]; then
+  "$HOME/.bun/bin/bunx" lint-staged
+else
+  # Fallback to npx if bunx is not found
+  npx lint-staged
+fi

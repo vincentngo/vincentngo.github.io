@@ -1,0 +1,49 @@
+---
+title: Débuter avec Next.js 16
+description: Un guide complet pour créer des applications web modernes avec Next.js
+date: 2026-01-10
+tags: [nextjs, react, typescript, tutoriel]
+slug: demarrer-avec-nextjs
+---
+
+# Débuter avec Next.js 16
+
+Next.js est devenu l'un des frameworks React les plus populaires pour créer des applications web prêtes pour la production. Dans ce guide, nous explorerons les fonctionnalités clés de Next.js 16.
+
+## Pourquoi Next.js ?
+
+Next.js offre plusieurs avantages :
+
+1. **Rendu Côté Serveur (SSR)** : Performances et SEO améliorés
+2. **Génération de Site Statique (SSG)** : Pré-rendu des pages au moment de la construction
+3. **App Router** : Routage moderne avec React Server Components
+4. **Optimisations Intégrées** : Optimisation d'images, de polices, et plus
+
+## Configuration de Votre Premier Projet
+
+Pour créer un nouveau projet Next.js, exécutez :
+
+```bash
+bun create next-app@latest mon-app
+cd mon-app
+bun run dev
+```
+
+## Bases de l'App Router
+
+L'App Router utilise un routage basé sur le système de fichiers. Voici un exemple simple :
+
+```typescript
+// app/page.tsx
+export default function Home() {
+  return (
+    <main>
+      <h1>Bienvenue sur Next.js !</h1>
+    </main>
+  );
+}
+```
+
+## Conclusion
+
+Next.js 16 apporte des fonctionnalités puissantes qui facilitent la création d'applications web modernes. Commencez à expérimenter dès aujourd'hui !

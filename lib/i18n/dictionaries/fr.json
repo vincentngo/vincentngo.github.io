@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Bienvenue",
+    "description": "Portfolio Personnel & Plateforme de Connaissances",
+    "greeting": "Salut, je suis Vincent Ngo",
+    "bio": "Ingénieur logiciel passionné par la création de solutions élégantes à des problèmes complexes. J'écris sur le développement web, la technologie et l'apprentissage continu.",
+    "location": "Hanoï, Vietnam",
+    "recentWriting": "Écrits Récents",
+    "allPosts": "Voir tous les articles",
+    "tags": "Tags & Sujets",
+    "readMore": "Lire la suite"
+  },
+  "nav": {
+    "home": "Accueil",
+    "blog": "Blog",
+    "about": "À Propos"
+  }
+}
