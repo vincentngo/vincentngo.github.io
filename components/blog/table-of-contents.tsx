@@ -36,7 +36,12 @@ export function TableOfContents({
 
     const onScroll = () => {
       const offset = 120;
-      let currentId = headingElements[0].id;
+      const firstHeading = headingElements[0];
+      if (!firstHeading) {
+        return;
+      }
+
+      let currentId = firstHeading.id;
 
       for (const element of headingElements) {
         if (element.getBoundingClientRect().top <= offset) {
