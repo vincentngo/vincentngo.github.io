@@ -6,6 +6,9 @@ import remarkGfm from "remark-gfm";
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { extractPostHeadings, createHeadingSlugger } from "@/lib/content/headings";
+import { TableOfContents } from "@/components/blog/table-of-contents";
+import type { ReactNode, ComponentPropsWithoutRef } from "react";
 
 interface PageProps {
   params: Promise<{
@@ -59,10 +62,38 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
+  const headings = extractPostHeadings(post.content);
+  const getHeadingId = createHeadingSlugger();
+
+  const getNodeText = (node: ReactNode): string => {
+    if (typeof node === "string" || typeof node === "number") {
+      return String(node);
+    }
+
+    if (Array.isArray(node)) {
+      return node.map(getNodeText).join("");
+    }
+
+    if (node && typeof node === "object" && "props" in node) {
+      return getNodeText((node as { props?: { children?: ReactNode } }).props?.children ?? "");
+    }
+
+    return "";
+  };
+
+  const HeadingWithId = (
+    Tag: "h2" | "h3",
+    props: ComponentPropsWithoutRef<"h2"> | ComponentPropsWithoutRef<"h3">
+  ) => {
+    const text = getNodeText(props.children).trim();
+    const id = text ? getHeadingId(text) : undefined;
+    return <Tag {...props} id={id} />;
+  };
+
   return (
     <>
       <Header locale={locale as Locale} dict={dict} />
-      <article className="container mx-auto max-w-3xl px-4 py-12">
+      <article className="container mx-auto max-w-6xl px-4 py-12">
         <header className="mb-8">
           <h1 className="mb-4 text-4xl font-bold">{post.frontmatter.title}</h1>
           <div className="mb-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -86,14 +117,34 @@ export default async function BlogPostPage({ params }: PageProps) {
           )}
         </header>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <MDXRemote
-            source={post.content}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkGfm],
-              },
-            }}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div>
+            <TableOfContents
+              headings={headings}
+              title={dict.blog.onThisPage}
+              showMobile
+              showDesktop={false}
+            />
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <MDXRemote
+                source={post.content}
+                components={{
+                  h2: (props) => HeadingWithId("h2", props),
+                  h3: (props) => HeadingWithId("h3", props),
+                }}
+                options={{
+                  mdxOptions: {
+                    remarkPlugins: [remarkGfm],
+                  },
+                }}
+              />
+            </div>
+          </div>
+          <TableOfContents
+            headings={headings}
+            title={dict.blog.onThisPage}
+            showMobile={false}
+            showDesktop
           />
         </div>
       </article>

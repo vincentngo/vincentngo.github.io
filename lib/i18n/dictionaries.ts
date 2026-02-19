@@ -17,6 +17,9 @@ type Dictionary = {
     blog: string;
     about: string;
   };
+  blog: {
+    onThisPage: string;
+  };
 };
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {

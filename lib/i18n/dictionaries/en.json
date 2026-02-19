@@ -14,5 +14,8 @@
     "home": "Home",
     "blog": "Blog",
     "about": "About"
+  },
+  "blog": {
+    "onThisPage": "On this page"
   }
 }

@@ -50,6 +50,10 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   * {
     @apply border-border;
   }
@@ -73,6 +77,11 @@
 
 .prose h3 {
   @apply mb-2 mt-4 text-2xl font-bold;
+}
+
+.prose h2,
+.prose h3 {
+  scroll-margin-top: 6rem;
 }
 
 .prose p {
