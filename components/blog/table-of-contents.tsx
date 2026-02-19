@@ -76,8 +76,9 @@ export function TableOfContents({
   }, [headingIds]);
 
   useEffect(() => {
-    if (!activeId && headings.length > 0) {
-      setActiveId(headings[0].id);
+    const first = headings[0];
+    if (!activeId && first) {
+      setActiveId(first.id);
     }
   }, [activeId, headings]);
 

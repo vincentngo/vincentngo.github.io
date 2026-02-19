@@ -51,12 +51,12 @@ function parseHeadingLine(line: string): { level: HeadingLevel; text: string } |
     return null;
   }
 
-  const level = match[1].length as HeadingLevel;
+  const level = (match[1] ?? "").length as HeadingLevel;
   if (level !== 2 && level !== 3) {
     return null;
   }
 
-  const text = stripInlineMarkdown(match[2]);
+  const text = stripInlineMarkdown(match[2] ?? "");
   if (!text) {
     return null;
   }
