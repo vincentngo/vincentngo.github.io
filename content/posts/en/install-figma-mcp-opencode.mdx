@@ -1,0 +1,258 @@
+---
+title: Install Figma MCP OpenCode
+description: A guide to connecting Figma to OpenCode using MCP so AI agents can read designs directly from Figma and help generate UI code
+date: 2026-03-11
+tags: [figma, mcp, opencode, ai, tutorial]
+slug: install-figma-mcp-opencode
+---
+
+# Install Figma MCP OpenCode
+
+This guide explains how to connect **Figma to OpenCode using MCP (Model Context Protocol)** so AI agents can read designs directly from Figma and help generate UI code.
+
+## What this enables
+
+- Read Figma frames and layouts from AI tools
+- Generate React / Tailwind components from designs
+- Export design assets
+- Improve design-to-code workflow for frontend development
+
+## Architecture Overview
+
+```
+Figma Design
+     ↓
+Figma MCP Server
+     ↓
+OpenCode MCP Client
+     ↓
+AI Models (Claude / Gemini)
+     ↓
+Generate UI Code
+```
+
+## Prerequisites
+
+Before starting, make sure you have:
+
+- A Figma account
+- OpenCode installed
+- Terminal access
+- Access to your OpenCode config file
+
+Typical config locations:
+
+```bash
+~/.config/opencode/opencode.json
+```
+
+or:
+
+```bash
+opencode.json
+```
+
+## Step 1 — Register an MCP client with Figma
+
+Run this in Terminal:
+
+```bash
+curl -X POST https://api.figma.com/v1/oauth/mcp_register \
+-H "Content-Type: application/json" \
+-d '{
+    "client_name": "Claude Code (figma)",
+    "redirect_uris": ["http://127.0.0.1:3845/mcp/oauth/callback"],
+    "grant_types": ["authorization_code", "refresh_token"],
+    "response_types": ["code"],
+    "token_endpoint_auth_method": "none"
+  }'
+```
+
+This registers your MCP client with Figma.
+
+## Step 2 — Save the returned credentials
+
+Figma should return something like:
+
+```json
+{
+  "client_id": "abc123",
+  "client_secret": "xyz456"
+}
+```
+
+Save both values:
+
+- `client_id`
+- `client_secret`
+
+You will need them for OpenCode config.
+
+## Step 3 — Add Figma MCP to `opencode.json`
+
+Find the `mcp` section in your config.
+
+Example current config:
+
+```json
+"mcp": {
+  "pencil": {
+    "command": [
+      "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+      "--app",
+      "desktop"
+    ],
+    "enabled": true,
+    "type": "local"
+  }
+}
+```
+
+Update it to include a `figma` entry inside the same `mcp` block:
+
+```json
+"mcp": {
+  "pencil": {
+    "command": [
+      "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+      "--app",
+      "desktop"
+    ],
+    "enabled": true,
+    "type": "local"
+  },
+  "figma": {
+    "enabled": true,
+    "type": "remote",
+    "url": "https://mcp.figma.com/mcp",
+    "oauth": {
+      "clientId": "YOUR_CLIENT_ID",
+      "clientSecret": "YOUR_CLIENT_SECRET"
+    }
+  }
+}
+```
+
+Replace:
+
+- `YOUR_CLIENT_ID`
+- `YOUR_CLIENT_SECRET`
+
+with the values returned from Figma.
+
+## Step 4 — Clear old MCP auth cache
+
+Delete any previous auth cache so OpenCode can re-authenticate cleanly:
+
+```bash
+rm ~/.local/share/opencode/mcp-auth.json
+```
+
+## Step 5 — Authenticate with Figma
+
+Run:
+
+```bash
+opencode mcp auth figma
+```
+
+This should open your browser and ask you to:
+
+1. Log in to Figma
+2. Approve access
+3. Complete OAuth authorization
+
+## Step 6 — Verify MCP connection
+
+Run:
+
+```bash
+opencode mcp list
+```
+
+Expected output should include something like:
+
+```
+pencil   local
+figma    remote
+```
+
+That confirms Figma MCP is connected.
+
+## What this enables next
+
+Once connected, AI tools can use Figma context to:
+
+- inspect layout structure
+- read frames and components
+- help generate React / Tailwind UI
+- support design-to-code workflows
+
+Example flow:
+
+```
+Figma Frame
+     ↓
+AI reads frame via MCP
+     ↓
+Generate React + Tailwind
+     ↓
+Developer review
+     ↓
+Commit to repo
+```
+
+## Example use case
+
+Prompt example:
+
+```
+Read the Figma frame for this dashboard and generate a React + Tailwind component.
+```
+
+Possible workflow:
+
+1. AI reads the selected frame from Figma
+2. AI understands the layout and structure
+3. AI generates frontend code
+4. Developer reviews and refines
+5. Code is added to the product
+
+This is especially useful for rebuilding UI faster and keeping design and implementation aligned.
+
+## Troubleshooting
+
+### Figma auth does not work
+
+Delete the cached auth file and retry:
+
+```bash
+rm ~/.local/share/opencode/mcp-auth.json
+opencode mcp auth figma
+```
+
+### Figma MCP does not appear in the list
+
+Check that the `figma` block is placed inside the `mcp` section and that your JSON syntax is valid.
+
+### Browser prompt does not open
+
+Run:
+
+```bash
+opencode mcp auth figma
+```
+
+again.
+
+### JSON config breaks after editing
+
+Make sure:
+
+- every block is separated by commas
+- all quotes are double quotes
+- braces are balanced correctly
+
+## Notes
+
+This setup is useful for design-heavy frontend work, especially when building or rebuilding dashboard interfaces. It supports faster implementation of internal dashboards, design-to-code experiments, and AI-assisted frontend development.

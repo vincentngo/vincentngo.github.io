@@ -21,9 +21,7 @@ export function HeroSection({ greeting, bio, location }: HeroSectionProps) {
         </div>
       </div>
 
-      <p className="mb-8 max-w-2xl text-xl leading-relaxed text-foreground/90">{bio}</p>
-
-      <div className="flex flex-wrap gap-4">
+      <div className="mb-6 flex flex-wrap gap-4">
         <Link
           href="https://github.com"
           target="_blank"
@@ -69,6 +67,12 @@ export function HeroSection({ greeting, bio, location }: HeroSectionProps) {
             LinkedIn
           </span>
         </Link>
+      </div>
+
+      <div className="mb-8 max-w-2xl space-y-4 text-base leading-relaxed text-foreground/90">
+        {bio.split("\n\n").map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
       </div>
     </section>
   );
