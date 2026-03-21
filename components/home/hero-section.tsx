@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface HeroSectionProps {
   greeting: string;
@@ -10,10 +11,15 @@ export function HeroSection({ greeting, bio, location }: HeroSectionProps) {
   return (
     <section className="mb-24">
       <div className="mb-8 flex items-start gap-6">
-        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full bg-secondary">
-          <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-muted-foreground">
-            VN
-          </div>
+        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
+          <Image
+            src="/home/profile-pic.webp"
+            alt="Vincent Ngo"
+            width={96}
+            height={96}
+            className="h-full w-full object-cover"
+            priority
+          />
         </div>
         <div className="flex-1">
           <h1 className="mb-3 text-4xl font-bold tracking-tight md:text-5xl">{greeting}</h1>
