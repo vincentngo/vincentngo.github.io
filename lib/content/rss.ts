@@ -11,7 +11,7 @@ export function generateRSSFeed(locale: Locale): string {
     title: `${SITE_TITLE} - ${locale.toUpperCase()}`,
     description: SITE_DESCRIPTION,
     feed_url: `${SITE_URL}/${locale}/rss.xml`,
-    site_url: `${SITE_URL}/${locale}`,
+    site_url: `${SITE_URL}/${locale}/`,
     language: locale,
     pubDate: new Date(),
   });
@@ -22,7 +22,7 @@ export function generateRSSFeed(locale: Locale): string {
     feed.item({
       title: post.frontmatter.title,
       description: post.frontmatter.description,
-      url: `${SITE_URL}/${locale}/blog/${post.slug}`,
+      url: `${SITE_URL}/${locale}/blog/${post.slug}/`,
       date: new Date(post.frontmatter.date),
       categories: post.frontmatter.tags,
     });

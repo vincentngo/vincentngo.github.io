@@ -20,13 +20,13 @@ export function Header({ locale, dict }: HeaderProps) {
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <nav className="flex items-center gap-6">
           <Link
-            href={`/${locale}`}
+            href={`/${locale}/`}
             className="text-sm font-medium transition-colors hover:text-foreground/80"
           >
             {dict.nav.home}
           </Link>
           <Link
-            href={`/${locale}/blog`}
+            href={`/${locale}/blog/`}
             className="text-sm font-medium transition-colors hover:text-foreground/80"
           >
             {dict.nav.blog}

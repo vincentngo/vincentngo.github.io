@@ -16,7 +16,7 @@ export function generateSitemap(): SitemapEntry[] {
   // Add homepage for each locale
   locales.forEach((locale) => {
     entries.push({
-      url: `${SITE_URL}/${locale}`,
+      url: `${SITE_URL}/${locale}/`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1.0,
@@ -24,7 +24,7 @@ export function generateSitemap(): SitemapEntry[] {
 
     // Add blog index for each locale
     entries.push({
-      url: `${SITE_URL}/${locale}/blog`,
+      url: `${SITE_URL}/${locale}/blog/`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.8,
@@ -34,7 +34,7 @@ export function generateSitemap(): SitemapEntry[] {
     const posts = getAllPosts(locale);
     posts.forEach((post) => {
       entries.push({
-        url: `${SITE_URL}/${locale}/blog/${post.slug}`,
+        url: `${SITE_URL}/${locale}/blog/${post.slug}/`,
         lastModified: new Date(post.frontmatter.date),
         changeFrequency: "monthly",
         priority: 0.6,

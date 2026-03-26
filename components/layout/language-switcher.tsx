@@ -8,19 +8,24 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
   const pathname = usePathname();
 
   const getLocalizedPath = (locale: Locale) => {
-    if (!pathname) return `/${locale}`;
+    if (!pathname) return `/${locale}/`;
 
-    // Remove current locale from pathname
-    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "");
+    // Remove current locale; keep trailingSlash-friendly paths (/en/, /en/blog/, …)
+    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
 
     // If we're on a blog post page, redirect to blog index for the new locale
     // since blog posts have different slugs per locale
-    if (pathWithoutLocale.match(/^\/blog\/[^/]+$/)) {
-      return `/${locale}/blog`;
+    if (pathWithoutLocale.match(/^\/blog\/[^/]+\/?$/)) {
+      return `/${locale}/blog/`;
     }
 
-    // Return new path with selected locale
-    return `/${locale}${pathWithoutLocale}`;
+    const rest =
+      pathWithoutLocale === "/"
+        ? "/"
+        : pathWithoutLocale.endsWith("/")
+          ? pathWithoutLocale
+          : `${pathWithoutLocale}/`;
+    return `/${locale}${rest}`;
   };
 
   return (

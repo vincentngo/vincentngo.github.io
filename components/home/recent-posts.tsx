@@ -15,7 +15,7 @@ export function RecentPosts({ posts, locale, title, allPostsText }: RecentPostsP
       <div className="mb-8 flex items-baseline justify-between">
         <h2 className="text-2xl font-bold">{title}</h2>
         <Link
-          href={`/${locale}/blog`}
+          href={`/${locale}/blog/`}
           className="group text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <span className="border-b border-transparent transition-colors group-hover:border-foreground">
@@ -27,7 +27,7 @@ export function RecentPosts({ posts, locale, title, allPostsText }: RecentPostsP
       <div className="space-y-10">
         {posts.slice(0, 5).map((post) => (
           <article key={post.slug} className="group">
-            <Link href={`/${locale}/blog/${post.slug}`}>
+            <Link href={`/${locale}/blog/${post.slug}/`}>
               <h3 className="mb-2 text-xl font-semibold transition-colors group-hover:text-foreground/80">
                 <span className="border-b-2 border-transparent transition-colors group-hover:border-foreground">
                   {post.frontmatter.title}
@@ -58,7 +58,7 @@ export function RecentPosts({ posts, locale, title, allPostsText }: RecentPostsP
                 {post.frontmatter.tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={`/${locale}/blog?tag=${encodeURIComponent(tag)}`}
+                    href={`/${locale}/blog/?tag=${encodeURIComponent(tag)}`}
                     className="rounded-full bg-secondary px-3 py-1 text-xs font-medium transition-colors hover:bg-secondary/80"
                   >
                     {tag}

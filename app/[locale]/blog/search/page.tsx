@@ -81,7 +81,7 @@ export default function SearchPage() {
               </p>
               {results.map((post) => (
                 <article key={post.slug} className="border-b border-border pb-6">
-                  <Link href={`/${locale}/blog/${post.slug}`}>
+                  <Link href={`/${locale}/blog/${post.slug}/`}>
                     <h2 className="mb-2 text-2xl font-semibold hover:text-primary">{post.title}</h2>
                   </Link>
                   <p className="mb-2 text-sm text-muted-foreground">

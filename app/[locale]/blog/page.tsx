@@ -25,7 +25,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
           <div className="space-y-8">
             {posts.map((post) => (
               <article key={post.slug} className="border-b border-border pb-8">
-                <Link href={`/${locale}/blog/${post.slug}`}>
+                <Link href={`/${locale}/blog/${post.slug}/`}>
                   <h2 className="mb-2 text-2xl font-semibold hover:text-primary">
                     {post.frontmatter.title}
                   </h2>
