@@ -9,7 +9,6 @@ interface HeaderProps {
     nav: {
       home: string;
       blog: string;
-      about: string;
     };
   };
 }

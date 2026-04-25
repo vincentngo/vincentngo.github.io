@@ -2,7 +2,7 @@ import RSS from "rss";
 import { getAllPosts } from "./posts";
 import type { Locale } from "@/lib/i18n/config";
 
-const SITE_URL = "https://itsvngo.github.io/itsvngo";
+const SITE_URL = "https://vincentngo.github.io";
 const SITE_TITLE = "itsvngo";
 const SITE_DESCRIPTION = "Personal Portfolio & Knowledge Platform";
 

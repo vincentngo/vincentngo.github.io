@@ -15,7 +15,6 @@ type Dictionary = {
   nav: {
     home: string;
     blog: string;
-    about: string;
   };
   blog: {
     onThisPage: string;

@@ -1,7 +1,7 @@
 import { getAllPosts } from "./posts";
 import { locales } from "@/lib/i18n/config";
 
-const SITE_URL = "https://itsvngo.github.io/itsvngo";
+const SITE_URL = "https://vincentngo.github.io";
 
 export interface SitemapEntry {
   url: string;
