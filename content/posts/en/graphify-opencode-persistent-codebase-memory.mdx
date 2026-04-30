@@ -1,0 +1,88 @@
+---
+title: Use Graphify with OpenCode for Persistent Codebase Memory
+description: A practical guide to wiring Graphify into OpenCode so your AI coding workflow has persistent, queryable architectural context instead of session-by-session amnesia.
+date: 2026-04-30
+tags: [graphify, opencode, ai, mcp, developer-tools, knowledge-graph]
+slug: graphify-opencode-persistent-codebase-memory
+---
+
+# Use Graphify with OpenCode for Persistent Codebase Memory
+
+If you use AI coding agents every day, you’ve probably seen this pattern:
+
+- new session starts
+- agent has no memory of repo architecture
+- it re-reads files and burns tokens rediscovering context
+
+Graphify + OpenCode is a practical fix.
+
+Graphify creates a queryable knowledge graph from your repo and related docs. OpenCode gives you a fast terminal-native coding workflow. Combined, they let your agent reason from structure first instead of repeated text search.
+
+## What you get
+
+- Better context reuse across sessions
+- More focused code navigation and impact analysis
+- Less repeated “exploration slop” and token waste
+- Cleaner team handoffs when graph artifacts are shared
+
+## Core setup
+
+```bash
+# Install Graphify
+pip install graphifyy
+
+# Install OpenCode (example)
+brew install opencode
+
+# Install Graphify integration for OpenCode
+graphify install --platform opencode
+
+# Build graph from your project root
+/graphify .
+```
+
+## Practical workflow loop
+
+1. Start with Graphify report output (`GRAPH_REPORT.md`)
+2. Query graph for scoped architectural context
+3. Plan/build in OpenCode with graph-informed understanding
+4. Refresh graph after meaningful code changes
+
+This shifts your workflow from “search everything every time” to “query the right structures first.”
+
+## NotebookLM research bundle
+
+I compiled the research set in NotebookLM from:
+
+- YouTube walkthrough: https://www.youtube.com/watch?v=rgYnZqi2GmA
+- Graphify site: https://graphifylabs.ai/
+- Graphify repo: https://github.com/safishamsi/graphify
+- OpenCode repo: https://github.com/sst/opencode
+- OpenCode docs: https://opencode.ai/docs
+
+## Download companion assets
+
+- **Infographic image**: [/images/posts/graphify-opencode/infographic.png](/images/posts/graphify-opencode/infographic.png)
+- **Presentation (PPTX)**: [/downloads/graphify-opencode/graphify-opencode-presentation.pptx](/downloads/graphify-opencode/graphify-opencode-presentation.pptx)
+- **Podcast (MP3)**: [/downloads/graphify-opencode/graphify-opencode-podcast.mp3](/downloads/graphify-opencode/graphify-opencode-podcast.mp3)
+- **Research report (Markdown)**: [/downloads/graphify-opencode/graphify-opencode-research-report.md](/downloads/graphify-opencode/graphify-opencode-research-report.md)
+
+## Team usage notes
+
+For teams, treat graph outputs like build artifacts:
+
+- generate in CI or by one designated maintainer
+- share the canonical graph outputs
+- avoid everyone producing diverging local semantic layers
+
+## Caveats
+
+- first-time graph generation can be non-trivial on larger repos
+- semantic extraction quality depends on source quality and project structure
+- refresh cadence matters; stale graph data can mislead architectural queries
+
+## Final take
+
+OpenCode gives speed; Graphify adds memory.
+
+If you’re doing serious AI-assisted development, this combination is one of the highest-leverage upgrades you can make: less context churn, better architectural reasoning, and a more stable coding loop.
