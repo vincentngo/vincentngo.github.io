@@ -65,6 +65,7 @@
 /* Prose styles for MDX content */
 .prose {
   @apply text-foreground;
+  overflow-wrap: break-word;
 }
 
 .prose h1 {
@@ -111,10 +112,12 @@
 
 .prose code {
   @apply rounded bg-secondary px-1.5 py-0.5 font-mono text-sm;
+  word-break: break-word;
 }
 
 .prose pre {
   @apply mb-4 overflow-x-auto rounded-lg bg-secondary p-4;
+  max-width: 100%;
 }
 
 .prose pre code {
@@ -131,4 +134,8 @@
 
 .prose em {
   @apply italic;
+}
+
+.prose img {
+  @apply h-auto max-w-full rounded-lg;
 }

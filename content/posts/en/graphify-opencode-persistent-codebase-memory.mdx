@@ -6,9 +6,7 @@ tags: [graphify, opencode, ai, mcp, developer-tools, knowledge-graph]
 slug: graphify-opencode-persistent-codebase-memory
 ---
 
-# Use Graphify with OpenCode for Persistent Codebase Memory
-
-If you use AI coding agents every day, you’ve probably seen this pattern:
+If you use AI coding agents every day, you've probably seen this pattern:
 
 - new session starts
 - agent has no memory of repo architecture
@@ -24,6 +22,12 @@ Graphify creates a queryable knowledge graph from your repo and related docs. Op
 - More focused code navigation and impact analysis
 - Less repeated “exploration slop” and token waste
 - Cleaner team handoffs when graph artifacts are shared
+
+## What it looks like
+
+A generated Graphify graph for a real codebase. Nodes are files and symbols; edges are imports, calls, and relationships. Communities surface architectural clusters automatically.
+
+![Graphify graph visualization showing 1535 nodes, 1683 edges, and 365 communities detected in a codebase](/images/posts/graphify-opencode/graph-visualization.webp)
 
 ## Core setup
 
@@ -51,6 +55,70 @@ graphify install --platform opencode
 This shifts your workflow from “search everything every time” to “query the right structures first.”
 
 {/* This pattern works with any terminal-native AI coding agent, not just OpenCode. Codex, Claude Code, and similar tools can all benefit from a persistent graph layer. */}
+
+## Example: querying authentication flow
+
+Here is a sanitized example of querying a real codebase for its auth architecture. All proprietary names, internal APIs, and business-specific routes have been replaced with generic equivalents.
+
+### The query
+
+```bash
+$ graphify query "show the auth flow" --graph graphify-out/graph.json
+```
+
+### Graph results (selected nodes)
+
+```
+NODE use-auth.ts           [src=hooks/use-auth.ts loc=L1 community=97]
+NODE auth-guard.tsx        [src=components/auth/auth-guard.tsx loc=L1 community=97]
+NODE sign-in/page.tsx      [src=app/(public)/sign-in/page.tsx loc=L1 community=42]
+NODE sign-in-form.tsx      [src=components/auth/sign-in-form.tsx loc=L1 community=42]
+NODE phone-login.tsx       [src=components/auth/phone-login.tsx loc=L1 community=42]
+NODE email-login.tsx       [src=components/auth/email-login.tsx loc=L1 community=42]
+NODE social-login.tsx      [src=components/auth/social-login.tsx loc=L1 community=42]
+NODE verify-otp.tsx        [src=components/auth/verify-otp.tsx loc=L1 community=42]
+NODE create-profile.tsx    [src=components/auth/create-profile.tsx loc=L1 community=42]
+NODE link-phone.tsx        [src=components/auth/link-phone.tsx loc=L1 community=42]
+NODE api-client.ts         [src=lib/api-client.ts loc=L1 community=12]
+NODE user-store.ts         [src=stores/user-store.ts loc=L1 community=97]
+```
+
+### Interpreted flow
+
+1. **Route guard** — `useAuth()` + `auth-guard.tsx`
+   - Checks current path against a `REQUIRED_AUTH_PAGES` list
+   - If no session token and the page is protected, blocks access
+   - Also defers rendering while user profile is being fetched
+
+2. **Sign-in entry point** — `sign-in/page.tsx`
+   - Renders the main sign-in shell
+   - If already authenticated, redirects to the original destination or home
+
+3. **Method selection** — `sign-in-form.tsx`
+   - Presents available login methods based on tenant configuration
+   - Phone, Email, or Social (Google, Apple, etc.)
+
+4. **Phone login flow**
+   - Collects phone number → submits to backend OTP endpoint
+   - Backend dispatches OTP via SMS or third-party provider
+   - User enters OTP in `verify-otp.tsx`
+   - New users are sent to `create-profile.tsx` to complete onboarding
+   - Success: persists access token and hydrates user store
+
+5. **Email login flow**
+   - Validates email format → submits to same OTP endpoint with email method
+   - Verifies OTP from inbox → may require phone linking for account recovery
+   - New users → profile creation → token persisted → store updated
+
+6. **Social login flow**
+   - Uses OAuth popups/redirects via provider SDKs
+   - On success, calls the backend sign-in endpoint with social payload
+   - If the tenant requires a phone number and the account lacks one, prompts to link via `link-phone.tsx`
+   - Otherwise, stores token and updates state directly
+
+### Why this matters
+
+Without the graph, an AI agent would need to grep for `"auth"`, open a dozen files, and slowly reconstruct this sequence. With Graphify, the architecture is queryable in seconds — the communities even cluster the guard logic (community 97), the public pages (community 42), and the API layer (community 12) automatically.
 
 ## Team usage notes
 

@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-          <div>
+          <div className="min-w-0">
             <TableOfContents
               headings={headings}
               title={dict.blog.onThisPage}
@@ -140,12 +140,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
             </div>
           </div>
-          <TableOfContents
-            headings={headings}
-            title={dict.blog.onThisPage}
-            showMobile={false}
-            showDesktop
-          />
+          <div className="min-w-0">
+            <TableOfContents
+              headings={headings}
+              title={dict.blog.onThisPage}
+              showMobile={false}
+              showDesktop
+            />
+          </div>
         </div>
       </article>
     </>
