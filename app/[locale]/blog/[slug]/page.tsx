@@ -8,6 +8,15 @@ import { Header } from "@/components/layout/header";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { extractPostHeadings, createHeadingSlugger } from "@/lib/content/headings";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { LightboxImage } from "@/components/ui/lightbox-image";
+import {
+  DataTable,
+  DataTableHead,
+  DataTableBody,
+  DataTableRow,
+  DataTableHeader,
+  DataTableCell,
+} from "@/components/ui/data-table";
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 
 interface PageProps {
@@ -131,6 +140,33 @@ export default async function BlogPostPage({ params }: PageProps) {
                 components={{
                   h2: (props) => HeadingWithId("h2", props),
                   h3: (props) => HeadingWithId("h3", props),
+                  LightboxImage,
+                  DataTable,
+                  DataTableHead,
+                  DataTableBody,
+                  DataTableRow,
+                  DataTableHeader,
+                  DataTableCell,
+                  table: (props) => (
+                    <div className="my-6 overflow-x-auto rounded-lg border border-border shadow-sm">
+                      <table className="w-full border-collapse text-sm" {...props} />
+                    </div>
+                  ),
+                  thead: (props) => <thead className="bg-muted" {...props} />,
+                  tbody: (props) => <tbody className="divide-y divide-border" {...props} />,
+                  tr: (props) => <tr className="transition-colors hover:bg-muted/50" {...props} />,
+                  th: (props) => (
+                    <th
+                      className="border-b border-border px-4 py-3 text-left font-semibold text-foreground"
+                      {...props}
+                    />
+                  ),
+                  td: (props) => (
+                    <td
+                      className="border-b border-border px-4 py-3 text-foreground/90"
+                      {...props}
+                    />
+                  ),
                 }}
                 options={{
                   mdxOptions: {

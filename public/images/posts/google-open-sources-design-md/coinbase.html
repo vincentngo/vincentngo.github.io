@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coinbase — The future of money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #0052ff;
+      --color-primary-active: #003ecc;
+      --color-primary-disabled: #a8b8cc;
+      --color-canvas: #ffffff;
+      --color-surface-soft: #f7f7f7;
+      --color-surface-strong: #eef0f3;
+      --color-surface-dark: #0a0b0d;
+      --color-surface-dark-elevated: #16181c;
+      --color-hairline: #dee1e6;
+      --color-ink: #0a0b0d;
+      --color-body: #5b616e;
+      --color-muted: #7c828a;
+      --color-on-primary: #ffffff;
+      --color-on-dark: #ffffff;
+      --color-on-dark-soft: #a8acb3;
+      --color-semantic-up: #05b169;
+      --color-semantic-down: #cf202f;
+
+      --font-sans: 'Inter', -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-pill: 100px;
+      --radius-xl: 24px;
+      --radius-md: 12px;
+      --radius-full: 9999px;
+
+      --spacing-section: 96px;
+      --spacing-xl: 32px;
+      --spacing-lg: 24px;
+      --spacing-md: 20px;
+      --spacing-base: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-ink);
+      background: var(--color-canvas);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Utilities */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-xl); }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--color-primary); color: var(--color-on-primary);
+      border: none; border-radius: var(--radius-pill);
+      padding: 12px 20px; height: 44px;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600; line-height: 1.15;
+      cursor: pointer; transition: background 0.2s ease; text-decoration: none;
+    }
+    .btn-primary:hover { background: var(--color-primary-active); }
+
+    .btn-pill-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--color-primary); color: var(--color-on-primary);
+      border: none; border-radius: var(--radius-pill);
+      padding: 16px 32px; height: 56px;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s ease; text-decoration: none;
+    }
+    .btn-pill-cta:hover { background: var(--color-primary-active); }
+
+    .btn-secondary-light {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--color-surface-strong); color: var(--color-ink);
+      border: none; border-radius: var(--radius-pill);
+      padding: 12px 20px; height: 44px;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s ease; text-decoration: none;
+    }
+    .btn-secondary-light:hover { background: var(--color-hairline); }
+
+    .btn-outline-dark {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--color-on-dark);
+      border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-pill);
+      padding: 12px 20px; height: 44px;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s ease; text-decoration: none;
+    }
+    .btn-outline-dark:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+
+    .btn-text {
+      display: inline-flex; align-items: center;
+      background: transparent; color: var(--color-primary);
+      border: none;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+    }
+    .btn-text:hover { text-decoration: underline; }
+
+    /* Navigation */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--color-canvas);
+      border-bottom: 1px solid var(--color-hairline);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav__logo {
+      font-size: 22px; font-weight: 600; letter-spacing: -0.5px;
+      color: var(--color-primary); text-decoration: none;
+    }
+    .nav__links { display: flex; align-items: center; gap: var(--spacing-lg); }
+    .nav__link {
+      color: var(--color-ink); text-decoration: none;
+      font-size: 14px; font-weight: 500; line-height: 1.4;
+      transition: opacity 0.2s ease;
+    }
+    .nav__link:hover { opacity: 0.7; }
+    .nav__cta-group { display: flex; align-items: center; gap: var(--spacing-base); }
+
+    /* Hero Band Dark */
+    .hero-dark {
+      background: var(--color-surface-dark); color: var(--color-on-dark);
+      padding: var(--spacing-section) 0;
+      overflow: hidden;
+    }
+    .hero-dark__grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-xl);
+      align-items: center;
+    }
+    .hero-dark__title {
+      font-size: clamp(40px, 5vw, 80px); font-weight: 400; line-height: 1.0;
+      letter-spacing: -2px; margin-bottom: var(--spacing-lg);
+    }
+    .hero-dark__subtitle {
+      font-size: 18px; font-weight: 400; line-height: 1.5;
+      color: var(--color-on-dark-soft); margin-bottom: var(--spacing-xl);
+      max-width: 480px;
+    }
+    .hero-dark__ctas { display: flex; gap: var(--spacing-base); flex-wrap: wrap; }
+
+    /* Product UI Card Stack */
+    .product-stack {
+      position: relative; height: 360px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .product-card {
+      background: var(--color-surface-dark-elevated);
+      border-radius: var(--radius-xl); padding: var(--spacing-xl);
+      width: 280px; box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    }
+    .product-card--main {
+      position: relative; z-index: 2;
+    }
+    .product-card--back {
+      position: absolute;
+      transform: rotate(-8deg) translate(40px, -20px);
+      opacity: 0.6; z-index: 1;
+    }
+    .product-card__header {
+      display: flex; align-items: center; gap: var(--spacing-base);
+      margin-bottom: var(--spacing-lg);
+    }
+    .product-card__icon {
+      width: 40px; height: 40px; border-radius: var(--radius-full);
+      background: var(--color-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .product-card__balance {
+      font-family: var(--font-mono); font-size: 24px; font-weight: 500;
+      color: var(--color-on-dark); margin-bottom: 4px;
+    }
+    .product-card__label {
+      font-size: 13px; color: var(--color-on-dark-soft);
+    }
+    .product-card__row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--spacing-base) 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .product-card__asset {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .product-card__asset-icon {
+      width: 28px; height: 28px; border-radius: var(--radius-full);
+      background: var(--color-surface-strong); display: flex;
+      align-items: center; justify-content: center; font-size: 12px;
+    }
+    .product-card__price {
+      font-family: var(--font-mono); font-size: 14px; font-weight: 500;
+    }
+    .product-card__change--up { color: var(--color-semantic-up); }
+    .product-card__change--down { color: var(--color-semantic-down); }
+
+    /* Stats Band */
+    .stats-band {
+      background: var(--color-surface-soft);
+      padding: var(--spacing-section) 0;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-xl);
+    }
+    .stat__value {
+      font-family: var(--font-mono); font-size: 32px; font-weight: 500;
+      color: var(--color-ink); margin-bottom: 8px;
+    }
+    .stat__label {
+      font-size: 14px; color: var(--color-body); line-height: 1.5;
+    }
+
+    /* Features */
+    .features { padding: var(--spacing-section) 0; }
+    .features__header {
+      text-align: center; max-width: 600px; margin: 0 auto var(--spacing-section);
+    }
+    .features__title {
+      font-size: clamp(36px, 4vw, 52px); font-weight: 400; line-height: 1.0;
+      letter-spacing: -1.3px; margin-bottom: var(--spacing-lg);
+    }
+    .features__subtitle {
+      font-size: 18px; color: var(--color-body); line-height: 1.5;
+    }
+    .features__grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-lg);
+    }
+    .feature-card {
+      background: var(--color-canvas);
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--radius-xl); padding: var(--spacing-xl);
+      transition: box-shadow 0.2s ease;
+    }
+    .feature-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .feature-card__icon {
+      width: 48px; height: 48px; border-radius: var(--radius-full);
+      background: var(--color-surface-strong);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--spacing-lg); font-size: 20px;
+    }
+    .feature-card__title {
+      font-size: 18px; font-weight: 600; line-height: 1.33;
+      margin-bottom: 8px;
+    }
+    .feature-card__desc {
+      font-size: 14px; color: var(--color-body); line-height: 1.5;
+    }
+
+    /* CTA Band Dark */
+    .cta-band {
+      background: var(--color-surface-dark); color: var(--color-on-dark);
+      padding: var(--spacing-section) 0; text-align: center;
+    }
+    .cta-band__title {
+      font-size: clamp(36px, 4vw, 52px); font-weight: 400; line-height: 1.0;
+      letter-spacing: -1.3px; margin-bottom: var(--spacing-lg);
+    }
+    .cta-band__subtitle {
+      font-size: 18px; color: var(--color-on-dark-soft);
+      margin-bottom: var(--spacing-xl); max-width: 520px;
+      margin-left: auto; margin-right: auto;
+    }
+    .cta-band__ctas { display: flex; gap: var(--spacing-base); justify-content: center; flex-wrap: wrap; }
+
+    /* Footer */
+    .footer {
+      background: var(--color-canvas);
+      border-top: 1px solid var(--color-hairline);
+      padding: var(--spacing-section) 0 var(--spacing-xl);
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 2fr repeat(4, 1fr);
+      gap: var(--spacing-xl); margin-bottom: var(--spacing-section);
+    }
+    .footer__brand {
+      font-size: 22px; font-weight: 600; color: var(--color-primary);
+      margin-bottom: var(--spacing-base);
+    }
+    .footer__tagline {
+      font-size: 14px; color: var(--color-body); line-height: 1.5;
+      max-width: 280px;
+    }
+    .footer__heading {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--color-ink);
+      margin-bottom: var(--spacing-lg);
+    }
+    .footer__links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer__link {
+      color: var(--color-body); text-decoration: none; font-size: 14px;
+      transition: color 0.2s ease;
+    }
+    .footer__link:hover { color: var(--color-ink); }
+    .footer__legal {
+      border-top: 1px solid var(--color-hairline);
+      padding-top: var(--spacing-xl);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer__legal-text {
+      font-size: 13px; color: var(--color-muted);
+    }
+
+    /* Badge */
+    .badge-pill {
+      display: inline-flex; align-items: center;
+      background: var(--color-surface-strong); color: var(--color-ink);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: var(--spacing-lg);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-dark__grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-dark__subtitle { margin-left: auto; margin-right: auto; }
+      .hero-dark__ctas { justify-content: center; }
+      .product-stack { height: 280px; margin-top: var(--spacing-xl); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .features__grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .nav__links { display: none; }
+      .stats-grid { grid-template-columns: 1fr; text-align: center; }
+      .features__grid { grid-template-columns: 1fr; }
+      .footer__grid { grid-template-columns: 1fr; }
+      .product-card { width: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">coinbase</a>
+      <div class="nav__links">
+        <a href="#" class="nav__link">Cryptocurrencies</a>
+        <a href="#" class="nav__link">Individuals</a>
+        <a href="#" class="nav__link">Businesses</a>
+        <a href="#" class="nav__link">Developers</a>
+      </div>
+      <div class="nav__cta-group">
+        <a href="#" class="nav__link">Sign in</a>
+        <a href="#" class="btn-primary">Sign up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Band Dark -->
+  <section class="hero-dark">
+    <div class="container">
+      <div class="hero-dark__grid">
+        <div>
+          <div class="badge-pill">Trusted by 100M+ users</div>
+          <h1 class="hero-dark__title">The future<br/>of money</h1>
+          <p class="hero-dark__subtitle">
+            Buy, sell, and manage crypto on the most trusted platform. Institutional-grade security with the simplicity of a consumer app.
+          </p>
+          <div class="hero-dark__ctas">
+            <a href="#" class="btn-pill-cta">Get started</a>
+            <a href="#" class="btn-outline-dark">View pricing</a>
+          </div>
+        </div>
+        <div class="product-stack">
+          <div class="product-card product-card--back">
+            <div class="product-card__header">
+              <div class="product-card__icon">💳</div>
+              <div>
+                <div class="product-card__balance">$24,891.40</div>
+                <div class="product-card__label">Portfolio</div>
+              </div>
+            </div>
+            <div class="product-card__row">
+              <div class="product-card__asset">
+                <div class="product-card__asset-icon">💎</div>
+                <span style="font-size:14px;">ETH</span>
+              </div>
+              <div class="product-card__price">$3,421.80</div>
+            </div>
+          </div>
+          <div class="product-card product-card--main">
+            <div class="product-card__header">
+              <div class="product-card__icon">💳</div>
+              <div>
+                <div class="product-card__balance">$42,156.78</div>
+                <div class="product-card__label">Total balance</div>
+              </div>
+            </div>
+            <div class="product-card__row">
+              <div class="product-card__asset">
+                <div class="product-card__asset-icon">🌕</div>
+                <span style="font-size:14px;">BTC</span>
+              </div>
+              <div>
+                <div class="product-card__price">$67,234.12</div>
+                <div class="product-card__change--up" style="font-size:12px;text-align:right;">+2.4%</div>
+              </div>
+            </div>
+            <div class="product-card__row">
+              <div class="product-card__asset">
+                <div class="product-card__asset-icon">💎</div>
+                <span style="font-size:14px;">ETH</span>
+              </div>
+              <div>
+                <div class="product-card__price">$3,421.80</div>
+                <div class="product-card__change--down" style="font-size:12px;text-align:right;">−0.8%</div>
+              </div>
+            </div>
+            <div class="product-card__row">
+              <div class="product-card__asset">
+                <div class="product-card__asset-icon">⚡</div>
+                <span style="font-size:14px;">SOL</span>
+              </div>
+              <div>
+                <div class="product-card__price">$148.92</div>
+                <div class="product-card__change--up" style="font-size:12px;text-align:right;">+5.1%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Band -->
+  <section class="stats-band">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat__value">$200B+</div>
+          <div class="stat__label">Assets on platform</div>
+        </div>
+        <div class="stat">
+          <div class="stat__value">100M+</div>
+          <div class="stat__label">Verified users</div>
+        </div>
+        <div class="stat">
+          <div class="stat__value">150+</div>
+          <div class="stat__label">Countries supported</div>
+        </div>
+        <div class="stat">
+          <div class="stat__value">$0</div>
+          <div class="stat__label">Minimum to start</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <div class="features__header">
+        <h2 class="features__title">Everything you need<br/>to build wealth</h2>
+        <p class="features__subtitle">
+          From your first Bitcoin to advanced trading, Coinbase gives you the tools to invest with confidence.
+        </p>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">🔒</div>
+          <div class="feature-card__title">Institutional security</div>
+          <div class="feature-card__desc">98% of crypto stored offline in cold wallets. Insurance on hot wallets. SOC 2 Type II certified.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">📊</div>
+          <div class="feature-card__title">Advanced trading</div>
+          <div class="feature-card__desc">Limit orders, stop losses, real-time charts. Pro-grade tools with consumer-friendly design.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">💰</div>
+          <div class="feature-card__title">Earn rewards</div>
+          <div class="feature-card__desc">Stake ETH, SOL, and more to earn up to 6% APY. Rewards deposited automatically.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">🎯</div>
+          <div class="feature-card__title">Recurring buys</div>
+          <div class="feature-card__desc">Set it and forget it. Dollar-cost average into Bitcoin, Ethereum, and 200+ assets on a schedule.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">💼</div>
+          <div class="feature-card__title">Coinbase Card</div>
+          <div class="feature-card__desc">Spend crypto anywhere Visa is accepted. Earn up to 4% back in crypto on every purchase.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">🏙️</div>
+          <div class="feature-card__title">Coinbase Wallet</div>
+          <div class="feature-card__desc">Your keys, your crypto. Self-custody wallet with built-in DeFi, NFTs, and dApp browser.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Band -->
+  <section class="cta-band">
+    <div class="container">
+      <h2 class="cta-band__title">Take control of<br/>your money</h2>
+      <p class="cta-band__subtitle">
+        Join millions of people who trust Coinbase to buy, sell, and manage their crypto.
+      </p>
+      <div class="cta-band__ctas">
+        <a href="#" class="btn-pill-cta">Get started free</a>
+        <a href="#" class="btn-outline-dark">Contact sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">coinbase</div>
+          <p class="footer__tagline">The most trusted platform for buying, selling, and managing cryptocurrency.</p>
+        </div>
+        <div>
+          <div class="footer__heading">Products</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Coinbase</a></li>
+            <li><a href="#" class="footer__link">Advanced Trade</a></li>
+            <li><a href="#" class="footer__link">Wallet</a></li>
+            <li><a href="#" class="footer__link">Card</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer__heading">Learn</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Basics</a></li>
+            <li><a href="#" class="footer__link">Market updates</a></li>
+            <li><a href="#" class="footer__link">Earn</a></li>
+            <li><a href="#" class="footer__link">What is crypto?</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer__heading">Company</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">About</a></li>
+            <li><a href="#" class="footer__link">Careers</a></li>
+            <li><a href="#" class="footer__link">Press</a></li>
+            <li><a href="#" class="footer__link">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer__heading">Support</div>
+          <ul class="footer__links">
+            <li><a href="#" class="footer__link">Help center</a></li>
+            <li><a href="#" class="footer__link">Contact us</a></li>
+            <li><a href="#" class="footer__link">Status</a></li>
+            <li><a href="#" class="footer__link">Legal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <span class="footer__legal-text">© 2026 Coinbase. All rights reserved.</span>
+        <span class="footer__legal-text">Trusted by institutions worldwide</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,499 @@
+---
+title: "Google Open-Sourced DESIGN.md — Here's Why It Matters and How to Use It"
+description: "A deep dive into Google's DESIGN.md format: what it is, why it matters, how it differs from AGENTS.md, and a hands-on tutorial building a landing page from a real production design system."
+date: "2026-05-01"
+tags: [design, design-systems, ai, google, frontend, stitch, markdown]
+slug: google-open-sources-design-md
+---
+
+If you have ever asked an AI coding agent to build you a landing page, you know the drill. You get something functional — but the colors are off-brand, the typography feels generic, and the spacing is inconsistent. Every follow-up prompt becomes design whack-a-mole: *make the buttons rounder, use the correct blue, more whitespace.*
+
+The root issue is not the agent's coding ability. It is that **agents lack persistent, structured context about how your UI should look and feel.** They do not have a design system file they can reference across sessions, tools, or prompts.
+
+Google's answer is [`DESIGN.md`](https://github.com/google-labs-code/design.md) — an open-source format specification (Apache-2.0) for describing a visual identity to coding agents. It launched alongside [Stitch](https://stitch.withgoogle.com/), Google's AI design tool, and is now being adopted by a growing ecosystem.
+
+---
+
+## What Is DESIGN.md
+
+`DESIGN.md` is a **single, self-contained, plain-text file** that defines your entire visual identity. It has two layers:
+
+1. **YAML front matter** — machine-readable design tokens (normative values)
+2. **Markdown body** — human-readable design rationale (context and guidance)
+
+Here is a minimal example:
+
+```yaml
+---
+name: Heritage
+colors:
+  primary: "#1A1C1E"
+  secondary: "#6C7278"
+  tertiary: "#B8422E"
+  neutral: "#F7F5F2"
+typography:
+  h1:
+    fontFamily: Public Sans
+    fontSize: 3rem
+    fontWeight: 700
+    lineHeight: 1.1
+  body-md:
+    fontFamily: Public Sans
+    fontSize: 1rem
+rounded:
+  sm: 4px
+  md: 8px
+spacing:
+  sm: 8px
+  md: 16px
+components:
+  button-primary:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "#FFFFFF"
+    rounded: "{rounded.sm}"
+    padding: 12px
+---
+
+## Overview
+
+Architectural Minimalism meets Journalistic Gravitas.
+
+## Colors
+
+- **Primary (#1A1C1E):** Deep ink for headlines and core text.
+- **Tertiary (#B8422E):** "Boston Clay" — the sole driver for interaction.
+
+## Typography
+
+Public Sans for everything except small all-caps labels.
+
+## Components
+
+`button-primary` is the only high-emphasis action on a page.
+```
+
+The tokens give agents **exact values**. The prose tells them **why those values exist** and **how to apply them**. An agent that reads this file will produce a UI with deep ink headlines, a warm limestone background, and Boston Clay call-to-action buttons — consistently, across every generation.
+
+---
+
+## Why Markdown
+
+Google chose Markdown deliberately. As one [excellent deep-dive](https://www.youtube.com/watch?v=LfgMBy0auL8) on the format explains:
+
+> *"Markdown is the right middle layer — structured enough for AI, readable enough for humans. It sits between raw design tokens and generated code."*
+
+LLMs read Markdown natively. There is no parser to configure, no schema to validate against (though the CLI helps), and no proprietary format to learn. A `DESIGN.md` file is readable in GitHub, editable in VS Code, and diffable in pull requests.
+
+---
+
+## The Anatomy of a DESIGN.md File
+
+### Token Schema (YAML Front Matter)
+
+The front matter follows a strict but expressive schema:
+
+```yaml
+version: alpha          # current spec version
+name: <string>
+description: <string>   # optional brand narrative
+colors:
+  <token-name>: <Color>
+typography:
+  <token-name>: <Typography>
+rounded:
+  <scale-level>: <Dimension>
+spacing:
+  <scale-level>: <Dimension | number>
+components:
+  <component-name>:
+    <property>: <string | token reference>
+```
+
+**Token types:**
+
+| Type | Format | Example |
+|------|--------|---------|
+| Color | `#` + hex (sRGB) | `"#1A1C1E"` |
+| Dimension | number + unit (`px`, `em`, `rem`) | `48px`, `-0.02em` |
+| Token Reference | `{path.to.token}` | `{colors.primary}` |
+| Typography | object with `fontFamily`, `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`, `fontFeature`, `fontVariation` | See above |
+
+**Component properties** are whitelisted to: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`. Variants like hover or active states are expressed as **separate component entries** (`button-primary-hover`), not nested objects.
+
+### Canonical Sections (Markdown Body)
+
+Sections are optional, but those present must appear in this exact order:
+
+1. **Overview** (alias: Brand & Style)
+2. **Colors**
+3. **Typography**
+4. **Layout** (alias: Layout & Spacing)
+5. **Elevation & Depth** (alias: Elevation)
+6. **Shapes**
+7. **Components**
+8. **Do's and Don'ts**
+
+This order matters. The linter flags sections that appear out of sequence. Unknown sections are preserved but not validated.
+
+---
+
+## The CLI: Lint, Diff, and Export
+
+Google ships an npm package (`@google/design.md`) that makes the spec actionable:
+
+```bash
+# Validate structure + token references + WCAG contrast
+npx @google/design.md lint DESIGN.md
+
+# Compare two versions, fail on regression
+npx @google/design.md diff DESIGN.md DESIGN-v2.md
+
+# Export to Tailwind theme JSON
+npx @google/design.md export --format tailwind DESIGN.md > tailwind.theme.json
+
+# Export to W3C DTCG tokens.json
+npx @google/design.md export --format dtcg DESIGN.md > tokens.json
+
+# Print the spec (great for injecting into agent prompts)
+npx @google/design.md spec --rules-only --format json
+```
+
+The linter runs **7 rules** covering broken references, duplicate sections, invalid values, and — critically — **WCAG contrast ratios**. When a component's `textColor` on `backgroundColor` falls below AA (4.5:1) or AAA (7:1), the linter surfaces it as a warning. For teams that care about accessibility, this alone justifies adopting the format.
+
+I ran the linter on the sample project we will build later and got zero errors. The only warnings were "orphaned tokens" — colors defined in the palette but not yet bound to a component. That is exactly the kind of structured feedback that keeps a design system honest.
+
+---
+
+## DESIGN.md vs. AGENTS.md
+
+A common question: *"How is this different from `AGENTS.md`?"*
+
+| | `AGENTS.md` | `DESIGN.md` |
+|---|---|---|
+| **Audience** | Coding agents | Design agents |
+| **Purpose** | *How* to build the project | *How* the project should look and feel |
+| **Content** | Architecture, stack, conventions, testing rules | Colors, typography, spacing, components, rationale |
+| **Read by** | Cursor, Claude Code, Copilot, Codex | Stitch, Claude Design, Neuform, Aura |
+
+In practice, **they are complements, not competitors.** `AGENTS.md` tells the agent *"Use React, TypeScript, and Tailwind. Run tests before committing."* `DESIGN.md` tells it *"Use a 65px light-weight display font, a single violet-blue accent, and pill-shaped buttons with 32px radii."*
+
+Together, they give an agent complete autonomy over both the engineering and the aesthetics of a project.
+
+---
+
+## The Ecosystem
+
+`DESIGN.md` is gaining traction beyond Google's walls. Here are the key players:
+
+- **[Stitch](https://stitch.withgoogle.com/)** — Google's own AI design tool. Stitch reads `DESIGN.md` to generate and remix UI components.
+- **[awesome-design-md](https://github.com/voltagent/awesome-design-md)** — A curated collection of 69+ `DESIGN.md` files extracted from real websites (Linear, Stripe, Vercel, Apple, Nike, etc.). Drop one into your project and tell your agent to "build me a page that looks like this."
+- **[getdesign.md](https://getdesign.md/)** — A searchable catalog of community design systems with installable `DESIGN.md` packages.
+- **[designmd.me](https://designmd.me/)** — Paste any website URL and instantly generate a `DESIGN.md` from it. Perfect for cloning the look and feel of sites you admire.
+- **[Refero](https://refero.design/)** — A massive library of real website screenshots and design references from popular sites. Great for researching design patterns and finding inspiration before writing your `DESIGN.md`.
+- **[Neuform](https://neuform.ai)** — Generate and remix designs using `DESIGN.md` as the interchange format.
+- **[Aura](https://aura.build)** — Bring `DESIGN.md` into build tools and deployment pipelines.
+- **[Claude Design](https://claude.ai/design)** — Anthropic's design assistant can consume `DESIGN.md` to guide visual generation.
+
+This is the pattern that makes `DESIGN.md` powerful: **it is an open interchange format.** Your design system travels with your code, readable by any tool that speaks Markdown.
+
+---
+
+## Tutorial: Building a Landing Page from a Real DESIGN.md
+
+Let us put this into practice. I grabbed a production-grade design system from [Refero Styles](https://styles.refero.design/) (inspired by a leading fintech brand) and converted it into a spec-compliant `DESIGN.md`. Then I built a landing page that follows it precisely.
+
+### Step 1: The DESIGN.md File
+
+Here is the file (abridged for readability):
+
+```yaml
+---
+version: alpha
+name: Mercury
+description: Mountain Top Command Center.
+colors:
+  primary: "#5266eb"
+  secondary: "#cdddff"
+  tertiary: "#70707d"
+  neutral: "#1e1e2a"
+  background: "#171721"
+  surface: "#1e1e2a"
+  interactive: "#272735"
+  text-primary: "#ededf3"
+  text-secondary: "#c3c3cc"
+  text-on-primary: "#ffffff"
+typography:
+  display:
+    fontFamily: "Inter"
+    fontSize: 65px
+    fontWeight: 300
+    lineHeight: 1.1
+    letterSpacing: "0.01em"
+  body:
+    fontFamily: "Inter"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+rounded:
+  full: 32px
+  button: 32px
+  button-lg: 40px
+spacing:
+  unit: 4px
+  md: 16px
+  lg: 24px
+  xl: 32px
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.text-on-primary}"
+    rounded: "{rounded.button}"
+    padding: "16px 24px"
+    typography: "{typography.body}"
+  button-primary-hover:
+    backgroundColor: "#3d50d6"
+---
+
+## Overview
+
+The design feels like a command center at twilight, expansive and focused.
+
+## Colors
+
+- **Primary (#5266eb):** "Mercury Blue" — the sole driver for interaction.
+- **Background (#171721):** "Deep Space" — outermost page background.
+- **Text Primary (#ededf3):** "Starlight" — primary text on dark backgrounds.
+
+## Typography
+
+Inter at light weights for headlines, creating authority through restraint.
+
+## Layout
+
+Full-bleed hero transitioning to a 1200px max-width centered layout below.
+
+## Elevation & Depth
+
+Achieved through tonal layers, not shadows.
+
+## Shapes
+
+Extreme pill radii (32px, 40px) for buttons. Sharp cards (0px) for contrast.
+
+## Components
+
+### Primary Pill Button
+Solid Mercury Blue background with Pure White text. 32px radius. 16px 24px padding.
+
+### Hero Email Input
+Transparent background. 32px radius on left, sharp on right to join with button.
+
+## Do's and Don'ts
+
+- **Do** reserve Mercury Blue exclusively for primary CTAs.
+- **Don't** apply shadows for elevation. Use color shifts instead.
+```
+
+A few things to note about the structure:
+
+- **Token references** (`{colors.primary}`) in the `components` section keep the palette single-source. Change one hex value and every component updates.
+- **Variants** like `button-primary-hover` are sibling keys, not nested properties. This is spec-mandated.
+- **Hex colors are quoted strings** — YAML will choke on unquoted `#1A1C1E`.
+
+### Step 2: Lint and Export
+
+Before building, I validated the file:
+
+```bash
+npx @google/design.md lint DESIGN.md
+# → 0 errors, 6 warnings (orphaned tokens), 1 info
+
+npx @google/design.md export --format tailwind DESIGN.md > tailwind.theme.json
+# → Tailwind v4 theme ready for import
+```
+
+### Step 3: The Landing Page
+
+Using the tokens as a single source of truth, I built a complete landing page in a single HTML file. Every value — color, font size, spacing unit, border radius — maps directly back to the `DESIGN.md`.
+
+Key implementation choices:
+
+- **CSS Custom Properties** mirror the token names exactly, making the relationship obvious:
+  ```css
+  :root {
+    --color-primary: #5266eb;
+    --color-background: #171721;
+    --text-display: 65px;
+    --radius-button: 32px;
+    --spacing-lg: 24px;
+  }
+  ```
+- **No shadows anywhere.** Elevation is achieved through tonal layers (`#171721` → `#1e1e2a` → `#272735`), exactly as the spec dictates.
+- **Pill buttons only.** The primary CTA uses a 32px radius; the secondary nav button uses 40px. No small radii on interactive elements.
+- **Light-weight headlines.** The hero uses `font-weight: 300` at `65px`, creating "authority through restraint."
+
+The result:
+
+<LightboxImage
+  src="/images/posts/google-open-sources-design-md/landing-page-preview.webp"
+  thumbnailSrc="/images/posts/google-open-sources-design-md/landing-page-thumb.webp"
+  alt="Mercury Landing Page"
+  caption="A dark, immersive landing page with a single violet-blue accent, pill-shaped buttons, light-weight typography, and generous whitespace — all generated from a single DESIGN.md file."
+/>
+
+### Step 4: Iterate with Confidence
+
+Because the design system is now a file in version control, iterating is trivial. Want to A/B test a different accent color? Change one line in `DESIGN.md`, re-lint, and regenerate. Want to see how the site looks with tighter spacing? Adjust the `spacing` scale and diff the output.
+
+```bash
+# Before and after comparison
+npx @google/design.md diff DESIGN.md DESIGN-v2.md
+# → {
+#   "tokens": { "colors": { "modified": ["primary"] } },
+#   "regression": false
+# }
+```
+
+---
+
+## Part 2: Coinbase — A Completely Different Vibe
+
+To show how versatile `DESIGN.md` is, I grabbed a second production design system: **Coinbase**. Where Mercury is dark, immersive, and cinematic, Coinbase is bright, editorial, and institutional. Same spec format, completely different output.
+
+<LightboxImage
+  src="/images/posts/google-open-sources-design-md/coinbase-design-system.webp"
+  thumbnailSrc="/images/posts/google-open-sources-design-md/coinbase-design-system-thumb.webp"
+  alt="Coinbase Design System"
+  caption="The full Coinbase design system from getdesign.md — showing the complete color palette (Coinbase Blue + monochrome surfaces, hairlines, text, and trading semantics), typography scales, pill geometry, component library, hero patterns, and responsive behavior grid."
+/>
+
+### The Coinbase DESIGN.md
+
+The Coinbase file is larger — 22K vs Mercury's 8.9K — because it defines more surfaces, more typography scales, and more components. But the structure is identical:
+
+```yaml
+---
+version: alpha
+name: Coinbase
+description: Institutional financial brand that happens to trade crypto.
+colors:
+  primary: "#0052ff"
+  primary-active: "#003ecc"
+  canvas: "#ffffff"
+  surface-soft: "#f7f7f7"
+  surface-strong: "#eef0f3"
+  surface-dark: "#0a0b0d"
+  surface-dark-elevated: "#16181c"
+  ink: "#0a0b0d"
+  body: "#5b616e"
+  muted: "#7c828a"
+  on-primary: "#ffffff"
+  on-dark: "#ffffff"
+  semantic-up: "#05b169"
+  semantic-down: "#cf202f"
+typography:
+  display-mega:
+    fontFamily: Inter
+    fontSize: 80px
+    fontWeight: 400
+    lineHeight: 1.0
+    letterSpacing: "-2px"
+  body-md:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+  number-display:
+    fontFamily: "JetBrains Mono"
+    fontSize: 18px
+    fontWeight: 500
+    lineHeight: 1.4
+rounded:
+  pill: 100px
+  xl: 24px
+  md: 12px
+  full: 9999px
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.pill}"
+    padding: "12px 20px"
+  button-pill-cta:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.pill}"
+    padding: "16px 32px"
+  product-ui-card-dark:
+    backgroundColor: "{colors.surface-dark-elevated}"
+    textColor: "{colors.on-dark}"
+    rounded: "{rounded.xl}"
+    padding: "32px"
+---
+```
+
+Key differences from Mercury:
+
+- **Light-first palette:** White canvas (`#ffffff`) as the default, not dark.
+- **Weight 400 display:** CoinbaseDisplay sits at 400, not 300. "Editorial calm, not trading urgency."
+- **100px pill radius:** All CTAs are perfect pills. No intermediate radii.
+- **Semantic colors:** Trading green (`#05b169`) and red (`#cf202f`) for price changes only.
+- **Product mockup cards:** The signature pattern — floating dashboard cards inside dark heroes.
+
+### The Diff: Mercury vs. Coinbase
+
+| | **Mercury** | **Coinbase** |
+|---|---|---|
+| **Mood** | Command center at twilight | Institutional editorial |
+| **Theme** | Dark-first, immersive | Light-first, spacious |
+| **Primary accent** | `#5266eb` (violet-blue) | `#0052ff` (Coinbase Blue) |
+| **Background** | `#171721` (deep space) | `#ffffff` (white canvas) |
+| **Display weight** | 300 (light, airy) | 400 (calm, editorial) |
+| **Display size** | 65px | 80px |
+| **Button radius** | 32px / 40px pills | 100px perfect pills |
+| **Card radius** | 0px (sharp) | 24px (soft) |
+| **Elevation** | Tonal layers, no shadows | Hairline borders + one soft shadow tier |
+| **Signature pattern** | Full-bleed hero + email capture | Dark hero + floating product-UI mockups |
+| **Typography substitute** | Inter | Inter + JetBrains Mono |
+| **Section rhythm** | 80–120px | 96px fixed |
+| **Number display** | Inter (same as body) | JetBrains Mono (distinct monospace) |
+
+Both files lint cleanly with zero errors. Both export to Tailwind themes. Both produce pixel-perfect landing pages from a single spec.
+
+### The Coinbase Landing Page
+
+<LightboxImage
+  src="/images/posts/google-open-sources-design-md/coinbase-landing-page.webp"
+  thumbnailSrc="/images/posts/google-open-sources-design-md/coinbase-landing-page-thumb.webp"
+  alt="Coinbase Landing Page"
+  caption="A bright, editorial landing page with alternating dark/light bands, 100px pill buttons, floating product mockups, and institutional typography — all from a single DESIGN.md file. Full page screenshot showing the complete page from the dark hero with portfolio mockup, through the stats band and feature grid, to the dark CTA section and multi-column footer."
+/>
+
+Notice the page rhythm: dark hero → light stats band → white feature grid → dark CTA band. The Coinbase spec explicitly documents this "dark/light band rotation" as a core pattern. The floating product-UI card stack in the hero — showing a portfolio dashboard with BTC, ETH, and SOL prices — is the brand's single most distinctive component, and it was generated entirely from the `product-ui-card-dark` token definition.
+
+---
+
+## Why This Matters
+
+**For developers:** You no longer need to be a designer to build beautiful, consistent UI. Drop a `DESIGN.md` into your project and your agent knows exactly what to do.
+
+**For designers:** Your decisions are preserved in a human-readable, version-controllable format. No more "the agent forgot the border radius again."
+
+**For teams:** `DESIGN.md` is a living source of truth that works across tools. The same file feeds Stitch, Claude Design, Cursor, and your custom build pipeline.
+
+**For accessibility:** The built-in WCAG contrast checking catches accessibility regressions before they ship.
+
+The spec is currently at `version: alpha`, so expect evolution. But the core idea is solid: **a single plain-text file that both humans and AI can read, understand, and refine.**
+
+---
+
+## Resources
+
+- **Official Repo:** [google-labs-code/design.md](https://github.com/google-labs-code/design.md)
+- **Specification:** [stitch.withgoogle.com/docs/design-md/specification/](https://stitch.withgoogle.com/docs/design-md/specification/)
+- **Awesome Collection:** [github.com/voltagent/awesome-design-md](https://github.com/voltagent/awesome-design-md)
+- **Generate from URL:** [designmd.me](https://designmd.me/) — Turn any website into a `DESIGN.md`
+- **Design Research:** [refero.design](https://refero.design/) — Browse real website screenshots for design inspiration
+- **Google Announcement:** [blog.google/innovation-and-ai/models-and-research/google-labs/stitch-design-md/](https://blog.google/innovation-and-ai/models-and-research/google-labs/stitch-design-md/)
+- **Deep Dive Video:** [Google Open Sourced DESIGN.md. Here's Why It Matters](https://www.youtube.com/watch?v=LfgMBy0auL8)
+- **AGENTS.md vs DESIGN.md Video:** [OpenCode + AwesomeDesign-md](https://www.youtube.com/watch?v=sCu34s8zb4o)
