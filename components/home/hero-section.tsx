@@ -74,9 +74,38 @@ export function HeroSection({ greeting, bio, location }: HeroSectionProps) {
       </div>
 
       <div className="mb-8 max-w-2xl space-y-4 text-base leading-relaxed text-foreground/90">
-        {bio.split("\n\n").map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
+        {bio.split("\n\n").map((paragraph, index) => {
+          // Parse simple markdown links [text](url) into React elements
+          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+          const parts: React.ReactNode[] = [];
+          let lastIndex = 0;
+          let match;
+          let linkCount = 0;
+
+          while ((match = linkRegex.exec(paragraph)) !== null) {
+            if (match.index > lastIndex) {
+              parts.push(paragraph.slice(lastIndex, match.index));
+            }
+            parts.push(
+              <a
+                key={`${index}-${linkCount++}`}
+                href={match[2]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 transition-colors hover:text-primary"
+              >
+                {match[1]}
+              </a>
+            );
+            lastIndex = match.index + match[0].length;
+          }
+
+          if (lastIndex < paragraph.length) {
+            parts.push(paragraph.slice(lastIndex));
+          }
+
+          return <p key={index}>{parts.length > 0 ? parts : paragraph}</p>;
+        })}
       </div>
     </section>
   );
