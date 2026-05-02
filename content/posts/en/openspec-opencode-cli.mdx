@@ -1,0 +1,974 @@
+---
+title: "OpenSpec + OpenCode CLI: A Practical Guide to Spec-Driven Agentic Coding"
+description: "Learn what OpenSpec is, why it matters for AI coding agents, and how to use it with OpenCode CLI—from install to proposals, implementation, verification, archiving, and parallel worktrees."
+date: 2026-05-02
+tags: [openspec, opencode, ai-coding, spec-driven-development, agents]
+slug: openspec-opencode-cli
+---
+
+# OpenSpec + OpenCode CLI: A Practical Guide to Spec-Driven Agentic Coding
+
+AI coding agents are getting dramatically better, but complex production work still fails in a surprisingly familiar way: the agent guesses our intent.
+
+The model may be smart. The prompt may be detailed. The code may even compile. But if the requirements, constraints, assumptions, and success criteria only live in chat history, the agent is still building from a fuzzy mental model. Every unspoken assumption becomes a branch. On small tasks, that is manageable. On bigger features, those branches compound into rework.
+
+That is the problem OpenSpec tries to solve.
+
+OpenSpec is a lightweight, local, markdown-based framework for spec-driven development with AI coding assistants. It helps you and your coding agent agree on what should be built before the implementation begins, then gives the agent durable artifacts to build against.
+
+In this post, we will cover:
+
+- what OpenSpec is and why it exists
+- how it differs from ordinary “vibe coding” and plan mode
+- how OpenSpec organizes specs, changes, proposals, designs, and tasks
+- how to install and initialize OpenSpec for OpenCode CLI
+- how to run the core OpenSpec workflow: propose → apply → sync/archive
+- when to use the expanded OPSX workflow
+- how to monitor and validate work
+- an advanced pattern for using Git worktrees with OpenCode for parallel implementation
+- best practices and pitfalls
+
+> Note: OpenSpec evolves quickly. The commands below are based on the current OPSX workflow documented in the OpenSpec repository. Run `openspec --help` and `openspec update` if your local installation behaves differently.
+
+---
+
+## What is OpenSpec?
+
+OpenSpec is an open-source spec-driven development framework for AI coding assistants. Its core idea is simple:
+
+> Before asking an AI agent to write code, capture the intent, requirements, design, and tasks in durable artifacts that live beside the codebase.
+
+Instead of relying on a transient chat prompt like:
+
+```text
+Add dark mode to the app.
+```
+
+OpenSpec helps create a structured change folder containing files such as:
+
+```text
+openspec/changes/add-dark-mode/
+├── proposal.md
+├── design.md
+├── tasks.md
+└── specs/
+    └── ui/
+        └── spec.md
+```
+
+Those files become the blueprint for the agent.
+
+OpenSpec is especially useful because the artifacts are:
+
+- **local** — markdown files in your repo
+- **reviewable** — humans can inspect and edit them before code is written
+- **versionable** — commit them like any other code artifact
+- **agent-readable** — coding agents can use them as durable context
+- **iterative** — you can update artifacts as you learn more
+- **brownfield-friendly** — designed for existing codebases, not just greenfield projects
+
+OpenSpec is not trying to replace your coding agent. It gives your agent a better operating system for feature work.
+
+---
+
+## Why not just use the agent's plan mode?
+
+Most coding agents have some kind of plan mode. That is useful, but it usually has two weaknesses:
+
+1. **The plan is ephemeral.** It lives in chat history, not in the repository.
+2. **The plan is not a system spec.** It may describe implementation steps, but it rarely becomes a durable record of product behavior.
+
+OpenSpec makes the plan persistent and structured. It separates:
+
+| Artifact           | Purpose                                                       |
+| ------------------ | ------------------------------------------------------------- |
+| `proposal.md`      | Why we are doing this, what is in scope, what is out of scope |
+| `specs/**/spec.md` | Behavior-level requirements and scenarios                     |
+| `design.md`        | Technical approach and architecture decisions                 |
+| `tasks.md`         | Implementation checklist                                      |
+
+That distinction matters. Specs should describe externally observable behavior. Design and tasks should describe how the behavior will be implemented.
+
+A good OpenSpec spec says:
+
+```markdown
+### Requirement: Theme Selection
+
+The system SHALL allow users to choose between light and dark themes.
+
+#### Scenario: Manual toggle
+
+- GIVEN a user is on any page
+- WHEN the user clicks the theme toggle
+- THEN the theme switches immediately
+- AND the preference persists across sessions
+```
+
+A task list says:
+
+```markdown
+- [ ] 1.1 Create ThemeContext
+- [ ] 1.2 Add CSS variables
+- [ ] 1.3 Implement localStorage persistence
+- [ ] 1.4 Add tests for theme switching
+```
+
+This keeps the behavior contract clean while still giving the agent an implementation checklist.
+
+---
+
+## OpenSpec's mental model: specs and changes
+
+OpenSpec organizes work into two main areas:
+
+```text
+openspec/
+├── specs/      # source of truth: how the system currently behaves
+└── changes/    # proposed modifications: one folder per change
+```
+
+### `openspec/specs/`
+
+The `specs/` directory is the current source of truth. It describes the behavior your system already supports.
+
+Example:
+
+```text
+openspec/specs/
+├── auth/
+│   └── spec.md
+├── billing/
+│   └── spec.md
+└── ui/
+    └── spec.md
+```
+
+You can organize specs by feature area, bounded context, service, or component.
+
+### `openspec/changes/`
+
+The `changes/` directory contains proposed work. Each feature, bug fix, refactor, or migration gets its own folder.
+
+Example:
+
+```text
+openspec/changes/add-passwordless-login/
+├── proposal.md
+├── design.md
+├── tasks.md
+└── specs/
+    └── auth/
+        └── spec.md
+```
+
+The spec inside a change is usually a **delta spec**. It describes what is being added, modified, or removed relative to the current source of truth.
+
+```markdown
+## ADDED Requirements
+
+### Requirement: Passwordless Login
+
+The system SHALL allow users to sign in using a one-time email link.
+
+#### Scenario: Successful email link login
+
+- GIVEN a user has requested a login link
+- WHEN the user opens a valid unexpired link
+- THEN the system authenticates the user
+- AND redirects them to the dashboard
+```
+
+When the work is complete, OpenSpec archives the change and merges the delta into the main `openspec/specs/` directory.
+
+---
+
+## Why OpenSpec pairs well with OpenCode CLI
+
+OpenCode CLI is a provider-agnostic AI coding agent you can run from the terminal. OpenSpec adds the planning and verification layer around it.
+
+The pairing works well because:
+
+- OpenCode can read repo-local markdown artifacts.
+- OpenSpec can generate OpenCode-specific skills and slash commands.
+- OpenSpec gives OpenCode a concrete implementation target instead of a vague prompt.
+- OpenCode can apply tasks and update files while OpenSpec tracks the intended behavior.
+- You can run validation commands such as `openspec list`, `openspec show`, `openspec validate`, and `openspec view` from the terminal while the agent works.
+
+The result is a cleaner workflow:
+
+```text
+Human intent
+   ↓
+OpenSpec proposal/spec/design/tasks
+   ↓
+Review and edit artifacts
+   ↓
+OpenCode implements against the artifacts
+   ↓
+OpenSpec verify/sync/archive
+   ↓
+Specs become living documentation
+```
+
+---
+
+## Prerequisites
+
+OpenSpec requires Node.js 20.19.0 or higher.
+
+Check your Node version:
+
+```bash
+node --version
+```
+
+Install OpenCode CLI if you do not already have it:
+
+```bash
+npm install -g opencode-ai@latest
+```
+
+Verify OpenCode:
+
+```bash
+opencode --version
+opencode auth list
+```
+
+Then install OpenSpec globally:
+
+```bash
+npm install -g @fission-ai/openspec@latest
+```
+
+Verify OpenSpec:
+
+```bash
+openspec --version
+```
+
+---
+
+## Initialize OpenSpec for OpenCode
+
+From your project root:
+
+```bash
+cd your-project
+openspec init --tools opencode
+```
+
+You can also run the interactive initializer:
+
+```bash
+openspec init
+```
+
+When prompted for tools, select **OpenCode**.
+
+OpenSpec will create the project structure and install OpenCode-specific instructions/commands. According to the OpenSpec supported-tools reference, OpenCode uses paths like:
+
+```text
+.opencode/skills/openspec-*/SKILL.md
+.opencode/commands/opsx-<id>.md
+```
+
+The exact files depend on your selected OpenSpec profile and workflow delivery mode.
+
+After initialization, you should see something like:
+
+```text
+openspec/
+├── specs/
+├── changes/
+└── config.yaml
+
+.opencode/
+├── skills/
+└── commands/
+```
+
+If you upgrade OpenSpec later, refresh the generated agent instructions:
+
+```bash
+npm install -g @fission-ai/openspec@latest
+openspec update
+```
+
+---
+
+## Add project context
+
+OpenSpec can use project-specific context when generating artifacts. The recommended place is:
+
+```text
+openspec/config.yaml
+```
+
+Example:
+
+```yaml
+schema: spec-driven
+
+context: |
+  Tech stack: TypeScript, Next.js, Node.js
+  Database: PostgreSQL with Prisma
+  Testing: Vitest for unit tests, Playwright for e2e
+  Style: strict TypeScript, ESLint, Prettier
+  Deployment: Vercel
+
+rules:
+  proposal:
+    - Include scope and non-goals
+    - Include a rollback plan for risky changes
+  specs:
+    - Use Given/When/Then scenarios
+    - Keep requirements behavior-focused
+  design:
+    - Include data flow for complex changes
+  tasks:
+    - Keep tasks small enough for one agent session
+```
+
+This context is injected into OpenSpec artifact instructions so OpenCode has a better understanding of your codebase.
+
+---
+
+## The default workflow: propose → apply → sync → archive
+
+OpenSpec's default `core` profile includes these OPSX commands:
+
+| Command         | Purpose                                              |
+| --------------- | ---------------------------------------------------- |
+| `/opsx:propose` | Create a change and generate planning artifacts      |
+| `/opsx:explore` | Investigate or clarify before committing to a change |
+| `/opsx:apply`   | Implement tasks from the change                      |
+| `/opsx:sync`    | Merge delta specs into main specs                    |
+| `/opsx:archive` | Archive completed change                             |
+
+A typical flow looks like this:
+
+```text
+/opsx:propose → /opsx:apply → /opsx:sync → /opsx:archive
+```
+
+In OpenCode, start the agent from your project root:
+
+```bash
+opencode
+```
+
+Then ask OpenCode to start a change:
+
+```text
+/opsx:propose add-dark-mode
+```
+
+OpenCode should use the OpenSpec command instructions to create something like:
+
+```text
+openspec/changes/add-dark-mode/
+├── proposal.md
+├── design.md
+├── tasks.md
+└── specs/ui/spec.md
+```
+
+Before implementation, review those files. This is the key habit. OpenSpec is not magic. It gives you a structured review point before the agent starts changing code.
+
+Open the artifacts and check:
+
+- Is the intent correct?
+- Is the scope too big?
+- Are non-goals explicit?
+- Are requirements behavior-focused?
+- Are scenarios testable?
+- Does the design match the existing architecture?
+- Are tasks small and ordered?
+
+When the artifacts look good, continue in OpenCode:
+
+```text
+/opsx:apply add-dark-mode
+```
+
+OpenCode will work through `tasks.md`, edit files, run tests where appropriate, and check off tasks as it completes them.
+
+You can monitor from another terminal:
+
+```bash
+openspec list
+openspec show add-dark-mode
+openspec validate add-dark-mode
+openspec view
+```
+
+When implementation is complete, archive the change:
+
+```text
+/opsx:archive add-dark-mode
+```
+
+Archive moves the change folder into history and updates the main specs.
+
+---
+
+## Use `/opsx:explore` when requirements are fuzzy
+
+Do not force every idea directly into a proposal. If the feature is unclear, start with exploration:
+
+```text
+/opsx:explore how should we add usage-based billing?
+```
+
+Use this for:
+
+- performance investigations
+- architecture decisions
+- unclear requirements
+- debugging before planning
+- comparing implementation options
+
+Once the direction is clear, move to:
+
+```text
+/opsx:propose add-usage-based-billing
+```
+
+This is one of the biggest advantages of OpenSpec: you can separate exploration from commitment.
+
+---
+
+## The expanded workflow
+
+If you want more granular control, enable the expanded OPSX commands:
+
+```bash
+openspec config profile
+openspec update
+```
+
+The expanded workflow adds commands such as:
+
+| Command              | Purpose                                        |
+| -------------------- | ---------------------------------------------- |
+| `/opsx:new`          | Start a change scaffold                        |
+| `/opsx:continue`     | Create the next artifact based on dependencies |
+| `/opsx:ff`           | Fast-forward through all planning artifacts    |
+| `/opsx:verify`       | Validate implementation against artifacts      |
+| `/opsx:bulk-archive` | Archive multiple completed changes             |
+| `/opsx:onboard`      | Guided tutorial workflow                       |
+
+Expanded flow:
+
+```text
+/opsx:new → /opsx:continue or /opsx:ff → /opsx:apply → /opsx:verify → /opsx:archive
+```
+
+Use `/opsx:continue` when you want to inspect each artifact before creating the next one:
+
+```text
+/opsx:new add-passwordless-login
+/opsx:continue add-passwordless-login
+/opsx:continue add-passwordless-login
+/opsx:continue add-passwordless-login
+```
+
+Use `/opsx:ff` when the scope is clear and you want OpenSpec to generate all planning artifacts in one pass:
+
+```text
+/opsx:new add-passwordless-login
+/opsx:ff add-passwordless-login
+```
+
+Rule of thumb:
+
+| Situation                      | Use                                  |
+| ------------------------------ | ------------------------------------ |
+| You know exactly what you want | `/opsx:propose` or `/opsx:ff`        |
+| You want step-by-step review   | `/opsx:continue`                     |
+| Requirements are unclear       | `/opsx:explore`                      |
+| Implementation is complete     | `/opsx:verify`, then `/opsx:archive` |
+
+---
+
+## Validate before you trust the result
+
+OpenSpec gives you several ways to check work.
+
+List active changes:
+
+```bash
+openspec list
+```
+
+Show a change:
+
+```bash
+openspec show add-dark-mode
+```
+
+Validate one change:
+
+```bash
+openspec validate add-dark-mode
+```
+
+Validate everything:
+
+```bash
+openspec validate --all
+```
+
+If using the expanded workflow, run verification before archiving:
+
+```text
+/opsx:verify add-dark-mode
+```
+
+Verification should check whether:
+
+- tasks are complete
+- requirements are implemented
+- scenarios are covered
+- design decisions match the implementation
+- tests exist for important behavior
+
+This is especially important with AI-generated code. Do not confuse “agent finished” with “feature is correct.”
+
+---
+
+## Advanced workflow: OpenSpec + OpenCode + Git worktrees
+
+One of the most interesting patterns is using OpenSpec with Git worktrees to parallelize implementation while keeping proposals coordinated.
+
+The safe pattern is:
+
+1. **Propose on main.**
+2. **Commit the OpenSpec change artifacts.**
+3. **Create worktrees for implementation.**
+4. **Run OpenCode in each worktree.**
+5. **Run verify inside each worktree.**
+6. **Merge back to main after review.**
+7. **Archive on main.**
+
+Why propose on main?
+
+Because OpenSpec can see the current source-of-truth specs and all active changes. If you propose inside an isolated worktree or feature branch, the agent may miss other active changes and fail to detect conflicts.
+
+Example flow:
+
+```bash
+# On main
+opencode
+```
+
+In OpenCode:
+
+```text
+/opsx:propose add-task-priority
+/opsx:propose add-task-editing
+/opsx:propose add-task-delete-shortcut
+```
+
+Commit the generated OpenSpec artifacts:
+
+```bash
+git add openspec/
+git commit -m "docs(openspec): propose task manager improvements"
+```
+
+Create worktrees:
+
+```bash
+git worktree add ../task-priority -b feature/task-priority
+git worktree add ../task-editing -b feature/task-editing
+git worktree add ../task-delete-shortcut -b feature/task-delete-shortcut
+```
+
+Run OpenCode in each worktree:
+
+```bash
+cd ../task-priority
+opencode
+```
+
+Then:
+
+```text
+/opsx:apply add-task-priority
+/opsx:verify add-task-priority
+```
+
+Repeat in the other worktrees.
+
+After each worktree passes tests and verification, merge back to main:
+
+```bash
+cd ../your-project
+git checkout main
+git merge feature/task-priority
+git merge feature/task-editing
+git merge feature/task-delete-shortcut
+```
+
+Then archive on main:
+
+```text
+/opsx:bulk-archive
+```
+
+or archive individually:
+
+```text
+/opsx:archive add-task-priority
+/opsx:archive add-task-editing
+/opsx:archive add-task-delete-shortcut
+```
+
+The key principle:
+
+> Branch or worktree for applying changes. Keep proposal and archive on main.
+
+That gives you parallel implementation without losing global spec awareness.
+
+---
+
+## Practical OpenCode prompts
+
+Here are prompts I would actually use with OpenCode after OpenSpec is initialized.
+
+### Populate project context
+
+```text
+Read openspec/config.yaml and the repository structure. Help me fill in project context: tech stack, architecture, test commands, conventions, and rules for proposal/spec/design/tasks. Do not change app behavior.
+```
+
+### Start a feature proposal
+
+```text
+/opsx:propose add-passwordless-login
+
+Intent: Let users sign in using a magic link sent to their email.
+Constraints:
+- Keep existing password login working.
+- Magic links expire after 15 minutes.
+- Add tests for success, expired link, and reused link.
+- Do not add social login.
+```
+
+### Review generated artifacts
+
+```text
+Review the generated OpenSpec artifacts for add-passwordless-login. Identify ambiguity, missing edge cases, oversized tasks, and requirements that are not testable. Do not implement yet.
+```
+
+### Implement strictly against the spec
+
+```text
+/opsx:apply add-passwordless-login
+
+Implement only what is described in the OpenSpec artifacts. Do not add extra features. Run the relevant tests and update tasks.md as work completes.
+```
+
+### Verify
+
+```text
+/opsx:verify add-passwordless-login
+
+Check completeness, correctness, tests, and whether implementation matches design.md and specs. Report any warnings before archive.
+```
+
+---
+
+## OpenSpec vs Spec Kit vs Kiro vs no spec framework
+
+| Approach          | Strength                                                              | Tradeoff                                             |
+| ----------------- | --------------------------------------------------------------------- | ---------------------------------------------------- |
+| No spec framework | Fast for tiny tasks                                                   | Intent lives in chat; hard to review; easy drift     |
+| Agent plan mode   | Better than raw prompting                                             | Usually ephemeral; not a living repo artifact        |
+| GitHub Spec Kit   | Strong spec-driven approach, especially for greenfield projects       | Can feel heavier for evolving brownfield systems     |
+| Kiro              | Integrated spec workflow in an IDE                                    | More tied to its own environment                     |
+| OpenSpec          | Lightweight, markdown-based, agent/tool-agnostic, brownfield-friendly | Requires discipline to review and maintain artifacts |
+
+OpenSpec's biggest advantage is not that it writes better code by itself. Its advantage is that it makes intent explicit and durable.
+
+---
+
+## Best practices
+
+### 1. Keep changes focused
+
+One OpenSpec change should represent one logical unit of work.
+
+Good names:
+
+```text
+add-dark-mode
+fix-login-redirect
+optimize-product-query
+implement-passwordless-login
+```
+
+Weak names:
+
+```text
+update
+changes
+wip
+feature-1
+```
+
+### 2. Review artifacts before implementation
+
+Do not skip the review step. The entire point is to catch wrong assumptions before they become wrong code.
+
+### 3. Keep specs behavior-focused
+
+Avoid internal implementation details in specs.
+
+Good:
+
+```text
+The system SHALL expire sessions after 30 minutes of inactivity.
+```
+
+Less good:
+
+```text
+The AuthService class SHALL call RedisSessionStore.deleteExpiredSessions().
+```
+
+Put implementation details in `design.md` or `tasks.md`.
+
+### 4. Use Given/When/Then scenarios
+
+Scenarios make requirements testable.
+
+```markdown
+#### Scenario: Expired magic link
+
+- GIVEN a user has a magic link older than 15 minutes
+- WHEN they open the link
+- THEN authentication fails
+- AND the system asks them to request a new link
+```
+
+### 5. Update artifacts as you learn
+
+OpenSpec is iterative, not waterfall. If implementation reveals that the design is wrong, update the design. If a requirement was ambiguous, update the spec.
+
+### 6. Verify before archiving
+
+Use tests, `openspec validate`, and `/opsx:verify` before you archive.
+
+### 7. Archive only when the source of truth should change
+
+Archiving means the behavior is now part of your documented system. Do not archive half-finished ideas unless you intentionally want that state in your source of truth.
+
+---
+
+## Common pitfalls
+
+### Pitfall: Treating OpenSpec as bureaucracy
+
+OpenSpec is supposed to be lightweight. Most changes do not need a giant design document. Use the smallest useful spec.
+
+### Pitfall: Letting the agent generate artifacts and immediately implement
+
+If you do not review the proposal, specs, design, and tasks, you are back to vibe coding with extra files.
+
+### Pitfall: Putting implementation details in specs
+
+Specs should describe behavior. Design and tasks describe implementation.
+
+### Pitfall: Proposing changes inside isolated worktrees
+
+For parallel workflows, propose on main so OpenSpec sees all active and archived changes. Use worktrees for implementation.
+
+### Pitfall: Archiving before verification
+
+Archive updates the long-term source of truth. Verify first.
+
+### Pitfall: Using weak models for planning
+
+OpenSpec benefits from high-reasoning models. A weak model can still write ambiguous specs, which then become ambiguous instructions for implementation.
+
+---
+
+## A complete mini-tutorial
+
+Here is a full example using OpenSpec with OpenCode CLI.
+
+### 1. Install
+
+```bash
+node --version
+npm install -g opencode-ai@latest
+npm install -g @fission-ai/openspec@latest
+openspec --version
+opencode --version
+```
+
+### 2. Initialize for OpenCode
+
+```bash
+cd my-app
+openspec init --tools opencode
+```
+
+### 3. Add project context
+
+Edit:
+
+```text
+openspec/config.yaml
+```
+
+Add tech stack, testing commands, conventions, and rules.
+
+### 4. Start OpenCode
+
+```bash
+opencode
+```
+
+### 5. Explore if needed
+
+```text
+/opsx:explore how should we add passwordless login to this app?
+```
+
+### 6. Create proposal
+
+```text
+/opsx:propose add-passwordless-login
+```
+
+### 7. Review artifacts
+
+Inspect:
+
+```text
+openspec/changes/add-passwordless-login/proposal.md
+openspec/changes/add-passwordless-login/design.md
+openspec/changes/add-passwordless-login/tasks.md
+openspec/changes/add-passwordless-login/specs/auth/spec.md
+```
+
+### 8. Validate before implementation
+
+```bash
+openspec validate add-passwordless-login
+openspec show add-passwordless-login
+```
+
+### 9. Apply with OpenCode
+
+```text
+/opsx:apply add-passwordless-login
+```
+
+### 10. Monitor progress
+
+```bash
+openspec view
+```
+
+### 11. Verify
+
+```text
+/opsx:verify add-passwordless-login
+```
+
+If your profile does not include `/opsx:verify`, use:
+
+```bash
+openspec validate add-passwordless-login
+npm test
+```
+
+### 12. Archive
+
+```text
+/opsx:archive add-passwordless-login
+```
+
+Commit the result:
+
+```bash
+git add .
+git commit -m "feat(auth): add passwordless login"
+```
+
+---
+
+## Final thoughts
+
+OpenSpec is not about adding paperwork to coding. It is about making intent durable.
+
+That matters more as coding agents become more autonomous. The better the agent, the more important it becomes to give it a clear target. OpenSpec gives you that target in a format humans can review, agents can follow, and teams can version.
+
+If you are using OpenCode CLI, OpenSpec is a strong companion because it turns OpenCode from “an agent responding to prompts” into “an agent implementing a reviewed change contract.”
+
+Start small:
+
+```bash
+npm install -g @fission-ai/openspec@latest
+cd your-project
+openspec init --tools opencode
+opencode
+```
+
+Then try one focused change:
+
+```text
+/opsx:propose add-dark-mode
+```
+
+Review the artifacts. Apply the change. Verify it. Archive it.
+
+That loop is the whole idea: less guessing, more agreement, better agentic software development.
+
+---
+
+## Research notes and source links
+
+Primary sources used for this draft:
+
+- https://openspec.dev/
+- https://github.com/Fission-AI/OpenSpec/
+- OpenSpec documentation in the GitHub repository: README, installation, getting started, concepts, workflows, commands, CLI, supported tools, OPSX workflow
+- YouTube: “An introduction to OpenSpec”
+- YouTube: “OpenSpec: NEW Toolkit Ends Vibe Coding! 100x Better Than Vibe Coding (Full Tutorial)”
+- YouTube: “OpenSpec, Git WorkTrees and OpenCode”
+- NotebookLM research notebook created for synthesis: `OpenSpec + OpenCode CLI Blog Research`
+
+## Optional infographic brief
+
+Title: “OpenSpec + OpenCode Workflow”
+
+Flow:
+
+```text
+Intent → /opsx:propose → proposal/spec/design/tasks → review → /opsx:apply → tests + /opsx:verify → /opsx:archive → living specs
+```
+
+Key callouts:
+
+- Specs live in repo as markdown
+- Changes isolate proposed work
+- OpenCode implements from reviewed artifacts
+- Worktrees enable parallel apply/verify
+- Archive only on main
+
+## Optional podcast outline
+
+1. Hook: why AI agents still fail complex production work
+2. The problem with vibe coding and ephemeral plan mode
+3. What OpenSpec adds: durable specs and change folders
+4. How OpenCode uses OpenSpec commands
+5. Tutorial walkthrough from install to archive
+6. Advanced worktree workflow
+7. Best practices and mistakes to avoid
+8. Closing: specs as the memory layer for agentic coding
