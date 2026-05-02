@@ -12,7 +12,8 @@
   },
   "nav": {
     "home": "Home",
-    "blog": "Blog"
+    "blog": "Blog",
+    "golf": "Golf"
   },
   "blog": {
     "onThisPage": "On this page"
