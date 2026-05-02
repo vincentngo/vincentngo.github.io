@@ -1,549 +1,385 @@
 import type {
-  Player,
-  LeaderboardEntry,
-  PlayerScorecard,
-  PlayerStatistics,
-  PlayerProfile,
+  Course,
+  Round,
+  GolferProfile,
+  ScoringDistribution,
+  Statistics,
+  RoundHistoryEntry,
 } from "./types";
 
-const players: Player[] = [
+export const golferProfile: GolferProfile = {
+  name: "Vincent Ngo",
+  handicap: 18.4,
+  roundsPlayed: 24,
+  bestScore: 84,
+  bestScoreToPar: 12,
+  avgScore: 92,
+  avgScoreToPar: 20,
+  coursesPlayed: 8,
+};
+
+const courses: Course[] = [
   {
-    id: "28237",
-    firstName: "Rory",
-    lastName: "McIlroy",
-    country: "Northern Ireland",
-    countryCode: "NIR",
-    age: 35,
-    height: "5' 9\"",
-    weight: "160 lbs",
-    worldRanking: 2,
-    bio: "Rory McIlroy is a professional golfer from Northern Ireland who is a member of both the European and PGA Tours. He is a four-time major champion, winning the 2011 U.S. Open, 2012 PGA Championship, 2014 Open Championship, and 2014 PGA Championship. He has spent over 100 weeks as world number one.",
+    id: "torrey-south",
+    name: "Torrey Pines South",
+    location: "La Jolla, CA",
+    par: 72,
+    holes: [
+      { hole: 1, par: 4, yards: 446 },
+      { hole: 2, par: 4, yards: 389 },
+      { hole: 3, par: 3, yards: 198 },
+      { hole: 4, par: 4, yards: 485 },
+      { hole: 5, par: 4, yards: 453 },
+      { hole: 6, par: 4, yards: 515 },
+      { hole: 7, par: 3, yards: 190 },
+      { hole: 8, par: 4, yards: 427 },
+      { hole: 9, par: 5, yards: 612 },
+      { hole: 10, par: 4, yards: 411 },
+      { hole: 11, par: 3, yards: 221 },
+      { hole: 12, par: 4, yards: 504 },
+      { hole: 13, par: 5, yards: 541 },
+      { hole: 14, par: 4, yards: 435 },
+      { hole: 15, par: 4, yards: 478 },
+      { hole: 16, par: 3, yards: 227 },
+      { hole: 17, par: 4, yards: 445 },
+      { hole: 18, par: 5, yards: 570 },
+    ],
   },
   {
-    id: "30925",
-    firstName: "Dustin",
-    lastName: "Johnson",
-    country: "United States",
-    countryCode: "USA",
-    age: 39,
-    height: "6' 4\"",
-    weight: "190 lbs",
-    worldRanking: 12,
-    bio: "Dustin Johnson is an American professional golfer who plays on the PGA Tour. He has won two major championships, the 2016 U.S. Open and the 2020 Masters Tournament. He is known for his prodigious driving distance and athleticism.",
+    id: "pebble-beach",
+    name: "Pebble Beach GL",
+    location: "Pebble Beach, CA",
+    par: 72,
+    holes: [
+      { hole: 1, par: 4, yards: 377 },
+      { hole: 2, par: 5, yards: 511 },
+      { hole: 3, par: 4, yards: 390 },
+      { hole: 4, par: 4, yards: 331 },
+      { hole: 5, par: 3, yards: 192 },
+      { hole: 6, par: 5, yards: 523 },
+      { hole: 7, par: 3, yards: 106 },
+      { hole: 8, par: 4, yards: 427 },
+      { hole: 9, par: 4, yards: 481 },
+      { hole: 10, par: 4, yards: 495 },
+      { hole: 11, par: 4, yards: 373 },
+      { hole: 12, par: 3, yards: 202 },
+      { hole: 13, par: 4, yards: 403 },
+      { hole: 14, par: 5, yards: 572 },
+      { hole: 15, par: 4, yards: 397 },
+      { hole: 16, par: 4, yards: 401 },
+      { hole: 17, par: 3, yards: 178 },
+      { hole: 18, par: 5, yards: 543 },
+    ],
   },
   {
-    id: "34046",
-    firstName: "Jordan",
-    lastName: "Spieth",
-    country: "United States",
-    countryCode: "USA",
-    age: 30,
-    height: "6' 1\"",
-    weight: "175 lbs",
-    worldRanking: 18,
-    bio: "Jordan Spieth is an American professional golfer on the PGA Tour and former world number one in the Official World Golf Ranking. He is a three-time major winner and the 2015 FedEx Cup champion.",
+    id: "tpc-sawgrass",
+    name: "TPC Sawgrass",
+    location: "Ponte Vedra, FL",
+    par: 72,
+    holes: [
+      { hole: 1, par: 4, yards: 423 },
+      { hole: 2, par: 5, yards: 532 },
+      { hole: 3, par: 4, yards: 177 },
+      { hole: 4, par: 3, yards: 384 },
+      { hole: 5, par: 4, yards: 471 },
+      { hole: 6, par: 4, yards: 393 },
+      { hole: 7, par: 4, yards: 451 },
+      { hole: 8, par: 3, yards: 237 },
+      { hole: 9, par: 5, yards: 602 },
+      { hole: 10, par: 4, yards: 424 },
+      { hole: 11, par: 5, yards: 558 },
+      { hole: 12, par: 4, yards: 466 },
+      { hole: 13, par: 3, yards: 181 },
+      { hole: 14, par: 4, yards: 481 },
+      { hole: 15, par: 4, yards: 470 },
+      { hole: 16, par: 5, yards: 523 },
+      { hole: 17, par: 3, yards: 137 },
+      { hole: 18, par: 4, yards: 462 },
+    ],
   },
   {
-    id: "35891",
-    firstName: "Scottie",
-    lastName: "Scheffler",
-    country: "United States",
-    countryCode: "USA",
-    age: 27,
-    height: "6' 3\"",
-    weight: "200 lbs",
-    worldRanking: 1,
-    bio: "Scottie Scheffler is an American professional golfer who plays on the PGA Tour. He is the 2022 Masters Tournament champion and has been ranked world number one. Known for his consistent ball-striking and clutch putting.",
-  },
-  {
-    id: "39977",
-    firstName: "Max",
-    lastName: "Homa",
-    country: "United States",
-    countryCode: "USA",
-    age: 33,
-    height: "6' 1\"",
-    weight: "180 lbs",
-    worldRanking: 9,
-    bio: "Max Homa is an American professional golfer who plays on the PGA Tour. Known for his social media presence and sharp wit, Homa has multiple PGA Tour victories and has represented the United States in international competitions.",
-  },
-  {
-    id: "40098",
-    firstName: "Patrick",
-    lastName: "Cantlay",
-    country: "United States",
-    countryCode: "USA",
-    age: 32,
-    height: "6' 1\"",
-    weight: "170 lbs",
-    worldRanking: 5,
-    bio: "Patrick Cantlay is an American professional golfer who plays on the PGA Tour. He was the number one golfer in the World Amateur Golf Ranking for a record 55 weeks. He has multiple PGA Tour wins including the 2021 FedEx Cup.",
-  },
-  {
-    id: "45791",
-    firstName: "Xander",
-    lastName: "Schauffele",
-    country: "United States",
-    countryCode: "USA",
-    age: 30,
-    height: "5' 10\"",
-    weight: "175 lbs",
-    worldRanking: 3,
-    bio: "Xander Schauffele is an American professional golfer. He is an Olympic gold medalist and has multiple PGA Tour wins. Known for his consistency and ability to perform in major championships.",
-  },
-  {
-    id: "46046",
-    firstName: "Scottie",
-    lastName: "Scheffler",
-    country: "United States",
-    countryCode: "USA",
-    age: 27,
-    height: "6' 3\"",
-    weight: "200 lbs",
-    worldRanking: 1,
-    bio: "Scottie Scheffler is an American professional golfer who plays on the PGA Tour. He is the 2022 Masters Tournament champion and has been ranked world number one.",
-  },
-  {
-    id: "47483",
-    firstName: "Will",
-    lastName: "Zalatoris",
-    country: "United States",
-    countryCode: "USA",
-    age: 27,
-    height: "6' 2\"",
-    weight: "175 lbs",
-    worldRanking: 24,
-    bio: "Will Zalatoris is an American professional golfer who plays on the PGA Tour. He gained prominence with his runner-up finish at the 2021 Masters Tournament in his debut.",
-  },
-  {
-    id: "48081",
-    firstName: "Viktor",
-    lastName: "Hovland",
-    country: "Norway",
-    countryCode: "NOR",
-    age: 26,
-    height: "5' 10\"",
-    weight: "165 lbs",
-    worldRanking: 4,
-    bio: "Viktor Hovland is a Norwegian professional golfer who plays on the PGA Tour. He was the first Norwegian to win on the PGA Tour and has multiple worldwide victories.",
-  },
-  {
-    id: "50525",
-    firstName: "Collin",
-    lastName: "Morikawa",
-    country: "United States",
-    countryCode: "USA",
-    age: 27,
-    height: "5' 9\"",
-    weight: "160 lbs",
-    worldRanking: 6,
-    bio: "Collin Morikawa is an American professional golfer who plays on the PGA Tour. He is a two-time major champion, winning the 2020 PGA Championship and the 2021 Open Championship.",
-  },
-  {
-    id: "52955",
-    firstName: "Ludvig",
-    lastName: "Åberg",
-    country: "Sweden",
-    countryCode: "SWE",
-    age: 24,
-    height: "6' 3\"",
-    weight: "190 lbs",
-    worldRanking: 7,
-    bio: "Ludvig Åberg is a Swedish professional golfer. He was the number one ranked amateur in the world before turning professional and has quickly risen through the professional ranks.",
-  },
-  {
-    id: "55182",
-    firstName: "Wyndham",
-    lastName: "Clark",
-    country: "United States",
-    countryCode: "USA",
-    age: 30,
-    height: "6' 0\"",
-    weight: "175 lbs",
-    worldRanking: 8,
-    bio: "Wyndham Clark is an American professional golfer who plays on the PGA Tour. He won his first major championship at the 2023 U.S. Open at Los Angeles Country Club.",
-  },
-  {
-    id: "57366",
-    firstName: "Cameron",
-    lastName: "Young",
-    country: "United States",
-    countryCode: "USA",
-    age: 27,
-    height: "6' 3\"",
-    weight: "185 lbs",
-    worldRanking: 15,
-    bio: "Cameron Young is an American professional golfer on the PGA Tour. He was named PGA Tour Rookie of the Year in 2022 and has multiple runner-up finishes in major championships.",
-  },
-  {
-    id: "59866",
-    firstName: "Sahith",
-    lastName: "Theegala",
-    country: "United States",
-    countryCode: "USA",
-    age: 26,
-    height: "6' 2\"",
-    weight: "185 lbs",
-    worldRanking: 19,
-    bio: "Sahith Theegala is an American professional golfer who plays on the PGA Tour. He was a three-time NCAA All-American at Pepperdine University.",
+    id: "bay-hill",
+    name: "Bay Hill Club",
+    location: "Orlando, FL",
+    par: 72,
+    holes: [
+      { hole: 1, par: 4, yards: 461 },
+      { hole: 2, par: 3, yards: 207 },
+      { hole: 3, par: 5, yards: 554 },
+      { hole: 4, par: 4, yards: 438 },
+      { hole: 5, par: 4, yards: 382 },
+      { hole: 6, par: 4, yards: 408 },
+      { hole: 7, par: 5, yards: 591 },
+      { hole: 8, par: 3, yards: 163 },
+      { hole: 9, par: 4, yards: 452 },
+      { hole: 10, par: 4, yards: 402 },
+      { hole: 11, par: 5, yards: 563 },
+      { hole: 12, par: 4, yards: 416 },
+      { hole: 13, par: 3, yards: 199 },
+      { hole: 14, par: 4, yards: 431 },
+      { hole: 15, par: 4, yards: 393 },
+      { hole: 16, par: 3, yards: 220 },
+      { hole: 17, par: 4, yards: 383 },
+      { hole: 18, par: 4, yards: 458 },
+    ],
   },
 ];
 
-const leaderboard: LeaderboardEntry[] = [
+const roundData: Omit<Round, "scores" | "total" | "toPar">[] = [
   {
-    position: "1",
-    playerId: "35891",
-    playerName: "Scheffler, S.",
-    countryCode: "USA",
-    total: 276,
-    toPar: -12,
-    round1: 68,
-    round2: 69,
-    round3: 70,
-    round4: 69,
-    thru: "F",
+    id: "r1",
+    courseId: "torrey-south",
+    courseName: "Torrey Pines South",
+    date: "2025-04-15",
+    fairwaysHit: 6,
+    fairwaysTotal: 14,
+    greensInRegulation: 7,
+    putts: 36,
+    sandSaves: 1,
+    sandAttempts: 3,
+    drivingDistances: [
+      245, 220, 180, 260, 255, 240, 190, 235, 270, 230, 200, 250, 265, 240, 248, 195, 238, 268,
+    ],
   },
   {
-    position: "2",
-    playerId: "28237",
-    playerName: "McIlroy, R.",
-    countryCode: "NIR",
-    total: 278,
-    toPar: -10,
-    round1: 69,
-    round2: 70,
-    round3: 68,
-    round4: 71,
-    thru: "F",
+    id: "r2",
+    courseId: "pebble-beach",
+    courseName: "Pebble Beach GL",
+    date: "2025-03-22",
+    fairwaysHit: 8,
+    fairwaysTotal: 14,
+    greensInRegulation: 9,
+    putts: 33,
+    sandSaves: 0,
+    sandAttempts: 2,
+    drivingDistances: [
+      230, 245, 175, 210, 185, 250, 160, 240, 255, 260, 225, 190, 235, 265, 220, 230, 170, 250,
+    ],
   },
   {
-    position: "3",
-    playerId: "45791",
-    playerName: "Schauffele, X.",
-    countryCode: "USA",
-    total: 279,
-    toPar: -9,
-    round1: 70,
-    round2: 68,
-    round3: 71,
-    round4: 70,
-    thru: "F",
+    id: "r3",
+    courseId: "tpc-sawgrass",
+    courseName: "TPC Sawgrass",
+    date: "2025-02-08",
+    fairwaysHit: 5,
+    fairwaysTotal: 14,
+    greensInRegulation: 6,
+    putts: 38,
+    sandSaves: 1,
+    sandAttempts: 4,
+    drivingDistances: [
+      240, 255, 160, 220, 250, 230, 245, 200, 260, 235, 265, 240, 175, 250, 248, 255, 155, 245,
+    ],
   },
   {
-    position: "4",
-    playerId: "50525",
-    playerName: "Morikawa, C.",
-    countryCode: "USA",
-    total: 280,
-    toPar: -8,
-    round1: 71,
-    round2: 69,
-    round3: 70,
-    round4: 70,
-    thru: "F",
+    id: "r4",
+    courseId: "bay-hill",
+    courseName: "Bay Hill Club",
+    date: "2025-01-18",
+    fairwaysHit: 7,
+    fairwaysTotal: 14,
+    greensInRegulation: 8,
+    putts: 34,
+    sandSaves: 2,
+    sandAttempts: 3,
+    drivingDistances: [
+      250, 195, 245, 240, 225, 235, 255, 165, 248, 230, 260, 238, 190, 242, 228, 205, 220, 245,
+    ],
   },
   {
-    position: "T5",
-    playerId: "48081",
-    playerName: "Hovland, V.",
-    countryCode: "NOR",
-    total: 281,
-    toPar: -7,
-    round1: 69,
-    round2: 71,
-    round3: 70,
-    round4: 71,
-    thru: "F",
+    id: "r5",
+    courseId: "torrey-south",
+    courseName: "Torrey Pines South",
+    date: "2024-12-10",
+    fairwaysHit: 9,
+    fairwaysTotal: 14,
+    greensInRegulation: 10,
+    putts: 32,
+    sandSaves: 1,
+    sandAttempts: 2,
+    drivingDistances: [
+      255, 235, 185, 265, 260, 250, 195, 240, 275, 245, 210, 258, 270, 248, 252, 200, 242, 272,
+    ],
   },
   {
-    position: "T5",
-    playerId: "52955",
-    playerName: "Åberg, L.",
-    countryCode: "SWE",
-    total: 281,
-    toPar: -7,
-    round1: 70,
-    round2: 70,
-    round3: 71,
-    round4: 70,
-    thru: "F",
-  },
-  {
-    position: "7",
-    playerId: "40098",
-    playerName: "Cantlay, P.",
-    countryCode: "USA",
-    total: 282,
-    toPar: -6,
-    round1: 71,
-    round2: 70,
-    round3: 71,
-    round4: 70,
-    thru: "F",
-  },
-  {
-    position: "T8",
-    playerId: "34046",
-    playerName: "Spieth, J.",
-    countryCode: "USA",
-    total: 283,
-    toPar: -5,
-    round1: 72,
-    round2: 69,
-    round3: 72,
-    round4: 70,
-    thru: "F",
-  },
-  {
-    position: "T8",
-    playerId: "55182",
-    playerName: "Clark, W.",
-    countryCode: "USA",
-    total: 283,
-    toPar: -5,
-    round1: 70,
-    round2: 72,
-    round3: 69,
-    round4: 72,
-    thru: "F",
-  },
-  {
-    position: "T10",
-    playerId: "30925",
-    playerName: "Johnson, D.",
-    countryCode: "USA",
-    total: 284,
-    toPar: -4,
-    round1: 71,
-    round2: 71,
-    round3: 71,
-    round4: 71,
-    thru: "F",
-  },
-  {
-    position: "T10",
-    playerId: "57366",
-    playerName: "Young, C.",
-    countryCode: "USA",
-    total: 284,
-    toPar: -4,
-    round1: 72,
-    round2: 70,
-    round3: 71,
-    round4: 71,
-    thru: "F",
-  },
-  {
-    position: "12",
-    playerId: "47483",
-    playerName: "Zalatoris, W.",
-    countryCode: "USA",
-    total: 285,
-    toPar: -3,
-    round1: 73,
-    round2: 70,
-    round3: 72,
-    round4: 70,
-    thru: "F",
-  },
-  {
-    position: "T13",
-    playerId: "39977",
-    playerName: "Homa, M.",
-    countryCode: "USA",
-    total: 286,
-    toPar: -2,
-    round1: 72,
-    round2: 72,
-    round3: 70,
-    round4: 72,
-    thru: "F",
-  },
-  {
-    position: "T13",
-    playerId: "59866",
-    playerName: "Theegala, S.",
-    countryCode: "USA",
-    total: 286,
-    toPar: -2,
-    round1: 71,
-    round2: 73,
-    round3: 71,
-    round4: 71,
-    thru: "F",
-  },
-  {
-    position: "15",
-    playerId: "46046",
-    playerName: "Scheffler, S.",
-    countryCode: "USA",
-    total: 288,
-    toPar: 0,
-    round1: 73,
-    round2: 72,
-    round3: 72,
-    round4: 71,
-    thru: "F",
+    id: "r6",
+    courseId: "pebble-beach",
+    courseName: "Pebble Beach GL",
+    date: "2024-11-02",
+    fairwaysHit: 7,
+    fairwaysTotal: 14,
+    greensInRegulation: 8,
+    putts: 35,
+    sandSaves: 0,
+    sandAttempts: 1,
+    drivingDistances: [
+      235, 250, 180, 215, 190, 255, 165, 245, 260, 265, 230, 195, 240, 270, 225, 235, 175, 255,
+    ],
   },
 ];
 
-function generateRound(
-  scores: number[],
-  par: number[]
-): { hole: number; par: number; score: number; yards: number }[] {
-  const yards = [
-    445, 575, 350, 240, 495, 180, 450, 570, 460, 495, 520, 155, 510, 440, 530, 170, 440, 465,
-  ];
-  return scores.map((score, i) => ({
-    hole: i + 1,
-    par: par[i] ?? 4,
-    score,
-    yards: yards[i] ?? 400,
+const rawScores: number[][] = [
+  [5, 5, 4, 6, 5, 6, 4, 5, 7, 5, 4, 6, 7, 5, 6, 4, 5, 6], // +16
+  [5, 5, 4, 5, 4, 6, 3, 5, 6, 5, 4, 5, 6, 5, 5, 4, 5, 6], // +12
+  [6, 6, 5, 6, 6, 6, 4, 6, 7, 6, 5, 6, 7, 6, 6, 5, 6, 7], // +22
+  [5, 4, 5, 5, 5, 5, 4, 5, 6, 5, 5, 5, 6, 5, 5, 4, 5, 6], // +14
+  [5, 5, 4, 5, 5, 5, 4, 5, 6, 5, 4, 5, 6, 5, 5, 4, 5, 6], // +12
+  [5, 5, 4, 5, 4, 6, 4, 5, 6, 5, 4, 5, 7, 5, 6, 4, 5, 7], // +16
+];
+
+function buildRound(base: Omit<Round, "scores" | "total" | "toPar">, scores: number[]): Round {
+  const course = courses.find((c) => c.id === base.courseId)!;
+  const holeScores = course.holes.map((h, i) => ({
+    hole: h.hole,
+    par: h.par,
+    score: scores[i] ?? h.par + 1,
+    yards: h.yards,
   }));
+  const total = holeScores.reduce((sum, h) => sum + h.score, 0);
+  const toPar = total - course.par;
+  return { ...base, scores: holeScores, total, toPar };
 }
 
-const augustaPar = [4, 5, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 3, 4, 4];
+export const rounds: Round[] = roundData.map((r, i) => buildRound(r, rawScores[i]!));
 
-const scorecards: PlayerScorecard[] = [
-  {
-    playerId: "28237",
-    rounds: [
-      {
-        roundNumber: 1,
-        scores: generateRound([4, 4, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 2, 4, 4], augustaPar),
-        total: 69,
-        toPar: -3,
-      },
-      {
-        roundNumber: 2,
-        scores: generateRound([4, 5, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 4, 4, 5, 3, 4, 4], augustaPar),
-        total: 70,
-        toPar: -2,
-      },
-      {
-        roundNumber: 3,
-        scores: generateRound([4, 4, 4, 2, 4, 3, 4, 4, 4, 4, 4, 3, 5, 4, 5, 3, 4, 4], augustaPar),
-        total: 68,
-        toPar: -4,
-      },
-      {
-        roundNumber: 4,
-        scores: generateRound([4, 5, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 3, 5, 4], augustaPar),
-        total: 71,
-        toPar: -1,
-      },
-    ],
-  },
-  {
-    playerId: "35891",
-    rounds: [
-      {
-        roundNumber: 1,
-        scores: generateRound([4, 4, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 4, 3, 4, 4], augustaPar),
-        total: 68,
-        toPar: -4,
-      },
-      {
-        roundNumber: 2,
-        scores: generateRound([4, 5, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 3, 4, 4], augustaPar),
-        total: 69,
-        toPar: -3,
-      },
-      {
-        roundNumber: 3,
-        scores: generateRound([4, 5, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 3, 5, 4], augustaPar),
-        total: 70,
-        toPar: -2,
-      },
-      {
-        roundNumber: 4,
-        scores: generateRound([4, 4, 4, 3, 4, 3, 4, 5, 4, 4, 4, 3, 5, 4, 5, 3, 4, 4], augustaPar),
-        total: 69,
-        toPar: -3,
-      },
-    ],
-  },
-];
+export const latestRound = rounds[0]!;
 
-const statistics: PlayerStatistics[] = [
-  {
-    playerId: "28237",
-    stats: [
-      { category: "Strokes Gained: Total", value: "2.342", rank: "3rd" },
-      { category: "Strokes Gained: Off-the-Tee", value: "0.892", rank: "5th" },
-      { category: "Strokes Gained: Approach", value: "0.745", rank: "8th" },
-      { category: "Strokes Gained: Around-the-Green", value: "0.312", rank: "12th" },
-      { category: "Strokes Gained: Putting", value: "0.393", rank: "15th" },
-      { category: "Driving Distance", value: "312.4 yds", rank: "18th" },
-      { category: "Fairways in Regulation", value: "68.2%", rank: "22nd" },
-      { category: "Greens in Regulation", value: "75.0%", rank: "6th" },
-      { category: "Putting Average", value: "1.72", rank: "24th" },
-      { category: "Scoring Average", value: "69.50", rank: "2nd" },
-    ],
-  },
-  {
-    playerId: "35891",
-    stats: [
-      { category: "Strokes Gained: Total", value: "2.891", rank: "1st" },
-      { category: "Strokes Gained: Off-the-Tee", value: "1.124", rank: "2nd" },
-      { category: "Strokes Gained: Approach", value: "0.982", rank: "3rd" },
-      { category: "Strokes Gained: Around-the-Green", value: "0.445", rank: "6th" },
-      { category: "Strokes Gained: Putting", value: "0.340", rank: "18th" },
-      { category: "Driving Distance", value: "298.7 yds", rank: "35th" },
-      { category: "Fairways in Regulation", value: "72.7%", rank: "8th" },
-      { category: "Greens in Regulation", value: "79.2%", rank: "2nd" },
-      { category: "Putting Average", value: "1.65", rank: "12th" },
-      { category: "Scoring Average", value: "69.00", rank: "1st" },
-    ],
-  },
-];
+export const roundHistory: RoundHistoryEntry[] = rounds.map((r) => ({
+  id: r.id,
+  courseName: r.courseName,
+  location: courses.find((c) => c.id === r.courseId)?.location ?? "",
+  date: r.date,
+  total: r.total,
+  toPar: r.toPar,
+  scores: r.scores.map((s) => s.score),
+}));
 
-const profiles: PlayerProfile[] = [
-  {
-    player: players.find((p) => p.id === "28237")!,
-    pastResults: [
-      { year: 2024, position: "T22", score: "289", toPar: "+1" },
-      { year: 2023, position: "T7", score: "283", toPar: "-5" },
-      { year: 2022, position: "2", score: "278", toPar: "-10" },
-      { year: 2021, position: "T18", score: "287", toPar: "-1" },
-      { year: 2020, position: "T5", score: "282", toPar: "-6" },
-      { year: 2019, position: "T21", score: "288", toPar: "E" },
-      { year: 2018, position: "T5", score: "279", toPar: "-9" },
-      { year: 2015, position: "4", score: "276", toPar: "-12" },
-      { year: 2014, position: "T8", score: "284", toPar: "-4" },
-      { year: 2011, position: "T20", score: "286", toPar: "-2" },
-    ],
-  },
-  {
-    player: players.find((p) => p.id === "35891")!,
-    pastResults: [
-      { year: 2024, position: "1", score: "276", toPar: "-12" },
-      { year: 2023, position: "T10", score: "283", toPar: "-5" },
-      { year: 2022, position: "1", score: "278", toPar: "-10" },
-    ],
-  },
-];
+export const coursesPlayed = courses.map((c) => {
+  const courseRounds = rounds.filter((r) => r.courseId === c.id);
+  const best = Math.min(...courseRounds.map((r) => r.total));
+  const avg = Math.round(courseRounds.reduce((s, r) => s + r.total, 0) / courseRounds.length);
+  return {
+    ...c,
+    timesPlayed: courseRounds.length,
+    bestScore: best,
+    avgScore: avg,
+  };
+});
 
-export function getAllPlayers(): Player[] {
-  return players;
+export function getScoreColorClass(score: number, par: number): string {
+  const diff = score - par;
+  if (diff <= -2) return "bg-[#1a3c27] text-white"; // Eagle or better
+  if (diff === -1) return "bg-[#2d7a3e] text-white"; // Birdie
+  if (diff === 0) return "bg-white text-[#1a1a1a]"; // Par
+  if (diff === 1) return "bg-[#e8e8e8] text-[#1a1a1a]"; // Bogey
+  return "bg-[#c8c8c8] text-[#1a1a1a]"; // Double bogey+
 }
 
-export function getPlayerById(id: string): Player | undefined {
-  return players.find((p) => p.id === id);
+export function getScoreLabel(score: number, par: number): string {
+  const diff = score - par;
+  if (diff <= -2) return "Eagle";
+  if (diff === -1) return "Birdie";
+  if (diff === 0) return "Par";
+  if (diff === 1) return "Bogey";
+  return "Double+";
 }
 
-export function getLeaderboard(): LeaderboardEntry[] {
-  return leaderboard;
+export function computeScoringDistribution(allRounds: Round[]): ScoringDistribution {
+  let eagles = 0;
+  let birdies = 0;
+  let pars = 0;
+  let bogeys = 0;
+  let doubleBogeys = 0;
+
+  for (const round of allRounds) {
+    for (const hole of round.scores) {
+      const diff = hole.score - hole.par;
+      if (diff <= -2) eagles++;
+      else if (diff === -1) birdies++;
+      else if (diff === 0) pars++;
+      else if (diff === 1) bogeys++;
+      else doubleBogeys++;
+    }
+  }
+
+  return {
+    eagles,
+    birdies,
+    pars,
+    bogeys,
+    doubleBogeys,
+    total: eagles + birdies + pars + bogeys + doubleBogeys,
+  };
 }
 
-export function getScorecard(playerId: string): PlayerScorecard | undefined {
-  return scorecards.find((s) => s.playerId === playerId);
+export function computeStatistics(allRounds: Round[]): Statistics {
+  const scoringDistribution = computeScoringDistribution(allRounds);
+
+  const totalFairwaysHit = allRounds.reduce((s, r) => s + r.fairwaysHit, 0);
+  const totalFairways = allRounds.reduce((s, r) => s + r.fairwaysTotal, 0);
+  const fairwayPercentage =
+    totalFairways > 0 ? Math.round((totalFairwaysHit / totalFairways) * 100) : 0;
+
+  const totalGir = allRounds.reduce((s, r) => s + r.greensInRegulation, 0);
+  const girPercentage = Math.round((totalGir / (allRounds.length * 18)) * 100);
+
+  const allDrives = allRounds.flatMap((r) => r.drivingDistances);
+  const avgDrivingDistance = Math.round(allDrives.reduce((s, d) => s + d, 0) / allDrives.length);
+  const longestDrive = Math.max(...allDrives);
+
+  const totalSandSaves = allRounds.reduce((s, r) => s + r.sandSaves, 0);
+  const totalSandAttempts = allRounds.reduce((s, r) => s + r.sandAttempts, 0);
+  const sandSavePercentage =
+    totalSandAttempts > 0 ? Math.round((totalSandSaves / totalSandAttempts) * 100) : 0;
+
+  const totalPutts = allRounds.reduce((s, r) => s + r.putts, 0);
+  const puttsPerRound = Math.round((totalPutts / allRounds.length) * 10) / 10;
+  const puttsPerGir = totalGir > 0 ? Math.round((totalPutts / totalGir) * 10) / 10 : 0;
+
+  // Avg score by par type
+  let par3Count = 0;
+  let par3Sum = 0;
+  let par4Count = 0;
+  let par4Sum = 0;
+  let par5Count = 0;
+  let par5Sum = 0;
+
+  for (const round of allRounds) {
+    for (const hole of round.scores) {
+      if (hole.par === 3) {
+        par3Count++;
+        par3Sum += hole.score;
+      } else if (hole.par === 4) {
+        par4Count++;
+        par4Sum += hole.score;
+      } else if (hole.par === 5) {
+        par5Count++;
+        par5Sum += hole.score;
+      }
+    }
+  }
+
+  return {
+    scoringDistribution,
+    girPercentage,
+    fairwayPercentage,
+    avgDrivingDistance,
+    sandSavePercentage,
+    puttsPerGir,
+    puttsPerRound,
+    avgScoreByPar3: par3Count > 0 ? Math.round((par3Sum / par3Count) * 10) / 10 : 0,
+    avgScoreByPar4: par4Count > 0 ? Math.round((par4Sum / par4Count) * 10) / 10 : 0,
+    avgScoreByPar5: par5Count > 0 ? Math.round((par5Sum / par5Count) * 10) / 10 : 0,
+    longestDrive,
+  };
 }
 
-export function getStatistics(playerId: string): PlayerStatistics | undefined {
-  return statistics.find((s) => s.playerId === playerId);
+export const statistics = computeStatistics(rounds);
+
+export function getCourseById(id: string): Course | undefined {
+  return courses.find((c) => c.id === id);
 }
 
-export function getPlayerProfile(playerId: string): PlayerProfile | undefined {
-  return profiles.find((p) => p.player.id === playerId);
+export function getRoundById(id: string): Round | undefined {
+  return rounds.find((r) => r.id === id);
 }

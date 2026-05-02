@@ -1,15 +1,16 @@
-export interface Player {
+export interface Course {
   id: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  countryCode: string;
-  age: number;
-  height: string;
-  weight: string;
-  worldRanking: number;
-  bio: string;
+  name: string;
+  location: string;
+  par: number;
+  holes: HoleInfo[];
   image?: string;
+}
+
+export interface HoleInfo {
+  hole: number;
+  par: number;
+  yards: number;
 }
 
 export interface HoleScore {
@@ -20,50 +21,63 @@ export interface HoleScore {
 }
 
 export interface Round {
-  roundNumber: number;
+  id: string;
+  courseId: string;
+  courseName: string;
+  date: string;
   scores: HoleScore[];
   total: number;
   toPar: number;
+  fairwaysHit: number;
+  fairwaysTotal: number;
+  greensInRegulation: number;
+  putts: number;
+  sandSaves: number;
+  sandAttempts: number;
+  drivingDistances: number[];
 }
 
-export interface PlayerScorecard {
-  playerId: string;
-  rounds: Round[];
+export interface GolferProfile {
+  name: string;
+  handicap: number;
+  roundsPlayed: number;
+  bestScore: number;
+  bestScoreToPar: number;
+  avgScore: number;
+  avgScoreToPar: number;
+  coursesPlayed: number;
+  avatarUrl?: string;
 }
 
-export interface LeaderboardEntry {
-  position: string;
-  playerId: string;
-  playerName: string;
-  countryCode: string;
+export interface ScoringDistribution {
+  eagles: number;
+  birdies: number;
+  pars: number;
+  bogeys: number;
+  doubleBogeys: number;
+  total: number;
+}
+
+export interface Statistics {
+  scoringDistribution: ScoringDistribution;
+  girPercentage: number;
+  fairwayPercentage: number;
+  avgDrivingDistance: number;
+  sandSavePercentage: number;
+  puttsPerGir: number;
+  puttsPerRound: number;
+  avgScoreByPar3: number;
+  avgScoreByPar4: number;
+  avgScoreByPar5: number;
+  longestDrive: number;
+}
+
+export interface RoundHistoryEntry {
+  id: string;
+  courseName: string;
+  location: string;
+  date: string;
   total: number;
   toPar: number;
-  round1: number | null;
-  round2: number | null;
-  round3: number | null;
-  round4: number | null;
-  thru: string;
-}
-
-export interface PlayerStat {
-  category: string;
-  value: string;
-  rank: string;
-}
-
-export interface PlayerStatistics {
-  playerId: string;
-  stats: PlayerStat[];
-}
-
-export interface TournamentResult {
-  year: number;
-  position: string;
-  score: string;
-  toPar: string;
-}
-
-export interface PlayerProfile {
-  player: Player;
-  pastResults: TournamentResult[];
+  scores: number[];
 }
