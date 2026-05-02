@@ -10,6 +10,7 @@ import { RoundHistory } from "./round-history";
 import { CourseDirectory } from "./course-directory";
 
 interface GolfPageClientProps {
+  locale: string;
   profile: GolferProfile;
   latestRound: Round;
   statistics: Statistics;
@@ -19,6 +20,7 @@ interface GolfPageClientProps {
 }
 
 export function GolfPageClient({
+  locale,
   profile,
   latestRound,
   statistics,
@@ -31,7 +33,7 @@ export function GolfPageClient({
       <ProfileHeader profile={profile} />
       <ScorecardTable round={latestRound} />
       <StatisticsDashboard statistics={statistics} rounds={allRounds} />
-      <RoundHistory entries={roundHistory} />
+      <RoundHistory entries={roundHistory} locale={locale} />
       <CourseDirectory courses={courses} />
     </div>
   );

@@ -35,6 +35,7 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
           </p>
         </div>
         <GolfPageClient
+          locale={locale}
           profile={golferProfile}
           latestRound={latestRound}
           statistics={statistics}

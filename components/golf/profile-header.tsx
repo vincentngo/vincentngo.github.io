@@ -8,7 +8,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
-    <div className="rounded-xl border border-[#e0e0d8] bg-white p-5 shadow-sm">
+    <div className="bg-white py-5">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
         {/* Avatar */}
         <div className="flex items-center gap-4">

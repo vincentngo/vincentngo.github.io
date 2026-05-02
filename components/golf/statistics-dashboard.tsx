@@ -23,13 +23,13 @@ export function StatisticsDashboard({ statistics, rounds }: StatisticsDashboardP
   const [activeTab, setActiveTab] = useState("Scoring Summary");
 
   return (
-    <div className="rounded-xl border border-[#e0e0d8] bg-white shadow-sm">
-      <div className="border-b border-[#e0e0d8] p-4 sm:p-5">
+    <div className="bg-white">
+      <div className="py-4 sm:py-5">
         <h2 className="text-lg font-bold text-[#1a1a1a]">Statistics</h2>
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-2 overflow-x-auto border-b border-[#e0e0d8] p-3">
+      <div className="flex gap-2 overflow-x-auto py-3">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -46,7 +46,7 @@ export function StatisticsDashboard({ statistics, rounds }: StatisticsDashboardP
       </div>
 
       {/* Tab content */}
-      <div className="p-4 sm:p-5">
+      <div className="py-4 sm:py-5">
         {activeTab === "Scoring Summary" && <ScoringSummary stats={statistics} />}
         {activeTab === "Greens in Reg" && <GreensInReg stats={statistics} rounds={rounds} />}
         {activeTab === "Fairways Hit" && <FairwaysHit stats={statistics} rounds={rounds} />}
@@ -74,7 +74,7 @@ function ScoringSummary({ stats }: { stats: Statistics }) {
   return (
     <div className="space-y-6">
       {/* Large donut */}
-      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+      <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
         <div className="flex flex-col items-center">
           <DonutChart items={items} size={200} strokeWidth={22} />
           <p className="mt-2 text-sm text-[#888888]">Overall scoring distribution</p>
@@ -98,10 +98,7 @@ function ScoringSummary({ stats }: { stats: Statistics }) {
         {items.map((item) => {
           const pct = total > 0 ? Math.round((item.count / total) * 100) : 0;
           return (
-            <div
-              key={item.label}
-              className="flex flex-col items-center rounded-lg border border-[#e0e0d8] p-3"
-            >
+            <div key={item.label} className="flex flex-col items-center rounded-lg p-3">
               <MiniDonut color={item.color} percentage={pct} size={60} strokeWidth={6} />
               <p className="mt-2 text-lg font-bold text-[#1a1a1a]">{item.count}</p>
               <p className="text-xs text-[#888888]">{item.label}</p>
@@ -282,7 +279,7 @@ function SandSaves({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
         {rounds.map((r) => {
           const pct = r.sandAttempts > 0 ? Math.round((r.sandSaves / r.sandAttempts) * 100) : 0;
           return (
-            <div key={r.id} className="rounded-lg border border-[#e0e0d8] p-3 text-center">
+            <div key={r.id} className="rounded-lg p-3 text-center">
               <p className="text-xs text-[#888888]">
                 {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               </p>
@@ -300,7 +297,7 @@ function SandSaves({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-[#e0e0d8] p-4 text-center">
+    <div className="rounded-lg p-4 text-center">
       <p className="text-2xl font-bold text-[#1a3c27]">{value}</p>
       <p className="text-xs text-[#888888]">{label}</p>
     </div>

@@ -14,17 +14,14 @@ interface CourseDirectoryProps {
 
 export function CourseDirectory({ courses }: CourseDirectoryProps) {
   return (
-    <div className="rounded-xl border border-[#e0e0d8] bg-white shadow-sm">
-      <div className="border-b border-[#e0e0d8] p-4 sm:p-5">
+    <div className="rounded-xl bg-white">
+      <div className="py-4 sm:py-5">
         <h2 className="text-lg font-bold text-[#1a1a1a]">My Courses</h2>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 py-4 sm:grid-cols-2 sm:py-5 lg:grid-cols-3">
         {courses.map((course) => (
-          <div
-            key={course.id}
-            className="group flex flex-col overflow-hidden rounded-lg border border-[#e0e0d8] transition-shadow hover:shadow-md"
-          >
+          <div key={course.id} className="group flex flex-col overflow-hidden rounded-lg">
             {/* Course image placeholder */}
             <div className="relative h-28 bg-[#1a3c27]">
               <div className="absolute inset-0 flex items-center justify-center">
