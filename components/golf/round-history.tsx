@@ -21,9 +21,9 @@ export function RoundHistory({ entries, locale }: RoundHistoryProps) {
   });
 
   return (
-    <div className="rounded-xl bg-white">
+    <div className="rounded-xl bg-card">
       <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:py-5">
-        <h2 className="text-lg font-bold text-[#1a1a1a]">Round History</h2>
+        <h2 className="text-lg font-bold text-foreground">Round History</h2>
         <div className="flex gap-2">
           {(
             [
@@ -38,7 +38,7 @@ export function RoundHistory({ entries, locale }: RoundHistoryProps) {
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 sort === opt.key
                   ? "bg-[#1a3c27] text-white"
-                  : "border border-[#e0e0d8] bg-white text-[#5c5c5c] hover:border-[#2d7a3e] hover:text-[#2d7a3e]"
+                  : "border border-border bg-card text-muted-foreground hover:border-[#2d7a3e] hover:text-[#2d7a3e] dark:hover:text-[#7ccf8a]"
               }`}
             >
               {opt.label}
@@ -47,7 +47,7 @@ export function RoundHistory({ entries, locale }: RoundHistoryProps) {
         </div>
       </div>
 
-      <div className="divide-y divide-[#f0f0ea]">
+      <div className="divide-y divide-border/60">
         {sorted.map((entry) => (
           <Link
             key={entry.id}
@@ -55,12 +55,12 @@ export function RoundHistory({ entries, locale }: RoundHistoryProps) {
             className="flex items-center justify-between py-4 text-left transition-colors hover:text-[#2d7a3e]"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e8f5e9] text-sm font-bold text-[#1a3c27]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e8f5e9] text-sm font-bold text-[#1a3c27] dark:bg-[#153421] dark:text-[#7ccf8a]">
                 {entry.toPar > 0 ? `+${entry.toPar}` : entry.toPar}
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#1a1a1a]">{entry.courseName}</p>
-                <div className="flex items-center gap-2 text-xs text-[#888888]">
+                <p className="text-sm font-semibold text-foreground">{entry.courseName}</p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex items-center gap-0.5">
                     <MapPinIcon /> {entry.location}
                   </span>
@@ -76,7 +76,7 @@ export function RoundHistory({ entries, locale }: RoundHistoryProps) {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-lg font-bold text-[#1a1a1a]">{entry.total}</span>
+              <span className="text-lg font-bold text-foreground">{entry.total}</span>
               <ChevronRightIcon />
             </div>
           </Link>
@@ -98,7 +98,7 @@ function ChevronRightIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-[#888888]"
+      className="text-muted-foreground"
     >
       <path d="m9 18 6-6-6-6" />
     </svg>

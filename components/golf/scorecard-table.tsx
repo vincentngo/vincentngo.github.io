@@ -18,15 +18,15 @@ export function ScorecardTable({ round, label = "Latest Round" }: ScorecardTable
   const backPar = back9.reduce((s, h) => s + h.par, 0);
 
   return (
-    <div className="bg-white">
+    <div className="bg-card">
       {/* Header */}
       <div className="py-4 sm:py-5">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-lg font-bold text-[#1a1a1a]">
+            <h2 className="text-lg font-bold text-foreground">
               {label} — {round.courseName}
             </h2>
-            <p className="text-sm text-[#888888]">
+            <p className="text-sm text-muted-foreground">
               {new Date(round.date).toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
@@ -36,13 +36,15 @@ export function ScorecardTable({ round, label = "Latest Round" }: ScorecardTable
             </p>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-[#1a3c27]">{round.total}</span>
-            <span className="text-lg font-semibold text-[#5c5c5c]">(+{round.toPar})</span>
+            <span className="text-3xl font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
+              {round.total}
+            </span>
+            <span className="text-lg font-semibold text-muted-foreground">(+{round.toPar})</span>
           </div>
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-[#e0e0d8]">
+      <div className="overflow-hidden rounded-xl border border-border">
         {/* Scorecard */}
         <div className="overflow-x-auto">
           <table className="w-full text-center text-sm">
@@ -62,35 +64,35 @@ export function ScorecardTable({ round, label = "Latest Round" }: ScorecardTable
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-[#e8f5e9]">
-                <td className="sticky left-0 z-10 bg-[#e8f5e9] px-2 py-2 text-left text-xs font-semibold text-[#1a3c27]">
+              <tr className="bg-[#e8f5e9] dark:bg-[#102719]">
+                <td className="sticky left-0 z-10 bg-[#e8f5e9] px-2 py-2 text-left text-xs font-semibold text-[#1a3c27] dark:bg-[#102719] dark:text-[#7ccf8a]">
                   Par
                 </td>
                 {round.scores.map((h) => (
                   <td
                     key={`par-${h.hole}`}
-                    className="px-1 py-2 text-xs font-medium text-[#1a3c27]"
+                    className="px-1 py-2 text-xs font-medium text-[#1a3c27] dark:text-[#7ccf8a]"
                   >
                     {h.par}
                   </td>
                 ))}
-                <td className="border-l border-[#e0e0d8] px-2 py-2 text-xs font-bold text-[#1a3c27]">
+                <td className="border-l border-border px-2 py-2 text-xs font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
                   {frontPar + backPar}
                 </td>
               </tr>
               <tr>
-                <td className="sticky left-0 z-10 bg-white px-2 py-2 text-left text-xs font-semibold text-[#1a1a1a]">
+                <td className="sticky left-0 z-10 bg-card px-2 py-2 text-left text-xs font-semibold text-foreground">
                   R1
                 </td>
                 {round.scores.map((h) => (
                   <td
                     key={`score-${h.hole}`}
-                    className="bg-white px-1 py-2 text-sm font-bold text-[#1a1a1a] transition-transform hover:scale-110"
+                    className="bg-card px-1 py-2 text-sm font-bold text-foreground transition-transform hover:scale-110"
                   >
                     <ScoreMarker score={h.score} par={h.par} />
                   </td>
                 ))}
-                <td className="border-l border-[#e0e0d8] bg-[#f5f5f0] px-2 py-2 text-sm font-bold text-[#1a1a1a]">
+                <td className="border-l border-border bg-muted px-2 py-2 text-sm font-bold text-foreground">
                   {round.total}
                 </td>
               </tr>
@@ -99,19 +101,23 @@ export function ScorecardTable({ round, label = "Latest Round" }: ScorecardTable
         </div>
 
         {/* 9-hole summary */}
-        <div className="grid grid-cols-2 gap-px border-t border-[#e0e0d8] bg-[#e0e0d8]">
-          <div className="bg-white p-3 text-center">
-            <p className="text-xs text-[#888888]">Front 9</p>
-            <p className="text-lg font-bold text-[#1a1a1a]">
+        <div className="grid grid-cols-2 gap-px border-t border-border bg-border">
+          <div className="bg-card p-3 text-center">
+            <p className="text-xs text-muted-foreground">Front 9</p>
+            <p className="text-lg font-bold text-foreground">
               {frontTotal}{" "}
-              <span className="text-sm font-normal text-[#888888]">(+{frontTotal - frontPar})</span>
+              <span className="text-sm font-normal text-muted-foreground">
+                (+{frontTotal - frontPar})
+              </span>
             </p>
           </div>
-          <div className="bg-white p-3 text-center">
-            <p className="text-xs text-[#888888]">Back 9</p>
-            <p className="text-lg font-bold text-[#1a1a1a]">
+          <div className="bg-card p-3 text-center">
+            <p className="text-xs text-muted-foreground">Back 9</p>
+            <p className="text-lg font-bold text-foreground">
               {backTotal}{" "}
-              <span className="text-sm font-normal text-[#888888]">(+{backTotal - backPar})</span>
+              <span className="text-sm font-normal text-muted-foreground">
+                (+{backTotal - backPar})
+              </span>
             </p>
           </div>
         </div>

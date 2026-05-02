@@ -43,7 +43,7 @@ export default async function GolfRoundPage({
         <div className="mb-8">
           <Link
             href={`/${locale}/golf/`}
-            className="text-sm font-medium text-[#2d7a3e] hover:text-[#1a3c27]"
+            className="text-sm font-medium text-[#2d7a3e] hover:text-[#1a3c27] dark:text-[#7ccf8a] dark:hover:text-[#a7e7b0]"
           >
             Back to golf
           </Link>

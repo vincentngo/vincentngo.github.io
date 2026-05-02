@@ -29,8 +29,8 @@ export default async function GolfPage({ params }: { params: Promise<{ locale: s
       <Header locale={locale as Locale} dict={dict} />
       <main className="container mx-auto max-w-5xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">My Golf Journey</h1>
-          <p className="mt-1 text-sm text-[#888888]">
+          <h1 className="text-3xl font-bold text-foreground">My Golf Journey</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Tracking every round, every shot, every improvement.
           </p>
         </div>

@@ -23,9 +23,9 @@ export function StatisticsDashboard({ statistics, rounds }: StatisticsDashboardP
   const [activeTab, setActiveTab] = useState("Scoring Summary");
 
   return (
-    <div className="bg-white">
+    <div className="bg-card">
       <div className="py-4 sm:py-5">
-        <h2 className="text-lg font-bold text-[#1a1a1a]">Statistics</h2>
+        <h2 className="text-lg font-bold text-foreground">Statistics</h2>
       </div>
 
       {/* Tab bar */}
@@ -37,7 +37,7 @@ export function StatisticsDashboard({ statistics, rounds }: StatisticsDashboardP
             className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               activeTab === tab
                 ? "bg-[#1a3c27] text-white"
-                : "border border-[#2d7a3e] bg-white text-[#2d7a3e] hover:bg-[#e8f5e9]"
+                : "border border-[#2d7a3e] bg-card text-[#2d7a3e] hover:bg-[#e8f5e9] dark:text-[#7ccf8a] dark:hover:bg-[#153421]"
             }`}
           >
             {tab}
@@ -77,7 +77,7 @@ function ScoringSummary({ stats }: { stats: Statistics }) {
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
         <div className="flex flex-col items-center">
           <DonutChart items={items} size={200} strokeWidth={22} />
-          <p className="mt-2 text-sm text-[#888888]">Overall scoring distribution</p>
+          <p className="mt-2 text-sm text-muted-foreground">Overall scoring distribution</p>
         </div>
 
         {/* Legend */}
@@ -85,7 +85,7 @@ function ScoringSummary({ stats }: { stats: Statistics }) {
           {items.map((item) => (
             <div key={item.label} className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
-              <span className="text-sm text-[#5c5c5c]">
+              <span className="text-sm text-muted-foreground">
                 {item.label} ({item.count})
               </span>
             </div>
@@ -98,10 +98,10 @@ function ScoringSummary({ stats }: { stats: Statistics }) {
         {items.map((item) => {
           const pct = total > 0 ? Math.round((item.count / total) * 100) : 0;
           return (
-            <div key={item.label} className="flex flex-col items-center rounded-lg p-3">
+            <div key={item.label} className="flex flex-col items-center rounded-lg bg-muted/30 p-3">
               <MiniDonut color={item.color} percentage={pct} size={60} strokeWidth={6} />
-              <p className="mt-2 text-lg font-bold text-[#1a1a1a]">{item.count}</p>
-              <p className="text-xs text-[#888888]">{item.label}</p>
+              <p className="mt-2 text-lg font-bold text-foreground">{item.count}</p>
+              <p className="text-xs text-muted-foreground">{item.label}</p>
               <p className="text-xs font-semibold" style={{ color: item.color }}>
                 {pct}%
               </p>
@@ -118,27 +118,31 @@ function GreensInReg({ stats, rounds }: { stats: Statistics; rounds: Round[] }) 
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <div className="text-center">
-          <p className="text-4xl font-bold text-[#1a3c27]">{stats.girPercentage}%</p>
-          <p className="text-sm text-[#888888]">Greens in Regulation</p>
+          <p className="text-4xl font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
+            {stats.girPercentage}%
+          </p>
+          <p className="text-sm text-muted-foreground">Greens in Regulation</p>
         </div>
       </div>
       <div>
-        <p className="mb-3 text-sm font-semibold text-[#5c5c5c]">GIR by Round</p>
+        <p className="mb-3 text-sm font-semibold text-muted-foreground">GIR by Round</p>
         <div className="space-y-2">
           {rounds.map((r) => {
             const pct = Math.round((r.greensInRegulation / 18) * 100);
             return (
               <div key={r.id} className="flex items-center gap-3">
-                <span className="w-32 shrink-0 truncate text-xs text-[#888888]">
+                <span className="w-32 shrink-0 truncate text-xs text-muted-foreground">
                   {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                 </span>
-                <div className="h-5 flex-1 overflow-hidden rounded-full bg-[#f5f5f0]">
+                <div className="h-5 flex-1 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full bg-[#2d7a3e] transition-all"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <span className="w-10 text-right text-xs font-semibold text-[#1a1a1a]">{pct}%</span>
+                <span className="w-10 text-right text-xs font-semibold text-foreground">
+                  {pct}%
+                </span>
               </div>
             );
           })}
@@ -152,26 +156,30 @@ function FairwaysHit({ stats, rounds }: { stats: Statistics; rounds: Round[] }) 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <p className="text-4xl font-bold text-[#1a3c27]">{stats.fairwayPercentage}%</p>
-        <p className="text-sm text-[#888888]">Fairways in Regulation</p>
+        <p className="text-4xl font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
+          {stats.fairwayPercentage}%
+        </p>
+        <p className="text-sm text-muted-foreground">Fairways in Regulation</p>
       </div>
       <div>
-        <p className="mb-3 text-sm font-semibold text-[#5c5c5c]">Fairways by Round</p>
+        <p className="mb-3 text-sm font-semibold text-muted-foreground">Fairways by Round</p>
         <div className="space-y-2">
           {rounds.map((r) => {
             const pct = Math.round((r.fairwaysHit / r.fairwaysTotal) * 100);
             return (
               <div key={r.id} className="flex items-center gap-3">
-                <span className="w-32 shrink-0 truncate text-xs text-[#888888]">
+                <span className="w-32 shrink-0 truncate text-xs text-muted-foreground">
                   {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                 </span>
-                <div className="h-5 flex-1 overflow-hidden rounded-full bg-[#f5f5f0]">
+                <div className="h-5 flex-1 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full bg-[#2d7a3e] transition-all"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <span className="w-10 text-right text-xs font-semibold text-[#1a1a1a]">{pct}%</span>
+                <span className="w-10 text-right text-xs font-semibold text-foreground">
+                  {pct}%
+                </span>
               </div>
             );
           })}
@@ -202,20 +210,22 @@ function ScoringByPar({ stats }: { stats: Statistics }) {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-[#888888]">Average score relative to par</p>
+      <p className="text-sm text-muted-foreground">Average score relative to par</p>
       {items.map((item) => {
         const diff = item.avg - item.par;
         const width = Math.min((diff / maxDiff) * 100, 100);
         return (
           <div key={item.label}>
             <div className="mb-1 flex items-center justify-between">
-              <span className="text-sm font-semibold text-[#1a1a1a]">{item.label}</span>
-              <span className="text-sm font-bold text-[#1a3c27]">
+              <span className="text-sm font-semibold text-foreground">{item.label}</span>
+              <span className="text-sm font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
                 {item.avg}{" "}
-                <span className="text-xs font-normal text-[#888888]">(+{diff.toFixed(1)})</span>
+                <span className="text-xs font-normal text-muted-foreground">
+                  (+{diff.toFixed(1)})
+                </span>
               </span>
             </div>
-            <div className="h-6 overflow-hidden rounded-full bg-[#f5f5f0]">
+            <div className="h-6 overflow-hidden rounded-full bg-muted">
               <div
                 className="flex h-full items-center justify-end rounded-full bg-[#2d7a3e] pr-2 transition-all"
                 style={{ width: `${Math.max(width, 8)}%` }}
@@ -238,7 +248,7 @@ function Driving({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
         <StatCard label="Longest Drive" value={`${stats.longestDrive} yds`} />
       </div>
       <div>
-        <p className="mb-3 text-sm font-semibold text-[#5c5c5c]">Avg Distance by Round</p>
+        <p className="mb-3 text-sm font-semibold text-muted-foreground">Avg Distance by Round</p>
         <div className="space-y-2">
           {rounds.map((r) => {
             const avg = Math.round(
@@ -247,16 +257,16 @@ function Driving({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
             const max = 300;
             return (
               <div key={r.id} className="flex items-center gap-3">
-                <span className="w-32 shrink-0 truncate text-xs text-[#888888]">
+                <span className="w-32 shrink-0 truncate text-xs text-muted-foreground">
                   {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                 </span>
-                <div className="h-5 flex-1 overflow-hidden rounded-full bg-[#f5f5f0]">
+                <div className="h-5 flex-1 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full bg-[#2d7a3e] transition-all"
                     style={{ width: `${(avg / max) * 100}%` }}
                   />
                 </div>
-                <span className="w-14 text-right text-xs font-semibold text-[#1a1a1a]">
+                <span className="w-14 text-right text-xs font-semibold text-foreground">
                   {avg} yds
                 </span>
               </div>
@@ -272,21 +282,23 @@ function SandSaves({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <p className="text-4xl font-bold text-[#1a3c27]">{stats.sandSavePercentage}%</p>
-        <p className="text-sm text-[#888888]">Sand Save Percentage</p>
+        <p className="text-4xl font-bold text-[#1a3c27] dark:text-[#7ccf8a]">
+          {stats.sandSavePercentage}%
+        </p>
+        <p className="text-sm text-muted-foreground">Sand Save Percentage</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
         {rounds.map((r) => {
           const pct = r.sandAttempts > 0 ? Math.round((r.sandSaves / r.sandAttempts) * 100) : 0;
           return (
-            <div key={r.id} className="rounded-lg p-3 text-center">
-              <p className="text-xs text-[#888888]">
+            <div key={r.id} className="rounded-lg bg-muted/30 p-3 text-center">
+              <p className="text-xs text-muted-foreground">
                 {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               </p>
-              <p className="text-xl font-bold text-[#1a1a1a]">
+              <p className="text-xl font-bold text-foreground">
                 {r.sandSaves}/{r.sandAttempts}
               </p>
-              <p className="text-xs font-semibold text-[#2d7a3e]">{pct}%</p>
+              <p className="text-xs font-semibold text-[#2d7a3e] dark:text-[#7ccf8a]">{pct}%</p>
             </div>
           );
         })}
@@ -297,9 +309,9 @@ function SandSaves({ stats, rounds }: { stats: Statistics; rounds: Round[] }) {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg p-4 text-center">
-      <p className="text-2xl font-bold text-[#1a3c27]">{value}</p>
-      <p className="text-xs text-[#888888]">{label}</p>
+    <div className="rounded-lg bg-muted/30 p-4 text-center">
+      <p className="text-2xl font-bold text-[#1a3c27] dark:text-[#7ccf8a]">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
     </div>
   );
 }
@@ -370,7 +382,8 @@ function MiniDonut({
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke="#e8e8e8"
+        className="text-muted"
+        stroke="currentColor"
         strokeWidth={strokeWidth}
       />
       <circle

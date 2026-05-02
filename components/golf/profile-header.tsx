@@ -8,19 +8,19 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
-    <div className="bg-white py-5">
+    <div className="bg-card py-5">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
         {/* Avatar */}
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1a3c27] text-xl font-bold text-white ring-2 ring-[#2d7a3e] ring-offset-2">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1a3c27] text-xl font-bold text-white ring-2 ring-[#2d7a3e] ring-offset-2 ring-offset-background">
             {profile.name
               .split(" ")
               .map((n) => n[0])
               .join("")}
           </div>
           <div className="sm:hidden">
-            <h1 className="text-xl font-bold text-[#1a1a1a]">{profile.name}</h1>
-            <span className="inline-flex items-center rounded-full bg-[#e8f5e9] px-2.5 py-0.5 text-xs font-semibold text-[#1a3c27]">
+            <h1 className="text-xl font-bold text-foreground">{profile.name}</h1>
+            <span className="inline-flex items-center rounded-full bg-[#e8f5e9] px-2.5 py-0.5 text-xs font-semibold text-[#1a3c27] dark:bg-[#153421] dark:text-[#7ccf8a]">
               HCP {profile.handicap}
             </span>
           </div>
@@ -28,8 +28,8 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
 
         {/* Name + Handicap (desktop) */}
         <div className="hidden sm:block">
-          <h1 className="text-2xl font-bold text-[#1a1a1a]">{profile.name}</h1>
-          <span className="mt-1 inline-flex items-center rounded-full bg-[#e8f5e9] px-3 py-1 text-sm font-semibold text-[#1a3c27]">
+          <h1 className="text-2xl font-bold text-foreground">{profile.name}</h1>
+          <span className="mt-1 inline-flex items-center rounded-full bg-[#e8f5e9] px-3 py-1 text-sm font-semibold text-[#1a3c27] dark:bg-[#153421] dark:text-[#7ccf8a]">
             Handicap {profile.handicap}
           </span>
         </div>
@@ -56,11 +56,11 @@ function StatBlock({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-lg bg-[#f5f5f0] px-3 py-2">
-      <span className="text-[#2d7a3e]">{icon}</span>
+    <div className="flex items-center gap-2.5 rounded-lg bg-muted px-3 py-2">
+      <span className="text-[#2d7a3e] dark:text-[#7ccf8a]">{icon}</span>
       <div>
-        <p className="text-xs font-medium text-[#888888]">{label}</p>
-        <p className="text-sm font-bold text-[#1a1a1a]">{value}</p>
+        <p className="text-xs font-medium text-muted-foreground">{label}</p>
+        <p className="text-sm font-bold text-foreground">{value}</p>
       </div>
     </div>
   );

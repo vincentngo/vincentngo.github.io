@@ -14,14 +14,17 @@ interface CourseDirectoryProps {
 
 export function CourseDirectory({ courses }: CourseDirectoryProps) {
   return (
-    <div className="rounded-xl bg-white">
+    <div className="rounded-xl bg-card">
       <div className="py-4 sm:py-5">
-        <h2 className="text-lg font-bold text-[#1a1a1a]">My Courses</h2>
+        <h2 className="text-lg font-bold text-foreground">My Courses</h2>
       </div>
 
       <div className="grid grid-cols-1 gap-4 py-4 sm:grid-cols-2 sm:py-5 lg:grid-cols-3">
         {courses.map((course) => (
-          <div key={course.id} className="group flex flex-col overflow-hidden rounded-lg">
+          <div
+            key={course.id}
+            className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card"
+          >
             {/* Course image placeholder */}
             <div className="relative h-28 bg-[#1a3c27]">
               <div className="absolute inset-0 flex items-center justify-center">
@@ -37,20 +40,20 @@ export function CourseDirectory({ courses }: CourseDirectoryProps) {
             </div>
 
             <div className="flex flex-1 flex-col justify-between p-3">
-              <div className="flex items-center justify-between text-xs text-[#888888]">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>Par {course.par}</span>
                 <span>{course.timesPlayed} rounds</span>
               </div>
               <div className="mt-2 flex items-center justify-between">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 text-[#2d7a3e] dark:text-[#7ccf8a]">
                   <TrophyIcon />
-                  <span className="text-sm font-bold text-[#1a1a1a]">{course.bestScore}</span>
-                  <span className="text-xs text-[#888888]">best</span>
+                  <span className="text-sm font-bold text-foreground">{course.bestScore}</span>
+                  <span className="text-xs text-muted-foreground">best</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 text-[#2d7a3e] dark:text-[#7ccf8a]">
                   <TrendingUpIcon />
-                  <span className="text-sm font-bold text-[#1a1a1a]">{course.avgScore}</span>
-                  <span className="text-xs text-[#888888]">avg</span>
+                  <span className="text-sm font-bold text-foreground">{course.avgScore}</span>
+                  <span className="text-xs text-muted-foreground">avg</span>
                 </div>
               </div>
             </div>
@@ -88,7 +91,7 @@ function TrophyIcon() {
       height="14"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#2d7a3e"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -111,7 +114,7 @@ function TrendingUpIcon() {
       height="14"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#2d7a3e"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
