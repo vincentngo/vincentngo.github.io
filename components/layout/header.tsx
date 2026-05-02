@@ -9,6 +9,7 @@ interface HeaderProps {
     nav: {
       home: string;
       blog: string;
+      golf?: string;
     };
   };
 }
@@ -30,6 +31,14 @@ export function Header({ locale, dict }: HeaderProps) {
           >
             {dict.nav.blog}
           </Link>
+          {dict.nav.golf && (
+            <Link
+              href={`/${locale}/golf/`}
+              className="text-sm font-medium transition-colors hover:text-foreground/80"
+            >
+              {dict.nav.golf}
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">

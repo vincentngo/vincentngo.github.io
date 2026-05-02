@@ -1,0 +1,386 @@
+---
+title: "Open Design: The Complete Guide to the Open-Source Alternative to Claude Design"
+description: "A deep-dive into Open Design — the local-first, BYOK, open-source alternative to Anthropic's Claude Design. Every skill, every use case, every design system, and why startups should care about AI vendor lock-in."
+date: "2026-05-01"
+tags: ["open-design", "claude-design", "ai-design", "open-source", "startup", "byok", "agentic-ai", "no-vendor-lock-in"]
+---
+
+# Open Design: The Complete Guide to the Open-Source Alternative to Claude Design
+
+> **TL;DR:** Open Design is a local-first, open-source design tool that turns natural-language briefs into editable HTML artifacts. It runs 34+ design skills across 129 brand-grade design systems, delegates to 11 coding-agent CLIs you already own, and costs a fraction of Claude Design's restrictive usage quotas.
+
+---
+
+## Why I Went Looking for an Alternative
+
+I tried Claude Design the day it dropped. Opus 4.7, artifact-first, stunning output. I typed *"make me a landing page for my startup"* and watched it generate something genuinely beautiful. Then I asked for a second iteration. Then a third. And then — **usage limit hit**. Fifteen percent of my weekly budget gone on a single landing page. I had to wait a week to try again.
+
+This isn't a rant about Anthropic's pricing. It's a reality check. In the age of AI, **cost mindfulness is a survival skill** for startups. When every tool wants its own subscription, its own usage tier, its own model lock-in, the bills compound fast. More importantly, the *dependency* compounds faster. Your design workflow becomes hostage to a single vendor's roadmap, quota policy, and model availability.
+
+I started looking for an alternative that was:
+- **Open-source** — so I can read, fork, and host it myself
+- **BYOK (Bring Your Own Key)** — so I can swap models and control costs
+- **Local-first** — so my data and my design files stay on my machine
+- **Skill-driven** — so the community can extend it, not just the vendor
+
+That search led me to [**Open Design**](https://github.com/nexu-io/open-design).
+
+---
+
+## What Is Open Design?
+
+Open Design (OD) is an **open-source alternative to Anthropic's Claude Design**. Released under Apache-2.0, it provides the same artifact-first design loop — natural language brief → interactive question form → live todo stream → sandboxed HTML preview → export — but without the closed-source walls.
+
+The project describes itself as *"local-first, web-deployable, BYOK at every layer."* It auto-detects **11 coding-agent CLIs** already on your `PATH`, drives them through **34+ composable Skills**, and ships with **129 brand-grade Design Systems**. No CLI installed? An OpenAI-compatible BYOK proxy lets you paste any `baseUrl` + `apiKey` + `model` and still run the full loop.
+
+### The Four Pillars Open Design Stands On
+
+Open Design is not built from scratch. It deliberately composes four existing open-source projects:
+
+| Pillar | Source | What OD Borrows |
+|---|---|---|
+| **Design Philosophy** | [`alchaincyf/huashu-design`](https://github.com/alchaincyf/huashu-design) | Junior-Designer workflow, 5-step brand-asset protocol, anti-AI-slop checklist, 5-dimensional self-critique, and the "5 schools × 20 design philosophies" direction picker |
+| **Deck Engine** | [`op7418/guizang-ppt-skill`](https://github.com/op7418/guizang-ppt-skill) | Magazine-style horizontal-swipe web decks, WebGL hero backgrounds, P0/P1/P2 checklists — bundled verbatim with original license preserved |
+| **UX Patterns** | [`OpenCoworkAI/open-codesign`](https://github.com/OpenCoworkAI/open-codesign) | Streaming-artifact loop, sandboxed-iframe preview, live agent panel (todos + tool calls), five-format export (HTML / PDF / PPTX / ZIP / Markdown) |
+| **Runtime Architecture** | [`multica-ai/multica`](https://github.com/multica-ai/multica) | PATH-scan agent detection, local daemon as the privileged process, agent-as-teammate worldview |
+
+---
+
+## The Complete Capabilities Catalog
+
+This is the section I wish existed when I started researching. Below is every skill, every design system, every agent adapter, and every unique feature I could find.
+
+### 34+ Built-In Skills (Organized by Mode & Scenario)
+
+Skills are the atomic unit of design capability in OD. Each is a `SKILL.md` file following the Claude Code convention, with optional `od:` frontmatter for design-specific features. They live under `skills/` and are auto-discovered on daemon boot.
+
+#### **Prototype Mode** (27 skills — single-page interactive artifacts)
+
+**Design & Marketing Surfaces**
+
+| Skill | Platform | What It Produces |
+|---|---|---|
+| [`web-prototype`](https://github.com/nexu-io/open-design/tree/main/skills/web-prototype) | Desktop | General-purpose landing / marketing / hero pages (default skill) |
+| [`saas-landing`](https://github.com/nexu-io/open-design/tree/main/skills/saas-landing) | Desktop | Hero → features → social proof → pricing → CTA marketing layout |
+| [`dashboard`](https://github.com/nexu-io/open-design/tree/main/skills/dashboard) | Desktop | Admin / analytics with sidebar + dense data layout + inline SVG charts |
+| [`pricing-page`](https://github.com/nexu-io/open-design/tree/main/skills/pricing-page) | Desktop | Standalone pricing + comparison tables |
+| [`docs-page`](https://github.com/nexu-io/open-design/tree/main/skills/docs-page) | Desktop | 3-column documentation layout |
+| [`blog-post`](https://github.com/nexu-io/open-design/tree/main/skills/blog-post) | Desktop | Editorial long-form article layout |
+| [`mobile-app`](https://github.com/nexu-io/open-design/tree/main/skills/mobile-app) | Mobile | iPhone 15 Pro / Pixel framed app screen mockups (6 archetypes: Feed, Detail, Onboarding, Profile, Checkout, Focus) |
+| [`mobile-onboarding`](https://github.com/nexu-io/open-design/tree/main/skills/mobile-onboarding) | Mobile | Multi-screen onboarding flow (splash → value-prop → sign-in) |
+| [`gamified-app`](https://github.com/nexu-io/open-design/tree/main/skills/gamified-app) | Mobile | Three-frame gamified prototype (cover, quests with XP ribbons, quest detail) |
+| [`email-marketing`](https://github.com/nexu-io/open-design/tree/main/skills/email-marketing) | Desktop | Brand product-launch HTML email, table-fallback safe |
+| [`social-carousel`](https://github.com/nexu-io/open-design/tree/main/skills/social-carousel) | Desktop | 3-card 1080×1080 Instagram/LinkedIn/X carousel with cinematic panels |
+| [`magazine-poster`](https://github.com/nexu-io/open-design/tree/main/skills/magazine-poster) | Desktop | Single-page magazine-style editorial poster |
+| [`motion-frames`](https://github.com/nexu-io/open-design/tree/main/skills/motion-frames) | Desktop | Motion-design hero with looping CSS animations (rotating type ring, animated globe, ticking timer) — hand-off ready for HyperFrames |
+| [`sprite-animation`](https://github.com/nexu-io/open-design/tree/main/skills/sprite-animation) | Desktop | Pixel / 8-bit animated explainer slide with looping CSS keyframes — screen-record into vertical video |
+| [`dating-web`](https://github.com/nexu-io/open-design/tree/main/skills/dating-web) | Desktop | Consumer dating / matchmaking dashboard mockup |
+| [`digital-eguide`](https://github.com/nexu-io/open-design/tree/main/skills/digital-eguide) | Desktop | Two-spread digital e-guide (cover + lesson spread with pull-quote) |
+| [`wireframe-sketch`](https://github.com/nexu-io/open-design/tree/main/skills/wireframe-sketch) | Desktop | Hand-drawn ideation sketch — for the "show something visible early" pass |
+
+**Creative & Media Surfaces**
+
+| Skill | Platform | What It Produces |
+|---|---|---|
+| [`image-poster`](https://github.com/nexu-io/open-design/tree/main/skills/image-poster) | Image | Single-image generation for posters, key art, editorial illustrations (routes to GPT-Image-2, Flux, Imagen, Midjourney) |
+| [`audio-jingle`](https://github.com/nexu-io/open-design/tree/main/skills/audio-jingle) | Audio | Music (Suno V5 / Udio / Lyria), speech (MiniMax TTS / Fish / ElevenLabs V3), SFX (ElevenLabs SFX / AudioCraft) |
+| [`video-shortform`](https://github.com/nexu-io/open-design/tree/main/skills/video-shortform) | Video | 3–10 second clips for product reveals, motion teasers, ambient loops (Seedance 2, Kling 3/4, Veo 3, Sora 2) |
+| [`hyperframes`](https://github.com/nexu-io/open-design/tree/main/skills/hyperframes) | Video | HTML-based video compositions, animations, title cards, captions, voiceovers, audio-reactive visuals, scene transitions |
+
+**Quality & Iteration Surfaces**
+
+| Skill | Platform | What It Produces |
+|---|---|---|
+| [`critique`](https://github.com/nexu-io/open-design/tree/main/skills/critique) | Desktop | 5-dimension expert design review (Philosophy · Hierarchy · Detail · Function · Innovation) with radar chart and Keep/Fix/Quick-wins lists |
+| [`tweaks`](https://github.com/nexu-io/open-design/tree/main/skills/tweaks) | Desktop | Live parameter panel (accent color, type scale, density, motion, theme) that rewrites CSS custom properties in real time and persists to localStorage |
+
+#### **Deck Mode** (4 skills — horizontal-swipe presentations)
+
+| Skill | Default For | What It Produces |
+|---|---|---|
+| [`guizang-ppt`](https://github.com/nexu-io/open-design/tree/main/skills/guizang-ppt) | **Default** | Magazine-style web PPT with WebGL fluid backgrounds, serif headlines, horizontal swipe navigation |
+| [`simple-deck`](https://github.com/nexu-io/open-design/tree/main/skills/simple-deck) | — | Minimal horizontal-swipe deck |
+| [`replit-deck`](https://github.com/nexu-io/open-design/tree/main/skills/replit-deck) | — | Product-walkthrough deck (Replit-style) |
+| [`weekly-update`](https://github.com/nexu-io/open-design/tree/main/skills/weekly-update) | — | Team weekly cadence deck (progress · blockers · next) |
+
+#### **Office & Operations Surfaces** (8 skills — document-flavored prototypes)
+
+| Skill | Scenario | What It Produces |
+|---|---|---|
+| [`pm-spec`](https://github.com/nexu-io/open-design/tree/main/skills/pm-spec) | Product | PM specification doc with TOC + decision log + milestones |
+| [`team-okrs`](https://github.com/nexu-io/open-design/tree/main/skills/team-okrs) | Product | OKR scoresheet |
+| [`meeting-notes`](https://github.com/nexu-io/open-design/tree/main/skills/meeting-notes) | Operations | Meeting decision log |
+| [`kanban-board`](https://github.com/nexu-io/open-design/tree/main/skills/kanban-board) | Operations | Board snapshot |
+| [`eng-runbook`](https://github.com/nexu-io/open-design/tree/main/skills/eng-runbook) | Engineering | Incident runbook |
+| [`finance-report`](https://github.com/nexu-io/open-design/tree/main/skills/finance-report) | Finance | Exec finance summary with KPIs, revenue charts, P&L table |
+| [`invoice`](https://github.com/nexu-io/open-design/tree/main/skills/invoice) | Finance | Single-page invoice |
+| [`hr-onboarding`](https://github.com/nexu-io/open-design/tree/main/skills/hr-onboarding) | HR | Role onboarding plan |
+
+### 129 Built-In Design Systems
+
+Every skill can consume an active `DESIGN.md` — a 9-section portable design spec (color, typography, spacing, layout, components, motion, voice, brand, anti-patterns). Switch systems → next render uses the new tokens automatically.
+
+**Hand-Authored Starters:**
+- `default` — Neutral Modern
+- `warm-editorial` — Warm Editorial (serif-forward)
+
+**70 Product Systems** (imported from [`VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md)):
+
+| Category | Systems |
+|---|---|
+| **AI & LLM** | Claude · Cohere · ElevenLabs · MiniMax · Mistral · Ollama · OpenCode · Replicate · Runway · Together · VoltAgent · xAI |
+| **Developer Tools** | Cursor · Expo · Lovable · Raycast · Superhuman · Vercel · Warp |
+| **Productivity & SaaS** | Cal · Intercom · Linear · Mintlify · Notion · Resend · Zapier |
+| **Backend & Data** | ClickHouse · Composio · HashiCorp · MongoDB · PostHog · Sanity · Sentry · Supabase |
+| **Design & Creative** | Airtable · Clay · Figma · Framer · Miro · Webflow |
+| **Fintech & Crypto** | Binance · Coinbase · Kraken · Mastercard · Revolut · Stripe · Wise |
+| **E-Commerce & Retail** | Airbnb · Meta · Nike · Shopify · Starbucks |
+| **Media & Consumer** | Apple · IBM · NVIDIA · Pinterest · PlayStation · SpaceX · Spotify · The Verge · Uber · Vodafone · WIRED · Xiaohongshu |
+| **Automotive** | BMW · Bugatti · Ferrari · Lamborghini · Renault · Tesla |
+
+**57 Design Skills** (from [`bergside/awesome-design-skills`](https://github.com/bergside/awesome-design-skills)) — additional normalized `DESIGN.md` files added directly under `design-systems/`.
+
+### 5 Curated Visual Directions
+
+When the user has no brand spec, OD emits a second form with five deterministic directions — each a fully specified OKLch palette + font stack + layout posture. No AI freestyle.
+
+| Direction | Mood | References |
+|---|---|---|
+| **Editorial — Monocle / FT** | Print magazine, ink + cream + warm rust | Monocle · FT Weekend · NYT Magazine |
+| **Modern Minimal — Linear / Vercel** | Cool, structured, minimal accent | Linear · Vercel · Stripe |
+| **Tech Utility** | Information density, monospace, terminal | Bloomberg · Bauhaus tools |
+| **Brutalist Experimental** | Raw, oversized type, no shadows, harsh accents | Bloomberg Businessweek · Achtung |
+| **Soft Warm** | Generous, low contrast, peachy neutrals | Notion marketing · Apple Health |
+
+### 11 Supported Coding-Agent CLIs
+
+Auto-detected from `PATH` on daemon boot. No config required. Swappable with one click.
+
+| Agent | Binary | Transport Format |
+|---|---|---|
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | `claude` | `claude-stream-json` |
+| [Codex CLI](https://github.com/openai/codex) | `codex` | `json-event-stream` |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `gemini` | `json-event-stream` |
+| [OpenCode](https://opencode.ai/) | `opencode` | `json-event-stream` |
+| [Cursor Agent](https://www.cursor.com/cli) | `cursor-agent` | `json-event-stream` |
+| [Qwen Code](https://github.com/QwenLM/qwen-code) | `qwen` | `plain` (raw stdout) |
+| [GitHub Copilot CLI](https://github.com/features/copilot/cli) | `copilot` | `copilot-stream-json` |
+| [Hermes](https://github.com/eqlabs/hermes) | `hermes` | `acp-json-rpc` |
+| [Kimi CLI](https://github.com/MoonshotAI/Kimi-Chat) | `kimi` | `acp-json-rpc` |
+| [Kiro CLI](https://kiro.dev) | `kiro-cli` | `acp-json-rpc` |
+| [Pi](https://github.com/mariozechner/pi-ai) | `pi` | `pi-rpc` (stdio JSON-RPC) |
+| **OpenAI-compatible BYOK** | n/a | SSE pass-through via `POST /api/proxy/stream` |
+
+### 5 Pixel-Accurate Device Frames
+
+Shared across skills under `assets/frames/` — the agent never re-draws a phone:
+
+- iPhone 15 Pro (Dynamic Island, status bar SVGs, home indicator)
+- Android Pixel
+- iPad Pro
+- MacBook
+- Browser Chrome
+
+---
+
+## Unique Features Worth Calling Out
+
+### 1. The Interactive Question Form Prevents 80% of Redirects
+
+OD's prompt stack hard-codes **Rule 1**: every fresh design brief begins with a `<question-form id="discovery">` instead of code. Surface · audience · tone · brand context · scale · constraints. Thirty seconds of radio buttons beats thirty minutes of "can you make it more modern?" redirects.
+
+### 2. The Five-Dimensional Self-Critique Gate
+
+Before emitting any `<artifact>`, the agent silently scores its output 1–5 across:
+- **Philosophy** — does it match the chosen direction?
+- **Visual Hierarchy** — does the eye know where to go first?
+- **Detail & Execution** — are the margins consistent? Are the colors from the system?
+- **Functionality** — does it work at the requested fidelity?
+- **Innovation & Restraint** — is it interesting without being chaotic?
+
+Anything under 3/5 is a regression — fix and rescore. Two passes is normal.
+
+### 3. The Anti-AI-Slop Machinery
+
+Inspired by `huashu-design`, the prompt stack explicitly forbids:
+- Aggressive purple gradients
+- Generic emoji icons
+- Rounded cards with left-border accents
+- Hand-drawn SVG humans
+- Inter as a *display* face
+- Invented metrics like "10× faster"
+
+Honest placeholders (`—` or grey blocks) are preferred over fake stats.
+
+### 4. Claude Design ZIP Import
+
+Drop an export from `claude.ai` onto the welcome dialog. OD parses it into a real project folder and stages a *"continue where Anthropic left off"* prompt for your local agent. No re-prompting required.
+
+### 5. Real Filesystem Workspace
+
+The daemon spawns the CLI with `cwd` set to the project's artifact folder under `.od/projects/<id>/`. The agent gets real `Read`, `Write`, `Bash`, `WebFetch` against a real on-disk environment. It can `grep` your CSS for hex values, write a `brand-spec.md`, drop generated images, and produce `.pptx` / `.zip` / `.pdf` files that show up as download chips.
+
+### 6. Artifact Lint API
+
+`POST /api/artifacts/lint` runs structural checks on generated artifacts (broken `<artifact>` framing, missing required side files, stale palette tokens) and returns findings the agent can read back into its next turn.
+
+### 7. Tab Persistence & SQLite State
+
+Projects, conversations, messages, and open tabs persist in a local SQLite DB at `.od/app.sqlite`. Reopen tomorrow — the todo card and open files are exactly where you left them.
+
+---
+
+## Head-to-Head: Open Design vs Claude Design vs Open CoDesign
+
+| Axis | Claude Design (Anthropic) | Open CoDesign | **Open Design** |
+|---|---|---|---|
+| **License** | Closed | MIT | **Apache-2.0** |
+| **Form Factor** | Web (claude.ai) | Desktop (Electron) | **Web app + local daemon** |
+| **Deployable on Vercel** | ❌ | ❌ | **✅** |
+| **Agent Runtime** | Bundled (Opus 4.7) | Bundled (pi-ai) | **Your existing CLI** |
+| **Skills** | Proprietary | 12 TS modules | **34+ file-based SKILL.md bundles** |
+| **Design Systems** | Proprietary | N/A | **129 DESIGN.md systems** |
+| **Provider Flexibility** | Anthropic only | 7+ via pi-ai | **11 CLI adapters + OpenAI BYOK proxy** |
+| **Init Question Form** | ❌ | ❌ | **✅ Hard rule, turn 1** |
+| **Direction Picker** | ❌ | ❌ | **✅ 5 deterministic directions** |
+| **Live Todo + Tool Stream** | ❌ | ✅ | **✅** |
+| **Sandboxed Iframe Preview** | ❌ | ✅ | **✅** |
+| **Claude Design ZIP Import** | n/a | ❌ | **✅** |
+| **5-Dim Self-Critique** | ❌ | ❌ | **✅ Pre-emit gate** |
+| **Artifact Lint** | ❌ | ❌ | **✅** |
+| **Filesystem Workspace** | ❌ | Partial | **✅ Real cwd, real tools, SQLite persistence** |
+| **Export Formats** | Limited | HTML / PDF / PPTX / ZIP / Markdown | **HTML / PDF / PPTX / ZIP / Markdown** |
+| **Cost Model** | Pro / Max / Team subscription | BYOK | **BYOK — paste any OpenAI-compatible endpoint** |
+
+---
+
+## Why Startups Should Care (The Cost & Lock-In Argument)
+
+I run a startup. Every dollar and every dependency is a decision that compounds. Here's why Open Design matters beyond just "it's cheaper":
+
+### 1. No Separate Usage Quota
+
+Claude Design has its own usage limits *on top of* your regular Anthropic subscription. Reviewers report burning 15% of a weekly budget on a single landing page. Open Design uses your regular model tokens. If you're already paying for Claude Code, Codex, or Cursor — you're already paying for the design engine.
+
+### 2. Model Portability
+
+Today Anthropic has the best design model. Tomorrow it might be OpenAI, Google, or a local Qwen 3.6 35B-A3B running on your M2 Max via oMLX. Open Design doesn't care. Swap the CLI, keep the skills, keep the design systems, keep your projects.
+
+### 3. Skills as Files, Not Plugins
+
+A skill is a folder with a `SKILL.md` + `assets/` + `references/`. Version it in git. Fork it. Share it with your team as a repo. Run your company's branded deck skill without rebuilding a product. This is infrastructure, not a feature.
+
+### 4. Design Systems as Pull Requests
+
+A `DESIGN.md` is a text file you can review in GitHub. Your brand tokens, component rules, and anti-patterns live in version control, not in an ephemeral chat thread. Onboard a new designer — point them at the `DESIGN.md`. Onboard a new agent — it reads the same file.
+
+### 5. Local-First = Data Sovereignty
+
+Your briefs, your artifacts, your brand specs, your conversation history — all on your machine in `.od/`. No cloud egress. No training-data ambiguity. No "we updated our terms of service."
+
+---
+
+## Every Use Case I Could Find
+
+### **For Founders & Startups**
+- Seed-round pitch deck (magazine-style, WebGL hero)
+- SaaS landing page with hero, features, pricing, CTA
+- Product dashboard mockup for investor demos
+- Pricing comparison page
+- Financial report (MRR, burn, gross margin, runway)
+- Team OKR scoresheet
+- Meeting notes / decision log
+- Investor update deck (weekly-update skill)
+
+### **For Product Teams**
+- PRD / product spec with TOC and decision log
+- Mobile app screen mockups (iOS & Android frames)
+- Onboarding flow prototypes (splash → value prop → sign-in)
+- Gamified app prototypes (quests, XP, level bars)
+- Kanban board snapshots
+- Engineering runbooks
+- Design critique reports with radar charts
+
+### **For Marketers & Growth**
+- Social media carousel posts (Instagram / LinkedIn / X)
+- HTML marketing emails (table-fallback safe)
+- Blog post editorial layouts
+- Digital e-guides (cover + lesson spreads)
+- Motion-design heroes with looping CSS animations
+- Sprite-based 8-bit explainer slides
+- Magazine-style editorial posters
+
+### **For Content Creators**
+- Short-form video clips (3–10s product reveals, teasers)
+- HTML-based video compositions with captions & voiceovers
+- Audio jingles, voiceovers, and sound effects
+- Editorial poster illustrations
+- Dating-web dashboard mockups (don't ask why this ships, but it does)
+
+### **For Design System Teams**
+- `DESIGN.md` generation from brand briefs, screenshots, or URLs
+- Cross-brand consistency via shared `DESIGN.md` tokens
+- Real-time tweak panels (accent, scale, density, motion, theme)
+- 5-dimensional quality audits on any artifact
+
+### **For Engineers & DevOps**
+- Documentation page layouts
+- Invoice generators
+- HR onboarding plans
+- Wireframe sketches for early ideation
+- Template-based rapid prototypes (copy template → fill content)
+
+---
+
+## Getting Started (3 Commands)
+
+```bash
+git clone https://github.com/nexu-io/open-design.git
+cd open-design
+corepack enable && corepack pnpm --version  # should print 10.33.2
+pnpm install
+pnpm tools-dev run web
+# open the web URL printed by tools-dev
+```
+
+Requirements: Node ~24, pnpm 10.33.x. The first load detects your agent CLIs, loads 34 skills + 129 design systems, and auto-creates `./.od/` for local state.
+
+---
+
+## The Roadmap (What's Coming)
+
+- [ ] Comment-mode surgical edits (click element → instruction → patch)
+- [ ] AI-emitted tweaks panel UX (chat-integrated, not just skill-level)
+- [ ] Vercel + tunnel deployment recipe
+- [ ] One-command `npx od init` to scaffold a project with `DESIGN.md`
+- [ ] Skill marketplace (`od skills install <github-repo>`)
+- [ ] Packaged Electron build
+
+---
+
+## Final Thoughts
+
+Claude Design is a **product**. Open Design is a **substrate**.
+
+If you want the most polished one-click experience and you're willing to pay Anthropic's quota mechanics, Claude Design is genuinely excellent. But if you believe — as I do — that startups in the age of AI need to own their tools, control their costs, and avoid vendor lock-in, Open Design is the most credible open-source alternative I've found.
+
+It's not 100% of Claude Design's visual polish yet. Reviewers estimate 80–90% on quality, with the gap narrowing every week. What it lacks in final shimmer, it more than makes up for in flexibility, cost control, and architectural sanity.
+
+**Star the repo** → [github.com/nexu-io/open-design](https://github.com/nexu-io/open-design)
+
+---
+
+## Sources & Further Reading
+
+All of the following were researched and added to a [NotebookLM notebook](https://notebooklm.google.com) for this post:
+
+- [Open Design GitHub Repository](https://github.com/nexu-io/open-design)
+- [Huashu Design (design philosophy core)](https://github.com/alchaincyf/huashu-design)
+- [Guizang PPT Skill (deck engine)](https://github.com/op7418/guizang-ppt-skill)
+- [Open CoDesign (peer project)](https://github.com/OpenCoworkAI/open-codesign)
+- [Multica (runtime architecture)](https://github.com/multica-ai/multica)
+- YouTube reviews and tutorials linked throughout the research phase
+
+---
+
+Star the repo if you find it useful → [github.com/nexu-io/open-design](https://github.com/nexu-io/open-design)
