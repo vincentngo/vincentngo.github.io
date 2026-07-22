@@ -47,7 +47,7 @@ export function HeroSection({ greeting, bio, location }: HeroSectionProps) {
         </Link>
 
         <Link
-          href="https://x.com/VincentNgo2"
+          href="https://x.com/itsvngo"
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
