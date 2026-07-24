@@ -139,3 +139,28 @@
 .prose img {
   @apply h-auto max-w-full rounded-lg;
 }
+
+/* Mask the light one-pixel rim X renders around dark embedded posts. */
+.x-post-embed .twitter-tweet-rendered {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.x-post-embed .twitter-tweet-rendered::after {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #ffffff;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+}
+
+.dark .x-post-embed .twitter-tweet-rendered {
+  background: #15202b;
+}
+
+.dark .x-post-embed .twitter-tweet-rendered::after {
+  border-color: #15202b;
+}

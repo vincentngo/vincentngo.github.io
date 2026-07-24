@@ -114,7 +114,7 @@ export function XPost({ postId, href }: XPostProps) {
 
   return (
     <div
-      className="not-prose my-8 flex min-h-40 w-full items-center justify-center"
+      className="x-post-embed not-prose my-8 flex min-h-40 w-full items-center justify-center"
       ref={containerRef}
     >
       <a
