@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/header";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { extractPostHeadings, createHeadingSlugger } from "@/lib/content/headings";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { XPost } from "@/components/blog/x-post";
 import { LightboxImage } from "@/components/ui/lightbox-image";
 import {
   DataTable,
@@ -141,6 +142,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   h2: (props) => HeadingWithId("h2", props),
                   h3: (props) => HeadingWithId("h3", props),
                   LightboxImage,
+                  XPost,
                   DataTable,
                   DataTableHead,
                   DataTableBody,
