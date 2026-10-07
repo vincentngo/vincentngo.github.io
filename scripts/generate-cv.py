@@ -39,7 +39,7 @@ def p(value, style="body"):
     return Paragraph(value, styles[style])
 
 def link(label, href):
-    return f'<link href="{escape(href, quote=True)}" color="#225b70">{text(label)}</link>'
+    return f'<link href="{escape(href, quote=True)}" color="#04BE76">{text(label)}</link>'
 
 story = []
 
