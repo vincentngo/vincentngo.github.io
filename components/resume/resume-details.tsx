@@ -9,12 +9,28 @@ interface ResumeDetailsProps {
     | "research"
     | "skills"
     | "interests"
-    | "patents";
+    | "patents"
+    | "talks";
 }
 
 const headingClassName = "mb-4 border-b border-border pb-1 text-xl font-semibold tracking-tight";
 
 export function ResumeDetails({ section }: ResumeDetailsProps) {
+  if (section === "talks") {
+    return (
+      <section aria-labelledby="talks-heading">
+        <h2 id="talks-heading" className={headingClassName}>
+          Tech Talks
+        </h2>
+        <div className="space-y-4">
+          {resume.talks.map((entry) => (
+            <ResumeEntry key={entry.role} {...entry} />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   if (section === "education") {
     return (
       <section aria-labelledby="education-heading">

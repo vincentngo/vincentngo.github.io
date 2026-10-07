@@ -84,6 +84,7 @@ export default async function ResumePage({ params }: ResumePageProps) {
           <ResumeDetails section="awards" />
           <ResumeDetails section="patents" />
           <ResumeDetails section="publications" />
+          <ResumeDetails section="talks" />
           <ResumeDetails section="research" />
           <ResumeDetails section="skills" />
           <ResumeDetails section="interests" />

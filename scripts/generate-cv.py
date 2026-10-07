@@ -14,7 +14,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether,
-    HRFlowable,
+    HRFlowable, PageBreak,
 )
 from reportlab.pdfgen import canvas
 
@@ -123,6 +123,10 @@ for index, item in enumerate(cv["publications"], 1):
         block.append(p(text(item["description"]), "detail"))
     block.append(Spacer(1, 4))
     story.append(KeepTogether(block))
+story.append(PageBreak())
+section("Tech Talks")
+for item in cv["talks"]:
+    entry(item)
 section("Research")
 for item in cv["research"]:
     entry(item)

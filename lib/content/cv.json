@@ -235,5 +235,19 @@
         }
       ]
     }
+  ],
+  "talks": [
+    {
+      "role": "Workshop One: Swift Collection Protocols",
+      "organization": "Bootcamp · with Kelvin Lau",
+      "period": "",
+      "description": "Co-led a workshop on Swift collection protocols and the standard library, teaching advanced techniques for everyday development and technical interviews."
+    },
+    {
+      "role": "Debugging, Optimizing & Fixing iOS Memory Leaks",
+      "organization": "RWDevCon",
+      "period": "2016",
+      "description": "Presented techniques for using Xcode Instruments to diagnose memory leaks, debug iOS apps, and improve performance."
+    }
   ]
 }
