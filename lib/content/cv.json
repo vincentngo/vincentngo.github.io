@@ -239,8 +239,8 @@
   "talks": [
     {
       "role": "Workshop One: Swift Collection Protocols",
-      "organization": "Bootcamp · with Kelvin Lau",
-      "period": "",
+      "organization": "RWDevCon · with Kelvin Lau",
+      "period": "2018",
       "description": "Co-led a workshop on Swift collection protocols and the standard library, teaching advanced techniques for everyday development and technical interviews."
     },
     {
