@@ -1,0 +1,181 @@
+---
+title: "An AI Agent Is an LLM With a Harness"
+description: "Jensen Huang's practical definition of an AI agent, why the harness matters more than most demos admit, and what this means for building agents at Good Journey."
+date: "2026-08-20"
+tags: [ai, ai-agents, llm, nvidia, good-journey, software]
+slug: what-is-an-ai-agent-jensen-huang
+---
+
+Most AI products still feel like chat boxes. You type a question, a model generates an answer, and the interaction ends.
+
+That is useful, but it is not much of an agent.
+
+During his GTC Taiwan keynote, Jensen Huang put a simple equation on screen:
+
+> **Agent = LLM + harness**
+
+The model is the brain. The harness is everything that lets the brain do productive work: context, orchestration, memory, tools, skills, permissions, and the loop that moves from observing a situation to taking action.
+
+That framing is useful because it shifts the conversation away from which model is smartest. A better model can improve an agent, but a model on its own does not know our customers, cannot safely access a booking, and has no authority to change a driver's assignment. The harness turns intelligence into a working product.
+
+<LightboxImage
+  src="/images/posts/what-is-an-ai-agent-jensen-huang/agent-llm-harness.png"
+  thumbnailSrc="/images/posts/what-is-an-ai-agent-jensen-huang/agent-llm-harness.png"
+  alt="Jensen Huang presenting a diagram labeled Agent equals LLM plus Harness"
+  caption="Jensen Huang's agent architecture: an LLM inside a harness connected to orchestration, memory, tools and skills, and security and governance."
+  thumbnailWidth={720}
+  thumbnailHeight={569}
+/>
+
+## Useful AI does work
+
+Huang opened this part of the keynote by saying that agentic AI, or "useful AI," has arrived. He used software development as the first major example and argued that rising GitHub activity shows AI increasing the amount of work engineers can produce.[1]
+
+I would treat the economic numbers in any hardware vendor's keynote as directional rather than settled evidence. The more useful part of Huang's argument is his definition of usefulness. AI becomes economically interesting when it moves beyond generating content and completes work inside an existing process.
+
+For a coding agent, success is not the elegance of its explanation. It is whether the code is correct, tested, and ready to merge.
+
+For Good Journey, success is not a fluent conversation about airport transfers. It is whether the system can gather the missing trip details, apply the right pricing and service rules, create an accurate booking, and leave a clean audit trail.
+
+That difference separates a chatbot from an agent.
+
+## What the harness contains
+
+Huang described an agent as one or more language models sitting inside a harness. The harness routes information as the system processes context, observes its environment, reasons about what to do, forms a plan, acts, and uses tools. It also manages short-term working memory and long-term memory.[2]
+
+His diagram breaks the system into five practical parts.
+
+### The context–observe–reason–act loop
+
+An agent does not produce one answer and stop. It operates in a loop:
+
+1. Process the current context.
+2. Observe what happened in the product or external system.
+3. Reason about the next step.
+4. Act through a tool.
+5. Feed the result back into the next cycle.
+
+The loop matters because real work changes while it is being performed. A booking tool may return no vehicles. A payment may fail. A dispatcher may already have reassigned the driver. The agent must observe the actual result rather than assume its previous action succeeded.
+
+### Orchestration
+
+Orchestration decides which model, tool, memory, or policy should handle each step. It controls the loop and determines when the task is complete, when the agent should ask a person for help, and when it must stop.
+
+This is where much of the product behavior lives. Two agents can use the same model and feel completely different because one has a thoughtful orchestrator while the other sends a prompt into an open-ended loop.
+
+### Tools and skills
+
+Tools let the agent do something outside the model: query a database, calculate a price, browse a website, create a reservation, send a message, or run code.
+
+Huang made a useful distinction between tools and skills. A tool is the capability. A skill is the manual that teaches the agent when and how to use it. He expects software libraries to ship with instructions that agents can read so they can use those libraries correctly.[3]
+
+That idea maps closely to how I think business software will evolve. APIs were designed for developers. Agent-ready products also need clear tool contracts, examples, boundaries, failure states, and operating instructions.
+
+### Memory
+
+Memory is more complicated than storing a chat transcript. The agent has to decide what belongs in working context, what should persist, what can be compacted, and how to retrieve the right information later. Huang called memory one of the hardest parts of the system and connected it to structured data, unstructured data, retrieval, and the relationships between them.[3]
+
+For a transportation platform, memory needs strict boundaries. A passenger's airport preference may be useful on the next trip. A temporary driver location should not become a permanent fact. Data from one fleet must never leak into another fleet's context.
+
+Good memory is selective. Bad memory is a growing pile of stale assumptions.
+
+### Security and governance
+
+An agent with tools can affect the real world, so permissions cannot be an afterthought. The harness needs to know which tenant the agent represents, which records it may access, which actions it may perform, and which decisions require approval.
+
+A support agent may read a trip and draft a response. That does not mean it should issue an unlimited refund. A dispatch agent may recommend a reassignment. That does not mean it should silently move a VIP passenger to another supplier.
+
+The model can propose an action. The harness decides whether the action is allowed.
+
+## An agent is a distributed application
+
+Huang went further than the usual software diagram. He described the agent as an "ultimate disaggregated and distributed computing model." In his explanation, model inference, tool execution, orchestration, security, memory, storage, and networking may all run on different hardware in different parts of a data center.[3]
+
+This section of the keynote naturally supports NVIDIA's argument for more GPUs, CPUs, DPUs, networking, and storage. Still, the architectural observation is sound: an agent is not a single model endpoint.
+
+A production agent may involve:
+
+- A language model for planning and interpretation
+- Small or specialized models for classification and extraction
+- Application servers that enforce business rules
+- Databases and retrieval systems for memory
+- Sandboxed tools for code or data processing
+- Queues and workers for long-running jobs
+- Identity, authorization, audit logs, and human approvals
+
+Calling the model is one step in that system. Often it is not the hardest step.
+
+## What this means for Good Journey
+
+At [Good Journey](https://www.goodjourney.io), we already have the raw material an agent needs: bookings, availability, rates, vehicles, drivers, passengers, suppliers, messages, payments, and the rules that connect them.
+
+The opportunity is to expose those capabilities through a safe harness.
+
+### A booking agent
+
+A customer could describe a trip in normal language. The agent would extract the route and schedule, identify missing details, check availability, apply the fleet's pricing rules, and prepare a quote. It would show the customer exactly what will be booked before creating the reservation.
+
+The language model handles the messy human request. Good Journey remains the source of truth for price, availability, policy, and the final booking.
+
+### A dispatch agent
+
+A dispatch agent could observe active jobs, driver status, flight changes, traffic, and unanswered messages. It could explain which trips are at risk and recommend a response.
+
+Some actions could be automatic when the rule is explicit and reversible. Higher-impact changes should wait for a dispatcher. The goal is not to remove the operator from the loop. It is to focus the operator on the exceptions that need judgment.
+
+### An operations agent
+
+An operations agent could work across longer tasks: reconcile a supplier invoice, follow up on missing driver documents, prepare a daily incident summary, or investigate why a set of bookings lost money.
+
+These jobs require memory and multiple tools. They also need checkpoints. An agent should be able to pause, show its evidence, and ask for approval before an irreversible step.
+
+## The harness is the product
+
+Model providers will keep changing. One model will lead this month, another will be cheaper next month, and a specialized model may outperform both on a narrow task.
+
+The durable part is the system around the model:
+
+- The connection to real customer and operational data
+- The definition of each tool and its failure modes
+- The business rules that constrain an action
+- The memory that preserves useful context without crossing boundaries
+- The evaluations that measure completed work rather than persuasive text
+- The approvals and audit trail that make autonomy trustworthy
+
+This is also where domain experience matters. A general model knows what an airport transfer is. It does not automatically understand how a specific operator handles wait time, meet-and-greet service, farm-outs, driver pay, flight delays, child seats, no-shows, or customer-specific pricing.
+
+Good Journey's advantage is not access to an LLM. Everyone can access an LLM. Our advantage is encoding transportation operations into a harness that can use intelligence safely.
+
+## How I would build the first agents
+
+I would start narrow.
+
+Pick one task with a clear beginning and end. Give the agent a small set of typed tools. Make every tool return an explicit success or failure result. Record the observations, decisions, and actions. Require approval for anything expensive, external, or difficult to reverse.
+
+Then evaluate the entire task:
+
+- Did the booking contain the correct details?
+- Did the quote follow the operator's rules?
+- Did the agent ask when information was missing?
+- Did it stop when it lacked permission?
+- Could a human understand what it did and why?
+
+A model benchmark cannot answer those questions. Product evaluations can.
+
+Only after the narrow workflow is reliable should the agent receive more tools, more memory, or more autonomy. Broad capability looks impressive in a demo, but constrained reliability is what earns trust in an operating business.
+
+## My takeaway from Huang's talk
+
+The line "Agent = LLM + harness" looks simple, but it corrects a common mistake. We have spent a lot of time comparing model intelligence and not enough time designing the environment around it.
+
+An LLM can reason about a booking. An agent can inspect the booking, use the correct tools, follow the operator's rules, ask for approval, take the action, and verify the result.
+
+That is the standard I want us to build toward at Good Journey. The model supplies intelligence. The harness turns it into accountable work.
+
+## Sources
+
+[1] https://www.youtube.com/watch?v=wSp6AiNIrsY&t=390s — Jensen Huang: agentic AI has arrived
+
+[2] https://www.youtube.com/watch?v=wSp6AiNIrsY&t=675s — Jensen Huang explains the agent harness
+
+[3] https://www.youtube.com/watch?v=wSp6AiNIrsY&t=1215s — Jensen Huang: an agent as a distributed computing model

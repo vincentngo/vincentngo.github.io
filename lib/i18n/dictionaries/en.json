@@ -12,7 +12,8 @@
   },
   "nav": {
     "home": "Home",
-    "blog": "Blog"
+    "blog": "Blog",
+    "resume": "CV"
   },
   "blog": {
     "onThisPage": "On this page"

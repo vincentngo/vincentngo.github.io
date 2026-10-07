@@ -30,6 +30,13 @@ export function generateSitemap(): SitemapEntry[] {
       priority: 0.8,
     });
 
+    entries.push({
+      url: `${SITE_URL}/${locale}/resume/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    });
+
     // Add all blog posts for each locale
     const posts = getAllPosts(locale);
     posts.forEach((post) => {
