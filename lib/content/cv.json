@@ -1,0 +1,239 @@
+{
+  "updated": "2026-10-07",
+  "name": "Vincent Ngo",
+  "summary": "iOS applications engineer, co-founder, and author.",
+  "contacts": [
+    {
+      "label": "vincentngo.github.io",
+      "href": "https://vincentngo.github.io"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/vincent-ngo-b6590778/"
+    }
+  ],
+  "education": [
+    {
+      "organization": "Virginia Tech",
+      "qualification": "Bachelor of Science in Computer Science",
+      "period": "2010 - 2014",
+      "details": "Graduated May 2014 · Minor in Mathematics · GPA: 3.65/4.0 overall, 3.61/4.0 in major · Blacksburg, VA",
+      "activities": "Computer Science Community Service (CS²), Web Development Group, ACM, and hackathons including MHacks, PennApps, HackNC, and HackVT."
+    },
+    {
+      "organization": "Stanford University",
+      "qualification": "Undergraduate Computer Science Coursework",
+      "details": "Completed undergraduate-level computer science courses while enrolled in high school."
+    },
+    {
+      "organization": "ISS International School of Singapore"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Capital One Identity Hackathon · First place",
+      "period": "",
+      "description": "Won first place for a liveness verification prototype that recorded randomly prompted facial gestures and detected multiple people in view to distinguish a live person from a static photo."
+    },
+    {
+      "title": "VT Hacks · Fitnet award",
+      "period": "April 2014",
+      "description": "Won first place for the most creative app incorporating multiple workout motivators. Built Project Ham with a team: an iOS workout companion with scheduling, alerts, and a virtual hamster whose fitness reflects the user's workout habits."
+    }
+  ],
+  "languages": [
+    {
+      "name": "English",
+      "proficiency": "Native or bilingual proficiency"
+    },
+    {
+      "name": "Mandarin",
+      "proficiency": "Limited working proficiency"
+    }
+  ],
+  "experience": [
+    {
+      "organization": "Good Journey Software",
+      "role": "Co-Founder",
+      "period": "February 2023 - Present",
+      "description": "Co-founded Good Journey Software to build a ground transportation operating system and global supplier network, with the goal of making rides bookable anywhere in the world.",
+      "link": {
+        "label": "Good Journey",
+        "href": "https://www.goodjourney.io/en"
+      }
+    },
+    {
+      "organization": "Kodeco (formerly raywenderlich.com)",
+      "role": "Writer & Author",
+      "period": "February 2014 - Present",
+      "description": "Turn complex mobile development concepts into practical tutorials and books that help developers build apps with iOS, Swift, and Flutter."
+    },
+    {
+      "organization": "Capital One",
+      "role": "Principal Software Engineer",
+      "period": "March 2017 - August 2019",
+      "description": "Worked across iOS applications, backend microservices, identity and secure authentication services, Presto, and contactless payments and verification, while mentoring engineers and giving tech talks at Dev Days."
+    },
+    {
+      "organization": "Capital One",
+      "role": "Software Engineer",
+      "period": "March 2016 - March 2017",
+      "description": "Built iOS interfaces for Capital One Wallet and the flagship app, and created the entire UI for T&EZ from scratch to help corporate travelers manage mileage, expenses, and receipts."
+    },
+    {
+      "organization": "IBM · Austin, TX",
+      "role": "Software Engineer",
+      "period": "July 2014 - March 2016",
+      "description": "Developed enterprise mobile features for IBM Connections and IBM Verse across iOS and Android—including email management, contacts, calendars, and instant messaging—collaborating with product, design, and backend teams to improve responsiveness, reliability, and usability across multiple releases."
+    },
+    {
+      "organization": "Mindsense",
+      "role": "iOS Developer Intern",
+      "period": "January 2014 - May 2014",
+      "description": "Built front-end features for Mail Pilot 2 on iPhone and iPad, contributing to the app's mobile email experience."
+    },
+    {
+      "organization": "Virginia Tech",
+      "role": "Undergraduate Teaching Assistant · CS 3714, Mobile Development",
+      "period": "August 2013 - December 2013",
+      "description": "Helped students turn mobile development concepts into working iOS apps through project guidance, feedback, and hands-on programming assignments."
+    },
+    {
+      "organization": "Gannett",
+      "role": "iOS Developer Intern",
+      "period": "May 2013 - August 2013",
+      "description": "Explored new iOS experiences for USA Today and built tools to capture and email console logs, helping developers investigate app issues."
+    }
+  ],
+  "research": [
+    {
+      "organization": "Virginia Tech",
+      "role": "Research Assistant · Part-time",
+      "period": "August 2013 - June 2014",
+      "description": "Contributed to Virtual Town Square, a project exploring online community interaction and civic engagement, with Dr. Andrea L. Kavanaugh and Dr. Manuel A. Pérez-Quiñones at Virginia Tech."
+    },
+    {
+      "organization": "Mobile Software Engineering Lab · Virginia Tech",
+      "role": "Undergraduate Research Assistant",
+      "period": "November 2012 - May 2013",
+      "description": "Explored iOS 6 features with Dr. Osman Balci, built example apps and tutorials, and supported students through teaching assistant workshops, coursework creation, grading, and office hours."
+    }
+  ],
+  "publications": [
+    {
+      "title": "Flutter Apprentice",
+      "publisher": "Kodeco",
+      "date": "2020 - 2024",
+      "dateTime": "2020-09-30",
+      "kind": "Book",
+      "description": "A hands-on guide that takes developers from Flutter fundamentals to building apps for iOS and Android from a single codebase.",
+      "href": "https://www.kodeco.com/books/flutter-apprentice"
+    },
+    {
+      "title": "Data Structures & Algorithms in Swift",
+      "publisher": "Kodeco",
+      "date": "2018 - 2025",
+      "dateTime": "2018-05-01",
+      "kind": "Book",
+      "description": "A practical guide to choosing and implementing data structures and algorithms in Swift, helping developers solve problems and build more efficient apps.",
+      "href": "https://www.kodeco.com/books/data-structures-algorithms-in-swift"
+    },
+    {
+      "title": "iOS 9 by Tutorials",
+      "publisher": "Ray Wenderlich",
+      "date": "October 7, 2015",
+      "dateTime": "2015-10-07",
+      "kind": "Book",
+      "description": "Co-authored a practical guide that helps developers turn the new iOS 9 APIs into features for their own apps.",
+      "href": "https://www.raywenderlich.com/store/ios-9-by-tutorials"
+    },
+    {
+      "title": "How to Create an iOS Book Open Animation",
+      "publisher": "raywenderlich.com",
+      "date": "August 11, 2015",
+      "dateTime": "2015-08-11",
+      "kind": "Tutorial",
+      "href": "https://www.raywenderlich.com/94565/how-to-create-an-ios-book-open-animation-part-1",
+      "description": "A step-by-step tutorial that brings a book-opening interaction to life in an iOS app."
+    },
+    {
+      "title": "Introducing iOS Design Patterns in Swift",
+      "publisher": "raywenderlich.com",
+      "date": "December 9, 2014",
+      "dateTime": "2014-12-09",
+      "kind": "Tutorial",
+      "href": "https://www.raywenderlich.com/86477/introducing-ios-design-patterns-in-swift-part-1",
+      "description": "A practical introduction to using design patterns in Swift to give iOS app code a clearer, more maintainable structure."
+    },
+    {
+      "title": "iOS 8 by Tutorials",
+      "publisher": "Ray Wenderlich",
+      "date": "September 24, 2014",
+      "dateTime": "2014-09-24",
+      "kind": "Book",
+      "description": "Co-authored a guide to adopting iOS 8 APIs through working examples in Swift and Objective-C.",
+      "href": "https://www.amazon.com/dp/1942878052/"
+    },
+    {
+      "title": "NSScanner Tutorial: Parsing Data in Mac OS X",
+      "publisher": "raywenderlich.com",
+      "date": "February 27, 2014",
+      "dateTime": "2014-02-27",
+      "kind": "Tutorial",
+      "href": "https://www.raywenderlich.com/61624/nsscanner-tutorial-parsing-data-os-x",
+      "description": "A hands-on tutorial that shows developers how to turn text into structured data with NSScanner on macOS."
+    }
+  ],
+  "skills": [
+    "Swift",
+    "Objective-C",
+    "Java",
+    "C",
+    "Python",
+    "React.js",
+    "iOS development",
+    "Mobile application development",
+    "Web development",
+    "Object-oriented design",
+    "Xcode",
+    "GitHub",
+    "Product development",
+    "Technical leadership",
+    "Software deployment"
+  ],
+  "interests": ["Hackathons", "iOS development", "Mobile", "Golf", "Music", "Teaching", "Writing"],
+  "patents": [
+    {
+      "title": "Systems and methods for transaction card-based authentication",
+      "description": "Co-invented an NFC challenge-response method that authenticates a transaction card using a user's device.",
+      "inventors": "Kevin Osborn, Samuel Patrick Edwards, Vincent Vy Ngo",
+      "grants": [
+        {
+          "number": "12,143,515",
+          "date": "November 12, 2024",
+          "dateTime": "2024-11-12",
+          "href": "https://patents.justia.com/patent/12143515"
+        }
+      ]
+    },
+    {
+      "title": "Computing systems utilizing generated unique authorization identifiers for authorizing user operations and methods of use thereof",
+      "description": "Co-invented a system that combines facial identity verification, unique authorization identifiers, location, and timestamps to authorize user operations.",
+      "inventors": "Lukiih Cuan, Dakyung Song, Vincent Vy Ngo",
+      "grants": [
+        {
+          "number": "11,463,436",
+          "date": "October 4, 2022",
+          "dateTime": "2022-10-04",
+          "href": "https://patents.justia.com/patent/11463436"
+        },
+        {
+          "number": "10,791,114",
+          "date": "September 29, 2020",
+          "dateTime": "2020-09-29",
+          "href": "https://patents.justia.com/patent/10791114"
+        }
+      ]
+    }
+  ]
+}

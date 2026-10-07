@@ -9,6 +9,7 @@ interface HeaderProps {
     nav: {
       home: string;
       blog: string;
+      resume: string;
     };
   };
 }
@@ -17,7 +18,7 @@ export function Header({ locale, dict }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4 sm:gap-6">
           <Link
             href={`/${locale}/`}
             className="text-sm font-medium transition-colors hover:text-foreground/80"
@@ -29,6 +30,12 @@ export function Header({ locale, dict }: HeaderProps) {
             className="text-sm font-medium transition-colors hover:text-foreground/80"
           >
             {dict.nav.blog}
+          </Link>
+          <Link
+            href={`/${locale}/resume/`}
+            className="text-sm font-medium transition-colors hover:text-foreground/80"
+          >
+            {dict.nav.resume}
           </Link>
         </nav>
 
