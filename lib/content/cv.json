@@ -121,22 +121,49 @@
   ],
   "publications": [
     {
+      "title": "Data Structures & Algorithms in Swift",
+      "publisher": "Kodeco",
+      "date": "2018 - 2025",
+      "dateTime": "2025-01-22",
+      "kind": "Book",
+      "description": "Co-authored a textbook that teaches the theory, implementation, and real-world application of data structures and algorithms in Swift, suitable for university courses and independent study. The Swift edition later served as source material for Kotlin and Dart adaptations by other authors.",
+      "href": "https://www.kodeco.com/books/data-structures-algorithms-in-swift"
+    },
+    {
       "title": "Flutter Apprentice",
       "publisher": "Kodeco",
       "date": "2020 - 2024",
-      "dateTime": "2020-09-30",
+      "dateTime": "2024-02-21",
       "kind": "Book",
       "description": "A hands-on guide that takes developers from Flutter fundamentals to building apps for iOS and Android from a single codebase.",
       "href": "https://www.kodeco.com/books/flutter-apprentice"
     },
     {
-      "title": "Data Structures & Algorithms in Swift",
+      "title": "iOS Accessibility: Getting Started",
       "publisher": "Kodeco",
-      "date": "2018 - 2025",
-      "dateTime": "2018-05-01",
-      "kind": "Book",
-      "description": "A practical guide to choosing and implementing data structures and algorithms in Swift, helping developers solve problems and build more efficient apps.",
-      "href": "https://www.kodeco.com/books/data-structures-algorithms-in-swift"
+      "date": "2016 · Updated 2020",
+      "dateTime": "2020-02-05",
+      "kind": "Tutorial",
+      "description": "An introduction to building more accessible iOS apps with VoiceOver and the Accessibility Inspector, originally published in 2016 and substantially updated in 2020.",
+      "href": "https://www.kodeco.com/6827616-ios-accessibility-getting-started"
+    },
+    {
+      "title": "Swift Algorithm Club: Graphs & Graph Algorithms",
+      "publisher": "raywenderlich.com",
+      "date": "2017 - 2018",
+      "dateTime": "2018-10-05",
+      "kind": "Tutorial series",
+      "description": "A four-part body of work covering adjacency-list graphs, depth-first search, Prim’s minimum-spanning-tree algorithm, and Strassen’s matrix-multiplication algorithm in Swift.",
+      "href": "https://www.kodeco.com/773-swift-algorithm-club-graphs-with-adjacency-list"
+    },
+    {
+      "title": "Introduction to Protocol Buffers on iOS",
+      "publisher": "raywenderlich.com",
+      "date": "February 6, 2017",
+      "dateTime": "2017-02-06",
+      "kind": "Tutorial",
+      "description": "A practical guide to serializing structured data with Protocol Buffers and integrating the generated models into an iOS app.",
+      "href": "https://www.kodeco.com/749-introduction-to-protocol-buffers-on-ios"
     },
     {
       "title": "iOS 9 by Tutorials",
@@ -150,20 +177,11 @@
     {
       "title": "How to Create an iOS Book Open Animation",
       "publisher": "raywenderlich.com",
-      "date": "August 11, 2015",
+      "date": "August 11 - 12, 2015",
       "dateTime": "2015-08-11",
-      "kind": "Tutorial",
-      "href": "https://www.raywenderlich.com/94565/how-to-create-an-ios-book-open-animation-part-1",
-      "description": "A step-by-step tutorial that brings a book-opening interaction to life in an iOS app."
-    },
-    {
-      "title": "Introducing iOS Design Patterns in Swift",
-      "publisher": "raywenderlich.com",
-      "date": "December 9, 2014",
-      "dateTime": "2014-12-09",
-      "kind": "Tutorial",
-      "href": "https://www.raywenderlich.com/86477/introducing-ios-design-patterns-in-swift-part-1",
-      "description": "A practical introduction to using design patterns in Swift to give iOS app code a clearer, more maintainable structure."
+      "kind": "Two-part tutorial",
+      "href": "https://www.kodeco.com/1719-how-to-create-an-ios-book-open-animation-part-1",
+      "description": "A two-part, step-by-step tutorial for building a book-opening interaction with page flips and a custom collection-view layout."
     },
     {
       "title": "iOS 8 by Tutorials",
