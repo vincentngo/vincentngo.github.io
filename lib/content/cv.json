@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-07",
+  "updated": "2026-10-30",
   "name": "Vincent Ngo",
   "summary": "Startup Founder and Author.",
   "contacts": [
@@ -24,9 +24,6 @@
       "organization": "Stanford University",
       "qualification": "Undergraduate Computer Science Coursework",
       "details": "Completed undergraduate-level computer science courses while enrolled in high school."
-    },
-    {
-      "organization": "ISS International School of Singapore"
     }
   ],
   "awards": [
