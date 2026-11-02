@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-11-02",
   "name": "Vincent Ngo",
   "summary": "Startup Founder and Author.",
   "contacts": [
@@ -50,10 +50,20 @@
   ],
   "experience": [
     {
-      "organization": "Good Journey Software",
-      "role": "Co-Founder",
+      "organization": "goodjourney.io",
+      "role": "Chief Technology Officer (CTO)",
       "period": "February 2023 - Present",
-      "description": "Co-founded Good Journey Software to build a ground transportation operating system and global supplier network, with the goal of making rides bookable anywhere in the world.",
+      "description": "Lead technology for goodjourney.io, building a ground transportation operating system and global supplier network that handles bookings, drivers, vehicles, and dispatch so rides can be booked anywhere in the world.",
+      "link": {
+        "label": "Good Journey",
+        "href": "https://www.goodjourney.io/en"
+      }
+    },
+    {
+      "organization": "goodjourney.io",
+      "role": "Chief Product Officer",
+      "period": "December 2022 - January 2023",
+      "description": "Led product for goodjourney.io as the company began building a ground transportation operating system and global supplier network.",
       "link": {
         "label": "Good Journey",
         "href": "https://www.goodjourney.io/en"
