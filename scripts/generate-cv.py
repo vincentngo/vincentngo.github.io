@@ -77,7 +77,7 @@ story.append(p(text(cv["name"]), "name"))
 story.append(p(text(cv["summary"]), "contact"))
 story.append(p(" &nbsp; | &nbsp; ".join(link(c["label"], c["href"]) for c in cv["contacts"]), "contact"))
 updated = date.fromisoformat(cv["updated"])
-story.append(p(f'Last updated on {updated.strftime("%B")} {updated.day}, {updated.year}', "contact"))
+story.append(p(f'Last updated on {updated.strftime("%b")} {updated.day}, {updated.year}', "contact"))
 section("Education")
 for item in cv["education"]:
     title = f'<i>{text(item["organization"])}</i>'

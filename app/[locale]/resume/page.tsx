@@ -49,7 +49,7 @@ export default async function ResumePage({ params }: ResumePageProps) {
             Last updated on{" "}
             <time dateTime={resume.updated}>
               {new Date(`${resume.updated}T12:00:00Z`).toLocaleDateString("en-US", {
-                month: "long",
+                month: "short",
                 day: "numeric",
                 year: "numeric",
                 timeZone: "UTC",
