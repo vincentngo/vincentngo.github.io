@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-02",
+  "updated": "2026-11-04",
   "name": "Vincent Ngo",
   "summary": "Startup Founder and Author.",
   "contacts": [
@@ -50,7 +50,7 @@
   ],
   "experience": [
     {
-      "organization": "goodjourney.io",
+      "organization": "Gojo Global Pte Ltd.",
       "role": "Chief Technology Officer (CTO)",
       "period": "Feb 2023 - Present",
       "description": "Lead technology for goodjourney.io, building a ground transportation operating system and global supplier network that handles bookings, drivers, vehicles, and dispatch so rides can be booked anywhere in the world.",
@@ -60,7 +60,7 @@
       }
     },
     {
-      "organization": "goodjourney.io",
+      "organization": "Gojo Global Pte Ltd.",
       "role": "Chief Product Officer",
       "period": "Dec 2022 - Jan 2023",
       "description": "Led product for goodjourney.io as the company began building a ground transportation operating system and global supplier network.",
